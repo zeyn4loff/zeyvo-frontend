@@ -43,6 +43,11 @@ function LegacyCitiesRedirect() {
   return <Navigate to="/catalog" replace />;
 }
 
+function LegacyForBusinessRedirect() {
+  useEffect(() => { window.location.replace("https://partner.zeyvo.app/"); }, []);
+  return <PageLoadingIndicator />;
+}
+
 function PublicCatalogGate() {
   const t = useCustomerText();
   useMarketplaceRevision();
@@ -100,7 +105,7 @@ export default function AppRouter() {
                 <Route path="cities" element={<LegacyCitiesRedirect />} />
                 <Route path="terms" element={<LegalPage />} />
                 <Route path="privacy" element={<LegalPage />} />
-                <Route path="for-business" element={<Navigate to="/partner/auth?mode=register" replace />} />
+                <Route path="for-business" element={<LegacyForBusinessRedirect />} />
                 <Route path="*" element={<StatusPage />} />
                 </Route>
               </Route>

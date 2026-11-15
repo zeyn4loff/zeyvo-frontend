@@ -38,7 +38,7 @@ export default function Footer() {
                         <ul className="space-y-2 text-xs text-gray-600">
                             <li><Link to="/catalog" className="hover:text-black">{t("catalog")}</Link></li>
                             <li><button type="button" onClick={openCityPicker} className="hover:text-black">{t("citySelection")}</button></li>
-                            <li><Link to="/partner/auth?mode=register" className="hover:text-black">{t("partnersFor")}</Link></li>
+                            <li><a href="https://partner.zeyvo.app/" className="hover:text-black">{t("partnersFor")}</a></li>
                         </ul>
                     </div>
 

@@ -65,7 +65,7 @@ export default function Header() {
                                     {t("catalog")}
                                 </Link>
                             ))}
-                            <Link to="/partner/auth?mode=register" className="inline-flex h-10 items-center justify-center gap-1 rounded-full border border-black/10 bg-[#b2dc70] px-4 text-center font-plus-jakarta text-xs font-bold text-primary shadow-sm transition hover:bg-[#a6d45e] hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">{t("partnersFor")} <ArrowUpRight size={14} aria-hidden="true" /></Link>
+                            <a href="https://partner.zeyvo.app/" className="inline-flex h-10 items-center justify-center gap-1 rounded-full border border-black/10 bg-[#b2dc70] px-4 text-center font-plus-jakarta text-xs font-bold text-primary shadow-sm transition hover:bg-[#a6d45e] hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">{t("partnersFor")} <ArrowUpRight size={14} aria-hidden="true" /></a>
                         </nav>
 
                         <LanguageIndicator />
@@ -78,7 +78,7 @@ export default function Header() {
                 </div>
 
                 <div className="flex justify-end border-b border-black/10 py-2 lg:hidden">
-                    <Link to="/partner/auth?mode=register" className="inline-flex min-h-9 items-center gap-1 rounded-full border border-black/10 bg-[#b2dc70] px-3 text-xs font-bold text-primary shadow-sm transition hover:bg-[#a6d45e] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">{t("partnersFor")} <ArrowUpRight size={14} aria-hidden="true" /></Link>
+                    <a href="https://partner.zeyvo.app/" className="inline-flex min-h-9 items-center gap-1 rounded-full border border-black/10 bg-[#b2dc70] px-3 text-xs font-bold text-primary shadow-sm transition hover:bg-[#a6d45e] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">{t("partnersFor")} <ArrowUpRight size={14} aria-hidden="true" /></a>
                 </div>
 
                 {isHome && <HeroBanner />}

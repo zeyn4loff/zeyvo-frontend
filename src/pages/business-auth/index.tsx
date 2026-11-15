@@ -28,7 +28,7 @@ export default function BusinessAuthPage() {
     <header className="border-b border-lime-300 bg-brand-primary">
       <div className="mx-auto flex min-h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
         {branding?.logo_url && <Link to="/" aria-label="Zeyvo Partner"><img src={branding.logo_url} alt="Zeyvo Partner" className="h-8 w-auto max-w-36 object-contain sm:h-9" /></Link>}
-        <div className="flex items-center gap-3"><LanguageIndicator /><Link to="/" className="inline-flex min-h-11 items-center gap-1.5 text-xs font-semibold sm:text-sm"><ArrowLeft size={16} />Əsas səhifə</Link></div>
+        <div className="flex items-center gap-3"><LanguageIndicator /><a href="https://zeyvo.app/" className="inline-flex min-h-11 items-center gap-1.5 text-xs font-semibold sm:text-sm"><ArrowLeft size={16} />Əsas səhifə</a></div>
       </div>
     </header>
 
