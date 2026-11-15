@@ -51,6 +51,13 @@ function PublicCatalogGate() {
   return <Outlet />;
 }
 
+function PartnerAuthRoute() {
+  const { search, hash } = useLocation();
+  return window.location.hostname === "partner.zeyvo.app"
+    ? <Navigate to={`/${search}${hash}`} replace />
+    : <BusinessAuthPage />;
+}
+
 export default function AppRouter() {
   return (
     <BrowserRouter>
@@ -60,7 +67,8 @@ export default function AppRouter() {
         <CustomerProvider>
           <Suspense fallback={<PageLoadingIndicator />}>
             <Routes>
-              <Route path="partner/auth" element={<BusinessAuthPage />} />
+              {window.location.hostname === "partner.zeyvo.app" && <Route index element={<BusinessAuthPage />} />}
+              <Route path="partner/auth" element={<PartnerAuthRoute />} />
               <Route path="partner" element={<BusinessDashboardPage />} />
               <Route path="partner/biznes" element={<BusinessDashboardPage />} />
               <Route path="partner/calendar" element={<BusinessCalendarPage />} />
@@ -78,7 +86,7 @@ export default function AppRouter() {
               <Route path="business/*" element={<LegacyPartnerRedirect />} />
               <Route element={<MainLayout />}>
                 <Route element={<PublicCatalogGate />}>
-                <Route index element={<Home />} />
+                {window.location.hostname !== "partner.zeyvo.app" && <Route index element={<Home />} />}
                 <Route path="catalog" element={<CatalogPage />} />
                 <Route path="catalog/:category" element={<CatalogPage />} />
                 <Route path="catalog/:category/:subcategory" element={<CatalogPage />} />

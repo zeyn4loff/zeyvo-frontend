@@ -15,7 +15,7 @@ async function fetchBranding(audience: Audience, language: Language, signal: Abo
 
 function SiteFavicon() {
   const { pathname } = useLocation();
-  const audience: Audience = pathname.startsWith("/partner") || pathname.startsWith("/business") ? "partner" : "customer";
+  const audience: Audience = window.location.hostname === "partner.zeyvo.app" || pathname.startsWith("/partner") || pathname.startsWith("/business") ? "partner" : "customer";
   const branding = useSiteBranding(audience);
   useEffect(() => {
     let icon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');

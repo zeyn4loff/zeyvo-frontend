@@ -22,13 +22,6 @@ server {
         proxy_ssl_server_name on;
     }
 
-    location = / {
-        if ($host = partner.zeyvo.app) {
-            return 302 /partner;
-        }
-        try_files $uri $uri/ /index.html;
-    }
-
     location / {
         try_files $uri $uri/ /index.html;
     }
