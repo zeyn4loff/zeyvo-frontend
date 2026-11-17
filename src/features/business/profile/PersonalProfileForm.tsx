@@ -31,18 +31,18 @@ export default function PersonalProfileForm({ name, phone, draft, onNameChange, 
   const selectedCountry = countries.find((country) => country.code === draft.country);
   const [regionId, setRegionId] = useState<number | null>(null);
   const regions = selectedCountry?.regions ?? [];
-  const currentCity = selectedCountry?.cities.find((city) => city.id === draft.cityId || city.name === draft.city);
+  const currentCity = selectedCountry?.cities.find((city) => city.id === draft.cityId || city.canonicalName === draft.city);
   const selectedRegionId = regionId ?? currentCity?.regionId ?? regions[0]?.id ?? null;
   const availableCities = useMemo(() => regions.length ? selectedCountry?.cities.filter((city) => city.regionId === selectedRegionId) ?? [] : selectedCountry?.cities ?? [], [selectedCountry, selectedRegionId, regions.length]);
   useEffect(() => {
     if (status !== "ready") return;
     const country = countries.find((item) => item.code === draft.country) ?? countries[0];
     if (country?.code !== draft.country) onChange("country", country?.code ?? "");
-    if (!availableCities.some((city) => city.name === draft.city)) {
+    if (!availableCities.some((city) => city.canonicalName === draft.city)) {
       onChange("city", availableCities[0]?.name ?? "");
       onChange("cityId", availableCities[0]?.id ?? null);
-    } else if (draft.cityId !== availableCities.find((city) => city.name === draft.city)?.id) {
-      onChange("cityId", availableCities.find((city) => city.name === draft.city)?.id ?? null);
+    } else if (draft.cityId !== availableCities.find((city) => city.canonicalName === draft.city)?.id) {
+      onChange("cityId", availableCities.find((city) => city.canonicalName === draft.city)?.id ?? null);
     }
   }, [status, countries, draft.country, draft.city, draft.cityId, availableCities, onChange]);
   const unavailable = status === "error" ? { az: "Ölkə və şəhərləri yükləmək mümkün olmadı.", ru: "Не удалось загрузить страны и города.", tr: "Ülkeler ve şehirler yüklenemedi.", en: "Could not load countries and cities." }[language] : "";
@@ -71,7 +71,7 @@ export default function PersonalProfileForm({ name, phone, draft, onNameChange, 
       <label className={label}>{text.language}<select value={language} onChange={(event) => { const next = event.target.value as BusinessProfile["language"]; onChange("language", next); setLanguage(next); }} className={field}><option value="az">Azərbaycan dili (AZ)</option><option value="ru">Русский (RU)</option><option value="tr">Türkçe (TR)</option><option value="en">English (EN)</option></select></label>
       <label className={label}>{text.country}<select value={selectedCountry?.code ?? ""} onChange={(event) => { const country = countries.find((item) => item.code === event.target.value); const firstRegion = country?.regions?.[0]; const firstCity = country?.cities.find((city) => !firstRegion || city.regionId === firstRegion.id); setRegionId(firstRegion?.id ?? null); onChange("country", country?.code ?? ""); onChange("city", firstCity?.name ?? ""); onChange("cityId", firstCity?.id ?? null); }} className={field} disabled={status !== "ready"} required><option value="">{status === "loading" ? "…" : "—"}</option>{countries.map((country) => <option key={country.code} value={country.code}>{country.flag ? `${country.flag} ` : ""}{country.name}</option>)}</select></label>
       {regions.length > 0 && <label className={label}>{text.region}<select value={selectedRegionId ?? ""} onChange={(event) => { const nextId = Number(event.target.value); setRegionId(nextId); const firstCity = selectedCountry?.cities.find((city) => city.regionId === nextId); onChange("city", firstCity?.name ?? ""); onChange("cityId", firstCity?.id ?? null); }} className={field} required>{regions.map((region) => <option key={region.id} value={region.id}>{region.name}</option>)}</select></label>}
-      <label className={label}>{text.city}<select value={availableCities.some((city) => city.name === draft.city) ? draft.city : ""} onChange={(event) => { onChange("city", event.target.value); onChange("cityId", availableCities.find((city) => city.name === event.target.value)?.id ?? null); }} className={field} disabled={status !== "ready" || !selectedCountry} required><option value="">—</option>{availableCities.map((city) => <option key={city.id} value={city.name}>{city.name}</option>)}</select></label>
+      <label className={label}>{text.city}<select value={availableCities.some((city) => city.canonicalName === draft.city) ? draft.city : ""} onChange={(event) => { onChange("city", event.target.value); onChange("cityId", availableCities.find((city) => city.canonicalName === event.target.value)?.id ?? null); }} className={field} disabled={status !== "ready" || !selectedCountry} required><option value="">—</option>{availableCities.map((city) => <option key={city.id} value={city.canonicalName}>{city.name}</option>)}</select></label>
       {selectedCountry && <p className="text-xs text-slate-500 sm:col-span-2">{text.currency}: {selectedCountry.currencyCode}{selectedCountry.currencySymbol ? ` (${selectedCountry.currencySymbol})` : ""} · {text.timeZone}: {currentCity?.timeZone ?? regions.find((region) => region.id === selectedRegionId)?.timeZone ?? selectedCountry.timeZone}</p>}
       <label className={`${label} sm:col-span-2`}>{text.about}<textarea rows={3} value={draft.bio} onChange={(event) => onChange("bio", event.target.value)} className={`${field} h-auto min-h-24 resize-y py-3`} /></label>
     </div>
