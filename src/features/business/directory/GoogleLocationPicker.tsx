@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ExternalLink, MapPin } from "lucide-react";
+import LocalizedText from "@/features/locale/LocalizedText";
+import { useCustomerText } from "@/features/locale/customerText";
 
 type Point = { lat: number; lng: number };
 type MapsApi = {
@@ -49,6 +51,7 @@ export default function GoogleLocationPicker({ address, city, country, latitude,
   address: string; city: string; country: string; latitude?: number | null; longitude?: number | null;
   onSelect: (point: Point & { address?: string }) => void;
 }) {
+  const translateUi = useCustomerText();
   const key = import.meta.env.VITE_GOOGLE_MAPS_API_KEY?.trim();
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<InstanceType<MapsApi["Map"]> | null>(null);
@@ -110,8 +113,8 @@ export default function GoogleLocationPicker({ address, city, country, latitude,
 
   const url = point ? `https://www.google.com/maps/search/?api=1&query=${point.lat},${point.lng}` : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([address, city, country].filter(Boolean).join(", "))}`;
   return <div className="space-y-2">
-    <div className="flex flex-wrap items-center justify-between gap-2"><span className="flex items-center gap-1 text-xs font-semibold"><MapPin size={15} className="text-brand-primary" />Xəritədə məkan (Google Maps)</span><a href={url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs font-semibold text-slate-600 underline">Google Maps-da aç <ExternalLink size={13} /></a></div>
-    {key ? <><div ref={container} role="application" aria-label="Filialın yerini seçmək üçün xəritə" className="h-52 w-full overflow-hidden rounded-2xl border border-slate-200 sm:h-60" /><p className="text-[11px] text-slate-500">Ünvan yazdıqda xəritədə axtarılır. Dəqiq yeri seçmək üçün xəritəyə toxunun.</p></> : <p className="rounded-xl bg-slate-50 p-3 text-xs text-slate-600">Google Maps açarı qurulmayıb.</p>}
-    {error && <p role="alert" className="text-xs text-red-600">{error}</p>}
+    <div className="flex flex-wrap items-center justify-between gap-2"><span className="flex items-center gap-1 text-xs font-semibold"><MapPin size={15} className="text-brand-primary" /><LocalizedText value={"Xəritədə məkan (Google Maps)"} /></span><a href={url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs font-semibold text-slate-600 underline"><LocalizedText value={"Google Maps-da aç"} /> <ExternalLink size={13} /></a></div>
+    {key ? <><div ref={container} role="application" aria-label={translateUi("Filialın yerini seçmək üçün xəritə")} className="h-52 w-full overflow-hidden rounded-2xl border border-slate-200 sm:h-60" /><p className="text-[11px] text-slate-500"><LocalizedText value={"Ünvan yazdıqda xəritədə axtarılır. Dəqiq yeri seçmək üçün xəritəyə toxunun."} /></p></> : <p className="rounded-xl bg-slate-50 p-3 text-xs text-slate-600"><LocalizedText value={"Google Maps açarı qurulmayıb."} /></p>}
+    {error && <p role="alert" className="text-xs text-red-600"><LocalizedText value={error} /></p>}
   </div>;
 }

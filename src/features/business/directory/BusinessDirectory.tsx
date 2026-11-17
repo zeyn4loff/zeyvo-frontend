@@ -13,11 +13,15 @@ import BusinessHeaderPortal from "../components/BusinessHeaderPortal";
 import BusinessHeaderButton from "../components/BusinessHeaderButton";
 import BusinessDirectoryCard from "./BusinessDirectoryCard";
 import { createBusiness, updateBusiness, createIndividual, saveIndividual as saveIndividualApi, saveBranch as saveBranchApi, removeBusiness, removeBranch, fetchBusinesses } from "./businessDirectoryApi";
+import { useCustomerText } from "@/features/locale/customerText";
+import LocalizedText from "@/features/locale/LocalizedText";
+
 
 type EditingBranch = { businessId: string; branch?: Branch };
 type Deleting = { businessId: string; branchId?: string; name: string };
 
 export default function BusinessDirectory({ session }: { session: BusinessSession }) {
+  const t = useCustomerText();
   const { businesses, update, loading, error: loadError } = useBusinesses(session);
   const [editingBusiness, setEditingBusiness] = useState<Business | null | undefined>(undefined);
   const [editingIndividual, setEditingIndividual] = useState<{ business: Business; creating: boolean } | null>(null);
@@ -27,8 +31,8 @@ export default function BusinessDirectory({ session }: { session: BusinessSessio
   const [saveError, setSaveError] = useState("");
   const deletionBlock = deleting ? (() => {
     const business = businesses.find((item) => item.id === deleting.businessId);
-    if (!business) return "Profil tapılmadı.";
-    return !deleting.branchId && business.type === "business" && business.branches.length > 0 ? "Əvvəlcə filialları silin." : "";
+    if (!business) return t("Profil tapılmadı.");
+    return !deleting.branchId && business.type === "business" && business.branches.length > 0 ? t("Əvvəlcə filialları silin.") : "";
   })() : "";
 
   async function reconcileServer(): Promise<void> {
@@ -41,8 +45,8 @@ export default function BusinessDirectory({ session }: { session: BusinessSessio
       if (!update(businesses.some((business) => business.id === item.id) ? businesses.map((business) => business.id === item.id ? saved : business) : [...businesses, saved])) throw new Error("Məlumat yadda saxlanmadı.");
       setSaveError("");
       setEditingBusiness(undefined);
-      showToast("Biznes məlumatları saxlanıldı.");
-    } catch (issue) { await reconcileServer(); setSaveError(issue instanceof Error ? issue.message : "Biznes saxlanılmadı."); }
+      showToast(t("Biznes məlumatları saxlanıldı."));
+    } catch (issue) { await reconcileServer(); setSaveError(issue instanceof Error ? issue.message : t("Biznes saxlanılmadı.")); }
   }
 
   function configureIndividual(item: Business) {
@@ -63,8 +67,8 @@ export default function BusinessDirectory({ session }: { session: BusinessSessio
           ? await createIndividual(editingIndividual.business, profile)
           : await saveIndividualApi(editingIndividual.business, profile);
         update(editingIndividual.creating ? [...businesses, saved] : businesses.map((business) => business.id === saved.id ? saved : business));
-        setSaveError(""); setEditingIndividual(null); showToast("Fərdi profil saxlanıldı.");
-      } catch (issue) { await reconcileServer(); setSaveError(issue instanceof Error ? issue.message : "Fərdi profil saxlanılmadı."); }
+        setSaveError(""); setEditingIndividual(null); showToast(t("Fərdi profil saxlanıldı."));
+      } catch (issue) { await reconcileServer(); setSaveError(issue instanceof Error ? issue.message : t("Fərdi profil saxlanılmadı.")); }
   }
 
   async function saveBranch(item: Branch) {
@@ -72,8 +76,8 @@ export default function BusinessDirectory({ session }: { session: BusinessSessio
       try {
         const saved = await saveBranchApi(editingBranch.businessId, item, editingBranch.branch);
         update(businesses.map((business) => business.id === saved.id ? saved : business));
-        setSaveError(""); setEditingBranch(null); showToast("Filial saxlanıldı.");
-      } catch (issue) { await reconcileServer(); setSaveError(issue instanceof Error ? issue.message : "Filial saxlanılmadı."); }
+        setSaveError(""); setEditingBranch(null); showToast(t("Filial saxlanıldı."));
+      } catch (issue) { await reconcileServer(); setSaveError(issue instanceof Error ? issue.message : t("Filial saxlanılmadı.")); }
   }
 
   async function deleteItem() {
@@ -81,20 +85,20 @@ export default function BusinessDirectory({ session }: { session: BusinessSessio
     try {
       if (deleting.branchId) await removeBranch(deleting.businessId, deleting.branchId);
       else await removeBusiness(deleting.businessId);
-    } catch (issue) { await reconcileServer(); setSaveError(issue instanceof Error ? issue.message : "Silmək mümkün olmadı."); return; }
+    } catch (issue) { await reconcileServer(); setSaveError(issue instanceof Error ? issue.message : t("Silmək mümkün olmadı.")); return; }
     update(deleting.branchId ? businesses.map((business) => business.id === deleting.businessId ? { ...business, branches: business.branches.filter((branch) => branch.id !== deleting.branchId) } : business) : businesses.filter((business) => business.id !== deleting.businessId));
     setSaveError("");
     setDeleting(null);
-    showToast("Silindi.");
+    showToast(t("Silindi."));
   }
 
   if (loading) return <BusinessPageLoading />;
   return <div className="mx-auto w-full max-w-7xl px-4 py-5 sm:px-7 sm:py-7">
-    <BusinessHeaderPortal><BusinessHeaderButton onClick={() => setEditingBusiness(null)} className="w-full sm:w-auto"><Plus />Yeni biznes və ya fərdi usta</BusinessHeaderButton></BusinessHeaderPortal>
-    {loading && <p role="status" className="mb-3 rounded-xl bg-slate-50 p-3 text-sm text-slate-600">Bizneslər yüklənir...</p>}
+    <BusinessHeaderPortal><BusinessHeaderButton onClick={() => setEditingBusiness(null)} className="w-full sm:w-auto"><Plus />{t("Yeni biznes və ya fərdi usta")}</BusinessHeaderButton></BusinessHeaderPortal>
+    {loading && <p role="status" className="mb-3 rounded-xl bg-slate-50 p-3 text-sm text-slate-600">{t("Bizneslər yüklənir...")}</p>}
     {loadError && <p role="alert" className="mb-3 rounded-xl bg-red-50 p-3 text-sm text-red-700">{loadError}</p>}
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-      {!loading && (businesses.length === 0 ? <EmptyState title="Hələ biznes və ya fərdi usta yoxdur" description="Başlamaq üçün biznes və ya fərdi usta əlavə edin." icon={Building2} actionLabel="Biznes və ya fərdi usta əlavə et" onAction={() => setEditingBusiness(null)} className="border-0 shadow-none" /> : <div className="divide-y divide-slate-100">{businesses.map((business) => <BusinessDirectoryCard
+      {!loading && (businesses.length === 0 ? <EmptyState title={t("Hələ biznes və ya fərdi usta yoxdur")} description={t("Başlamaq üçün biznes və ya fərdi usta əlavə edin.")} icon={Building2} actionLabel={t("Biznes və ya fərdi usta əlavə et")} onAction={() => setEditingBusiness(null)} className="border-0 shadow-none" /> : <div className="divide-y divide-slate-100">{businesses.map((business) => <BusinessDirectoryCard
         key={business.id}
         business={business}
         collapsed={collapsed.includes(business.id)}
@@ -106,7 +110,7 @@ export default function BusinessDirectory({ session }: { session: BusinessSessio
         onAddBranch={() => setEditingBranch({ businessId: business.id })}
       />)}</div>)}
     </div>
-    {saveError && <p role="alert" className="mt-3 rounded-xl bg-red-50 p-3 text-sm text-red-700">{saveError}</p>}
+    {saveError && <p role="alert" className="mt-3 rounded-xl bg-red-50 p-3 text-sm text-red-700"><LocalizedText value={saveError} /></p>}
     {editingBusiness !== undefined && <BusinessFormDialog key={editingBusiness?.id ?? "new-business"} open initial={editingBusiness ?? undefined} saveError={saveError} onClose={() => { setEditingBusiness(undefined); setSaveError(""); }} onSave={saveBusiness} onConfigureIndividual={configureIndividual} />}
     {editingIndividual && <BranchFormDialog key={editingIndividual.business.id} open individual server creating={editingIndividual.creating} initial={{ ...editingIndividual.business, id: editingIndividual.business.id, name: editingIndividual.business.name, city: editingIndividual.business.city ?? "Bakı", address: editingIndividual.business.address ?? "", phone: editingIndividual.business.phone ?? "", hours: editingIndividual.business.hours ?? "", logo: editingIndividual.business.logo ?? editingIndividual.business.image }} saveError={saveError} onClose={() => { setEditingIndividual(null); setSaveError(""); }} onSave={saveIndividual} />}
     {editingBranch && <BranchFormDialog key={editingBranch.branch?.id ?? `${editingBranch.businessId}-new`} open server initial={editingBranch.branch} saveError={saveError} onClose={() => { setEditingBranch(null); setSaveError(""); }} onSave={saveBranch} />}

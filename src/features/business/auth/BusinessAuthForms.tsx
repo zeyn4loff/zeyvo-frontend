@@ -9,6 +9,7 @@ import CodeInput from "@/components/common/CodeInput";
 import { PartnerApiError, requestPartnerCode, verifyPartnerCode } from "./partnerAuthApi";
 import { useTranslations } from "@/features/locale/language";
 import { readPartnerProfile } from "../profile/profileApi";
+import { useCustomerText } from "@/features/locale/customerText";
 
 interface AuthProps {
   onStart: (session: BusinessSession, remember: boolean) => void;
@@ -18,6 +19,7 @@ interface AuthProps {
 type Pending = { phone: string; register: boolean; resendAt: number; channel: string };
 
 function PhoneAuthForm({ onStart, onError, register }: AuthProps & { register: boolean }) {
+  const translateUi = useCustomerText();
   const { t } = useTranslations();
   const [phone, setPhone] = useState(() => register ? "" : formatPhone(rememberedBusinessPhone()));
   const [name, setName] = useState("");
@@ -99,7 +101,7 @@ function PhoneAuthForm({ onStart, onError, register }: AuthProps & { register: b
   </form>;
 
   return <form onSubmit={requestCode} className="space-y-4">
-    {register && <BusinessAuthField label={t("fullName")} icon={UserRound} name="ownerName" type="text" autoComplete="name" required minLength={2} placeholder="Məs: Əli Əliyev" value={name} onChange={(event) => setName(event.target.value)} />}
+    {register && <BusinessAuthField label={t("fullName")} icon={UserRound} name="ownerName" type="text" autoComplete="name" required minLength={2} placeholder={translateUi("Məs: Əli Əliyev")} value={name} onChange={(event) => setName(event.target.value)} />}
     <label className="block space-y-1.5 text-sm font-semibold text-slate-700"><span>{t("phone")}</span><AzPhoneInput name="phone" required value={phone} onValueChange={(next) => setPhone(formatPhone(next))} /></label>
     <p className="text-xs leading-5 text-slate-500">{t("phoneCodeNote")}</p>
     <button type="submit" disabled={busy} className="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-brand-primary px-4 text-sm font-bold disabled:opacity-50">{busy ? t("sendingCode") : register ? t("partnerGetCodeRegister") : t("partnerGetCodeLogin")} <ArrowRight size={17} /></button>

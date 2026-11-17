@@ -3,6 +3,8 @@ import { ChevronDown, Pencil, Plus, Trash2, Armchair } from "lucide-react";
 import { CategoryIconView } from "../components/CategoryIconPicker";
 import type { Resource, ResourceCategory, ResourceStatus } from "./resources";
 import ResourceRow from "./ResourceRow";
+import LocalizedText from "@/features/locale/LocalizedText";
+import { useCustomerText } from "@/features/locale/customerText";
 
 type ResourceGroup = ResourceCategory & { resources: Resource[] };
 type Props = {
@@ -22,7 +24,7 @@ function ResourceTree({ resources, categoryId, onAddResource, branchLabel, onEdi
 } & RowActions) {
   return <div className="relative ml-2 space-y-2 border-l-2 border-slate-200/90 pl-4 pt-1 sm:ml-3 sm:pl-5">
     {resources.map((item) => <div key={item.id} className="relative before:absolute before:-left-[18px] before:top-1/2 before:h-0.5 before:w-4 before:-translate-y-1/2 before:bg-slate-200 sm:before:-left-[22px] sm:before:w-5"><ResourceRow item={item} branchLabel={branchLabel} onEdit={onEditResource} onDelete={onDeleteResource} onChangeUnitStatus={onChangeUnitStatus} /></div>)}
-    <div className="relative pt-0.5 before:absolute before:-left-[18px] before:top-1/2 before:h-0.5 before:w-4 before:-translate-y-1/2 before:bg-slate-200 sm:before:-left-[22px] sm:before:w-5"><button type="button" onClick={() => onAddResource(categoryId)} className="flex min-h-10 w-full cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-slate-200/80 bg-slate-100/90 px-3 py-2 text-xs font-medium text-slate-800 transition hover:border-amber-300 hover:bg-brand-primary"><Plus size={15} />Resurs əlavə et</button></div>
+    <div className="relative pt-0.5 before:absolute before:-left-[18px] before:top-1/2 before:h-0.5 before:w-4 before:-translate-y-1/2 before:bg-slate-200 sm:before:-left-[22px] sm:before:w-5"><button type="button" onClick={() => onAddResource(categoryId)} className="flex min-h-10 w-full cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-slate-200/80 bg-slate-100/90 px-3 py-2 text-xs font-medium text-slate-800 transition hover:border-amber-300 hover:bg-brand-primary"><Plus size={15} /><LocalizedText value={"Resurs əlavə et"} /></button></div>
   </div>;
 }
 
@@ -42,13 +44,14 @@ function ResourceGroupSection({ group, isCollapsed, onToggleGroup, onEditCategor
 }
 
 export default function ResourceGroups({ groups, uncategorized, collapsed, category, hasFilter, search, filteredLength, categoriesLength, branchLabel, onToggleGroup, onEditCategory, onDeleteCategory, onAddResource, onEditResource, onDeleteResource, onChangeUnitStatus }: Props) {
+  const translateUi = useCustomerText();
   const visibleGroups = groups.filter((group) => !hasFilter || group.resources.length > 0 || group.name.toLocaleLowerCase("az-AZ").includes(search.toLocaleLowerCase("az-AZ")));
   const showUncategorized = (category === "all" || category === "uncategorized") && uncategorized.length > 0;
-  if (visibleGroups.length === 0 && !showUncategorized) return <EmptyState title={filteredLength === 0 && (hasFilter || categoriesLength === 0) ? "Resurs tapılmadı" : "Kateqoriya tapılmadı"} description="Filtrləri dəyişin və ya yeni resurs əlavə edin." icon={Armchair} />;
+  if (visibleGroups.length === 0 && !showUncategorized) return <EmptyState title={filteredLength === 0 && (hasFilter || categoriesLength === 0) ? translateUi("Resurs tapılmadı") : translateUi("Kateqoriya tapılmadı")} description={translateUi("Filtrləri dəyişin və ya yeni resurs əlavə edin.")} icon={Armchair} />;
 
   const rowActions = { branchLabel, onEditResource, onDeleteResource, onChangeUnitStatus };
   return <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"><div className="divide-y divide-slate-100">
     {visibleGroups.map((group) => <ResourceGroupSection key={group.id} group={group} isCollapsed={collapsed.includes(group.id)} onToggleGroup={onToggleGroup} onEditCategory={onEditCategory} onDeleteCategory={onDeleteCategory} onAddResource={onAddResource} {...rowActions} />)}
-    {showUncategorized && <section className="p-4 sm:p-5"><h2 className="mb-3 text-sm font-bold">Kateqoriyasız <span className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px]">{uncategorized.length}</span></h2><div className="space-y-2">{uncategorized.map((item) => <ResourceRow key={item.id} item={item} branchLabel={branchLabel} onEdit={onEditResource} onDelete={onDeleteResource} onChangeUnitStatus={onChangeUnitStatus} />)}</div></section>}
+    {showUncategorized && <section className="p-4 sm:p-5"><h2 className="mb-3 text-sm font-bold"><LocalizedText value={"Kateqoriyasız"} /> <span className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px]">{uncategorized.length}</span></h2><div className="space-y-2">{uncategorized.map((item) => <ResourceRow key={item.id} item={item} branchLabel={branchLabel} onEdit={onEditResource} onDelete={onDeleteResource} onChangeUnitStatus={onChangeUnitStatus} />)}</div></section>}
   </div></div>;
 }

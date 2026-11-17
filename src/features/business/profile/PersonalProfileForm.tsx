@@ -4,6 +4,10 @@ import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { useProfileLocations } from "./useProfileLocations";
 import type { BusinessProfile } from "./profile";
 import { useLanguage } from "@/features/locale/language";
+import { useCustomerText } from "@/features/locale/customerText";
+import LocalizedText from "@/features/locale/LocalizedText";
+
+
 
 const field = businessControlClass;
 const label = businessLabelClass;
@@ -25,6 +29,7 @@ const labels = {
 };
 
 export default function PersonalProfileForm({ name, phone, draft, onNameChange, onChange, onSubmit }: Props) {
+  const translateUi = useCustomerText();
   const { language, setLanguage } = useLanguage();
   const text = labels[language];
   const { status, countries } = useProfileLocations();
@@ -48,8 +53,8 @@ export default function PersonalProfileForm({ name, phone, draft, onNameChange, 
   const unavailable = status === "error" ? { az: "Ölkə və şəhərləri yükləmək mümkün olmadı.", ru: "Не удалось загрузить страны и города.", tr: "Ülkeler ve şehirler yüklenemedi.", en: "Could not load countries and cities." }[language] : "";
   return <form onSubmit={onSubmit} className="space-y-5 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
     <div className="border-b border-slate-100 pb-4">
-      <h3 className="text-sm font-bold text-slate-900">{text.title}</h3>
-      <p className="mt-1 text-xs font-medium text-slate-400">{text.detail}</p>
+      <h3 className="text-sm font-bold text-slate-900"><LocalizedText value={text.title} /></h3>
+      <p className="mt-1 text-xs font-medium text-slate-400"><LocalizedText value={text.detail} /></p>
     </div>
     <div className="grid gap-4 sm:grid-cols-2">
       <div className="sm:col-span-2">
@@ -58,7 +63,7 @@ export default function PersonalProfileForm({ name, phone, draft, onNameChange, 
           {([{ id: "female", title: text.female }, { id: "male", title: text.male }] as const).map((item) => {
             const selected = draft.gender === item.id;
             const selectedStyle = item.id === "female" ? "border-2 border-pink-500 bg-pink-50 text-pink-700" : "border-2 border-blue-600 bg-blue-50 text-blue-700";
-            return <button key={item.id} type="button" aria-pressed={selected} onClick={() => onChange("gender", item.id)} className={`min-h-11 cursor-pointer rounded-xl text-xs font-bold transition ${selected ? selectedStyle : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"}`}>{item.title}</button>;
+            return <button key={item.id} type="button" aria-pressed={selected} onClick={() => onChange("gender", item.id)} className={`min-h-11 cursor-pointer rounded-xl text-xs font-bold transition ${selected ? selectedStyle : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"}`}><LocalizedText value={item.title} /></button>;
           })}
         </div>
       </div>
@@ -68,7 +73,7 @@ export default function PersonalProfileForm({ name, phone, draft, onNameChange, 
           <span aria-hidden="true">🇦🇿</span><span className="ml-2">+994 {phone}</span>
         </div>
       </div>
-      <label className={label}>{text.language}<select value={language} onChange={(event) => { const next = event.target.value as BusinessProfile["language"]; onChange("language", next); setLanguage(next); }} className={field}><option value="az">Azərbaycan dili (AZ)</option><option value="ru">Русский (RU)</option><option value="tr">Türkçe (TR)</option><option value="en">English (EN)</option></select></label>
+      <label className={label}>{text.language}<select value={language} onChange={(event) => { const next = event.target.value as BusinessProfile["language"]; onChange("language", next); setLanguage(next); }} className={field}><option value="az">{translateUi("Azərbaycan dili (AZ)")}</option><option value="ru">Русский (RU)</option><option value="tr">{translateUi("Türkçe (TR)")}</option><option value="en">English (EN)</option></select></label>
       <label className={label}>{text.country}<select value={selectedCountry?.code ?? ""} onChange={(event) => { const country = countries.find((item) => item.code === event.target.value); const firstRegion = country?.regions?.[0]; const firstCity = country?.cities.find((city) => !firstRegion || city.regionId === firstRegion.id); setRegionId(firstRegion?.id ?? null); onChange("country", country?.code ?? ""); onChange("city", firstCity?.canonicalName ?? ""); onChange("cityId", firstCity?.id ?? null); }} className={field} disabled={status !== "ready"} required><option value="">{status === "loading" ? "…" : "—"}</option>{countries.map((country) => <option key={country.code} value={country.code}>{country.flag ? `${country.flag} ` : ""}{country.name}</option>)}</select></label>
       {regions.length > 0 && <label className={label}>{text.region}<select value={selectedRegionId ?? ""} onChange={(event) => { const nextId = Number(event.target.value); setRegionId(nextId); const firstCity = selectedCountry?.cities.find((city) => city.regionId === nextId); onChange("city", firstCity?.canonicalName ?? ""); onChange("cityId", firstCity?.id ?? null); }} className={field} required>{regions.map((region) => <option key={region.id} value={region.id}>{region.name}</option>)}</select></label>}
       <label className={label}>{text.city}<select value={availableCities.some((city) => city.canonicalName === draft.city) ? draft.city : ""} onChange={(event) => { onChange("city", event.target.value); onChange("cityId", availableCities.find((city) => city.canonicalName === event.target.value)?.id ?? null); }} className={field} disabled={status !== "ready" || !selectedCountry} required><option value="">—</option>{availableCities.map((city) => <option key={city.id} value={city.canonicalName}>{city.name}</option>)}</select></label>

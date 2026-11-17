@@ -2,6 +2,8 @@ import { Link, useLocation } from "react-router";
 import Breadcrumbs from "@/features/marketplace/components/Breadcrumbs";
 import { useTranslations } from "@/features/locale/language";
 import { type LegalTab, useLegalContent } from "@/features/customer/legalContent";
+import LocalizedText from "@/features/locale/LocalizedText";
+
 
 export default function LegalPage() {
   const tab: LegalTab = useLocation().pathname === "/privacy" ? "privacy" : "terms";
@@ -11,7 +13,7 @@ export default function LegalPage() {
   return <div className="container mx-auto space-y-6 px-4 py-8 pb-24">
     <Breadcrumbs items={[{ label: title }]} />
     <section className="mx-auto max-w-3xl rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8 md:p-10">
-      <h1 className="break-words text-2xl font-bold tracking-tight [overflow-wrap:anywhere] sm:text-3xl">{title}</h1>
+      <h1 className="break-words text-2xl font-bold tracking-tight [overflow-wrap:anywhere] sm:text-3xl"><LocalizedText value={title} /></h1>
       {content?.subtitle && <p className="mt-1 text-sm text-slate-500">{content.subtitle}</p>}
       <nav aria-label="Legal pages" className="mt-6 flex rounded-xl bg-slate-100 p-1 text-sm font-semibold">
         <Link to="/terms" aria-current={tab === "terms" ? "page" : undefined} className={`min-w-0 flex-1 rounded-lg px-2 py-2 text-center text-xs [overflow-wrap:anywhere] sm:text-sm ${tab === "terms" ? "bg-white shadow-sm" : ""}`}>{t("terms")}</Link>

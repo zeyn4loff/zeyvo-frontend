@@ -19,7 +19,7 @@ export default function BusinessPagination({ totalItems, currentPage, pageSize =
     : page <= 3 ? [1, 2, 3, 4, "…", pages]
     : page >= pages - 2 ? [1, "…", pages - 3, pages - 2, pages - 1, pages]
     : [1, "…", page - 1, page, page + 1, "…", pages];
-  const pageButton = (target: number, label: string, disabled = false, active = false) => <button key={`${label}-${target}`} type="button" disabled={disabled} aria-current={active ? "page" : undefined} onClick={() => onPageChange(target)} className={`inline-flex min-h-8 min-w-8 shrink-0 cursor-pointer items-center justify-center rounded-lg border px-2 text-xs font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-45 ${active ? "border-brand-primary bg-brand-primary text-[#101114]" : "border-[#e2e5eb] bg-white text-slate-700 hover:bg-slate-50"}`}>{label}</button>;
+  const pageButton = (target: number, label: string, disabled = false, active = false) => <button key={`${label}-${target}`} type="button" disabled={disabled} aria-current={active ? "page" : undefined} onClick={() => onPageChange(target)} className={`inline-flex min-h-8 min-w-8 shrink-0 cursor-pointer items-center justify-center rounded-lg border px-2 text-xs font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-45 ${active ? "border-brand-primary bg-brand-primary text-[#101114]" : "border-[#e2e5eb] bg-white text-slate-700 hover:bg-slate-50"}`}><LocalizedText value={label} /></button>;
 
   return <div className="flex min-w-0 flex-wrap items-center justify-between gap-3 border-t border-slate-100 bg-white px-4 py-3 text-xs">
     <div className="flex flex-wrap items-center gap-1 text-slate-500">{t("Cəmi")} <strong className="text-[#101114]">{totalItems}</strong> {t(itemFromLabel)} <strong className="text-[#101114]">{from}-{to}</strong> {t("göstərilir")}{onPageSizeChange && <label className="ml-2 inline-flex items-center gap-1">{t("Səhifədə:")} <select value={pageSize} onChange={(event) => onPageSizeChange(Number(event.target.value))} className="min-h-8 rounded-lg border border-slate-200 bg-white px-2 text-xs font-semibold text-slate-700">{[10, 25, 50, 100].map((size) => <option key={size} value={size}>{size}</option>)}</select></label>}</div>
@@ -31,4 +31,4 @@ export default function BusinessPagination({ totalItems, currentPage, pageSize =
   </div>;
 }
 import { useCustomerText } from "@/features/locale/customerText";
-
+import LocalizedText from "@/features/locale/LocalizedText";

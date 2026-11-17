@@ -20,9 +20,12 @@ import StaffTeamView from "./StaffTeamView";
 import { weekdays, type StaffMember, type StaffRole } from "./staff";
 import { useStaff } from "./useStaff";
 import { deleteStaffMember, deleteStaffRole, saveStaffMember, saveStaffRole } from "./staffApi";
+import LocalizedText from "@/features/locale/LocalizedText";
+import { useCustomerText } from "@/features/locale/customerText";
 
 type Tab = "team" | "schedule" | "roles";
 export default function BusinessStaff({ session }: { session: BusinessSession }) {
+  const translateUi = useCustomerText();
   const { data, refresh, error: loadError, loading } = useStaff(session);
   const { data: serviceData, refresh: refreshServices, loading: servicesLoading } = useServices(session);
   const activeContext = useActiveBusinessContext(session);
@@ -83,13 +86,13 @@ export default function BusinessStaff({ session }: { session: BusinessSession })
   const tabs: { id: Tab; label: string; count?: number }[] = [{ id: "team", label: "Ustalar", count: branchMembers.length }, { id: "schedule", label: "İş qrafiki & Smenlər" }, { id: "roles", label: "Vəzifələr və rollar", count: data.roles.length }];
   if (loading || servicesLoading) return <BusinessPageLoading />;
   return <div className="mx-auto max-w-7xl space-y-6 px-4 py-5 sm:px-7 sm:py-7">
-    <BusinessHeaderPortal slot="subtitle">Mütəxəssislər, iş cədvəli və komissiyalar</BusinessHeaderPortal>
+    <BusinessHeaderPortal slot="subtitle"><LocalizedText value={"Mütəxəssislər, iş cədvəli və komissiyalar"} /></BusinessHeaderPortal>
     <BusinessHeaderPortal>
-      {tab === "team" && <BusinessHeaderButton variant="secondary" onClick={() => setTab("schedule")} className="flex-1 sm:flex-none"><CalendarDays />İş qrafiki</BusinessHeaderButton>}
-      {tab === "roles" ? <BusinessHeaderButton onClick={() => setEditingRole(null)} className="flex-1 sm:flex-none"><Plus />Yeni vəzifə</BusinessHeaderButton> : <BusinessHeaderButton onClick={() => openStaff()} className="flex-1 sm:flex-none"><Plus />Yeni usta</BusinessHeaderButton>}
+      {tab === "team" && <BusinessHeaderButton variant="secondary" onClick={() => setTab("schedule")} className="flex-1 sm:flex-none"><CalendarDays /><LocalizedText value={"İş qrafiki"} /></BusinessHeaderButton>}
+      {tab === "roles" ? <BusinessHeaderButton onClick={() => setEditingRole(null)} className="flex-1 sm:flex-none"><Plus /><LocalizedText value={"Yeni vəzifə"} /></BusinessHeaderButton> : <BusinessHeaderButton onClick={() => openStaff()} className="flex-1 sm:flex-none"><Plus />Yeni usta</BusinessHeaderButton>}
     </BusinessHeaderPortal>
-    <BusinessTabNav label="Heyət bölmələri" centered>{tabs.map((item) => <BusinessTabButton key={item.id} active={tab === item.id} count={item.count} onClick={() => { setTab(item.id); setError(""); }}>{item.label}</BusinessTabButton>)}</BusinessTabNav>
-    {loading && <p className="text-sm text-slate-500">Ustalar yüklənir…</p>}
+    <BusinessTabNav label={translateUi("Heyət bölmələri")} centered>{tabs.map((item) => <BusinessTabButton key={item.id} active={tab === item.id} count={item.count} onClick={() => { setTab(item.id); setError(""); }}><LocalizedText value={item.label} /></BusinessTabButton>)}</BusinessTabNav>
+    {loading && <p className="text-sm text-slate-500"><LocalizedText value={"Ustalar yüklənir…"} /></p>}
     {(error || loadError) && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm font-semibold text-red-700">{error || loadError}</p>}
     {tab === "team" && <StaffTeamView data={{ ...data, members: branchMembers }} services={serviceData.services} filters={filters} setFilters={setFilters} search={search} setSearch={setSearch} setFilterOpen={setFilterOpen} page={page} setPage={setPage} todayKey={todayKey} roleName={roleName} branchName={branchName} filtered={filtered} shown={shown} totalPages={totalPages} activeFilterCount={activeFilterCount} avgRating={avgRating} openStaff={openStaff} setDeleting={setDeleting} setEmployment={setEmployment} />}
     {tab === "schedule" && <StaffScheduleTab members={branchMembers} today={todayKey} roleName={roleName} onEditSchedule={(item) => openStaff(item, "schedule")} />}
@@ -98,6 +101,6 @@ export default function BusinessStaff({ session }: { session: BusinessSession })
     {editingStaff && <StaffFormDialog key={editingStaff.item?.id ?? "new"} initial={editingStaff.item} initialTab={editingStaff.tab} roles={data.roles} branchId={actualBranchId ?? ""} serviceData={serviceData} onClose={() => setEditingStaff(null)} onSave={saveStaff} />}
     {editingRole !== undefined && <RoleFormDialog key={editingRole?.id ?? "new"} initial={editingRole ?? undefined} error={error} onClose={() => { setEditingRole(undefined); setError(""); }} onSave={saveRole} />}
     {employment && employmentMember && <StaffEmploymentDialog key={`${employment.id}-${employment.mode}`} member={employmentMember} roles={data.roles} mode={employment.mode} onClose={() => setEmployment(null)} onSave={saveEmployment} onModeChange={(mode) => setEmployment({ id: employment.id, mode })} />}
-    {deleting && <BusinessDeleteDialog name={deleting.name} detail={deleting.kind === "role" ? "Bu vəzifədəki ustalar vəzifəsiz qalacaq." : undefined} onClose={() => setDeleting(null)} onDelete={remove} />}
+    {deleting && <BusinessDeleteDialog name={deleting.name} detail={deleting.kind === "role" ? translateUi("Bu vəzifədəki ustalar vəzifəsiz qalacaq.") : undefined} onClose={() => setDeleting(null)} onDelete={remove} />}
   </div>;
 }

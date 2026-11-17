@@ -6,6 +6,8 @@ import { BookingContactStep, BookingMasterStep, BookingServiceStep, BookingTimeS
 import { formatPhone } from "./formatPhone";
 import { useCustomer } from "./useCustomer";
 import { useCustomerText } from "@/features/locale/customerText";
+import LocalizedText from "@/features/locale/LocalizedText";
+
 
 const bookingStepTitles = ["Xidmət", "Usta", "Vaxt", "Məlumatlar"] as const;
 
@@ -116,7 +118,7 @@ export default function BookingModal() {
           {step === 1 && <BookingMasterStep specialists={specialists} selected={chosenSpecialist} onSelect={chooseSpecialist} />}
           {step === 2 && <>{loadingSlots && <p role="status" className="mb-3 text-sm text-slate-500">{ct("Məlumatlar yüklənir")}</p>}<BookingTimeStep dates={availableDates} bookableDates={bookableDates} slots={slotOptions} availableSlots={slotOptions} date={chosenDate} time={chosenTime} loading={loadingSlots} onDate={(value) => { setDate(value); setTime(""); setAvailableSlots([]); setLoadingSlots(true); setError(""); }} onTime={(value) => { setTime(value); setError(""); }} /></>}
           {step === 3 && <BookingContactStep service={chosenService?.name || ""} price={chosenService?.price ?? 0} specialist={chosenSpecialist?.name || ct("İstənilən usta")} date={chosenDate} time={chosenTime} name={name} phone={phoneValue} onName={setCustomerName} onPhone={setPhone} />}
-          {error && <p role="alert" className="mt-4 text-xs font-semibold text-red-600">{error}</p>}
+          {error && <p role="alert" className="mt-4 text-xs font-semibold text-red-600"><LocalizedText value={error} /></p>}
         </div>
         <div className="grid shrink-0 grid-cols-2 gap-2 border-t border-slate-200 bg-white px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-6">
           <button type="button" onClick={() => { if (step === 0) close(); else { setStep(visibleSteps[progressIndex - 1]); setError(""); } }} className="min-h-11 cursor-pointer rounded-xl bg-slate-100 px-2 text-sm font-semibold">{step === 0 ? ct("İmtina") : ct("Geri")}</button>

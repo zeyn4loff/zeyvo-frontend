@@ -15,11 +15,12 @@ interface Props {
 }
 
 export default function CatalogResults({ results, visibleCount, city, onLoadMore, onClearFilters }: Props) {
+  const translateUi = useCustomerText();
   const ct = useCustomerText();
   const { favoriteSalonIds, toggleSalonFavorite } = useCustomer();
   const visibleResults = results.slice(0, visibleCount);
   return (
-    <section className="min-w-0 space-y-4" aria-label="Kataloq nəticələri">
+    <section className="min-w-0 space-y-4" aria-label={translateUi("Kataloq nəticələri")}>
       {visibleResults.length > 0 && <div className="grid min-w-0 grid-cols-1 items-start gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {visibleResults.map((result) => result.kind === "salon"
           ? <SalonCard key={`s${result.item.id}`} item={result.item} isFavorite={favoriteSalonIds.includes(result.item.id)} onToggleFavorite={() => toggleSalonFavorite(result.item.id)} />

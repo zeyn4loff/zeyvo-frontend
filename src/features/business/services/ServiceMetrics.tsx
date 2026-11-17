@@ -1,6 +1,8 @@
 import { useCurrencySymbol } from "../finance/businessCurrency";
 import { Check, CircleDollarSign, Clock3, Scissors } from "lucide-react";
 import type { Service } from "./services";
+import LocalizedText from "@/features/locale/LocalizedText";
+
 
 export default function ServiceMetrics({ services, categoryCount, onlineOnly, onToggleOnline }: { services: Service[]; categoryCount: number; onlineOnly: boolean; onToggleOnline: () => void }) {
   const currencySign = useCurrencySymbol();
@@ -17,7 +19,7 @@ export default function ServiceMetrics({ services, categoryCount, onlineOnly, on
     { title: "Orta müddət", value: `${averageDuration} dəq`, detail: "İcra və xidmət vaxtı", icon: Clock3, iconClass: "bg-purple-50 text-purple-600", valueClass: "text-xl sm:text-2xl" },
   ];
   return <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">{metrics.map((metric, index) => {
-    const content = <><div className="mb-2 flex items-center justify-between gap-1"><span className="text-xs font-semibold text-slate-500">{metric.title}</span><span className={`flex size-8 shrink-0 items-center justify-center rounded-xl ${metric.iconClass}`}><metric.icon size={16} /></span></div><div className={`${metric.valueClass} font-bold text-slate-900`}>{metric.value}</div><p className="mt-1 truncate text-[11px] font-semibold text-slate-400">{metric.detail}</p></>;
+    const content = <><div className="mb-2 flex items-center justify-between gap-1"><span className="text-xs font-semibold text-slate-500"><LocalizedText value={metric.title} /></span><span className={`flex size-8 shrink-0 items-center justify-center rounded-xl ${metric.iconClass}`}><metric.icon size={16} /></span></div><div className={`${metric.valueClass} font-bold text-slate-900`}>{metric.value}</div><p className="mt-1 truncate text-[11px] font-semibold text-slate-400"><LocalizedText value={metric.detail} /></p></>;
     return index === 1 ? <button key={metric.title} type="button" onClick={onToggleOnline} aria-pressed={onlineOnly} className={`${card} cursor-pointer transition hover:border-slate-300 ${onlineOnly ? "border-[#101114] ring-2 ring-brand-primary/40" : ""}`}>{content}</button> : <div key={metric.title} className={card}>{content}</div>;
   })}</div>;
 }

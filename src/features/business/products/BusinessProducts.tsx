@@ -30,6 +30,8 @@ import OperationsSection from "./OperationsSection";
 import ProductMetricCard from "./ProductMetricCard";
 import { deleteInventoryRecord, postInventoryDocument, saveInventoryRecord } from "./inventoryApi";
 import { readBusinesses } from "../directory/businesses";
+import LocalizedText from "@/features/locale/LocalizedText";
+import { useCustomerText } from "@/features/locale/customerText";
 
 type Tab = "balances" | "warehouses" | "catalog" | "techcards" | "operations" | "inventory" | "suppliers";
 const tabs: { id: Tab; label: string }[] = [
@@ -47,6 +49,7 @@ const tabSubtitles: Record<Tab, string> = {
   suppliers: "Tərəfdaş şirkətlər və kontragentlər",
 };
 export default function BusinessProducts({ session }: { session: BusinessSession }) {
+  const translateUi = useCustomerText();
   const currencyCode = useBusinessCurrency();
   const { data, refresh, error: loadError, loading } = useProducts(session);
   const { openPos } = useContext(BusinessHeaderContext);
@@ -109,19 +112,19 @@ export default function BusinessProducts({ session }: { session: BusinessSession
   if (loading || servicesLoading) return <BusinessPageLoading />;
 
   return <div className="mx-auto w-full max-w-7xl space-y-6 px-4 py-5 sm:px-7 sm:py-7">
-    <BusinessHeaderPortal slot="title">{tabs.find((item) => item.id === tab)?.label}</BusinessHeaderPortal>
+    <BusinessHeaderPortal slot="title"><LocalizedText value={tabs.find((item) => item.id === tab)?.label} /></BusinessHeaderPortal>
     <BusinessHeaderPortal slot="subtitle">{tabSubtitles[tab]}</BusinessHeaderPortal>
-    <BusinessHeaderPortal slot="actions"><BusinessHeaderButton onClick={headerAction.onClick}><HeaderIcon />{headerAction.label}</BusinessHeaderButton></BusinessHeaderPortal>
-    <BusinessTabNav label="Məhsullar bölmələri">{tabs.map((item) => <BusinessTabButton key={item.id} active={tab === item.id} onClick={() => { setTab(item.id); setError(""); }}>{item.label}</BusinessTabButton>)}</BusinessTabNav>
-    {error && <div role="alert" className="rounded-xl bg-red-50 p-3 text-sm font-semibold text-red-700">{error}</div>}
+    <BusinessHeaderPortal slot="actions"><BusinessHeaderButton onClick={headerAction.onClick}><HeaderIcon /><LocalizedText value={headerAction.label} /></BusinessHeaderButton></BusinessHeaderPortal>
+    <BusinessTabNav label={translateUi("Məhsullar bölmələri")}>{tabs.map((item) => <BusinessTabButton key={item.id} active={tab === item.id} onClick={() => { setTab(item.id); setError(""); }}><LocalizedText value={item.label} /></BusinessTabButton>)}</BusinessTabNav>
+    {error && <div role="alert" className="rounded-xl bg-red-50 p-3 text-sm font-semibold text-red-700"><LocalizedText value={error} /></div>}
     {loadError && <div role="alert" className="rounded-xl bg-red-50 p-3 text-sm font-semibold text-red-700">{loadError}</div>}
-    {loading && <div role="status" className="rounded-xl bg-slate-50 p-3 text-sm text-slate-600">Məhsullar yüklənir...</div>}
-    {(tab === "balances" || tab === "catalog") && <div className="flex min-w-0 gap-2"><label className="business-search-control flex min-h-11 min-w-0 flex-1 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3"><Search size={17} className="shrink-0 text-slate-400" /><input aria-label="Məhsul axtar" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Məhsul adı, artikol və ya barkod ilə axtarın" className="min-w-0 flex-1 bg-transparent text-sm outline-none" /></label><BusinessFilterButton onClick={() => setFilterOpen(true)} count={Number(warehouse !== "auto") + Number(category !== "all") + Number(stockFilter !== "all")} /></div>}
+    {loading && <div role="status" className="rounded-xl bg-slate-50 p-3 text-sm text-slate-600"><LocalizedText value={"Məhsullar yüklənir..."} /></div>}
+    {(tab === "balances" || tab === "catalog") && <div className="flex min-w-0 gap-2"><label className="business-search-control flex min-h-11 min-w-0 flex-1 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3"><Search size={17} className="shrink-0 text-slate-400" /><input aria-label={translateUi("Məhsul axtar")} value={search} onChange={(event) => setSearch(event.target.value)} placeholder={translateUi("Məhsul adı, artikol və ya barkod ilə axtarın")} className="min-w-0 flex-1 bg-transparent text-sm outline-none" /></label><BusinessFilterButton onClick={() => setFilterOpen(true)} count={Number(warehouse !== "auto") + Number(category !== "all") + Number(stockFilter !== "all")} /></div>}
     {tab === "balances" && <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-      <ProductMetricCard label="Ümumi çeşid" value={scopeProducts.length} detail={selectedWarehouse === "all" ? "Bütün anbarlar üzrə" : "Seçilmiş anbar üzrə"} icon={Package} iconClassName="bg-slate-100 text-slate-700 group-hover:bg-brand-primary group-hover:text-black" selected={stockFilter === "all"} onClick={() => setStockFilter("all")} />
-      <ProductMetricCard label="Kifayət qədər" value={inStock} detail="Normal qalıq səviyyəsi" icon={Check} iconClassName="bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100" selected={stockFilter === "available"} onClick={() => setStockFilter("available")} />
-      <ProductMetricCard label="Kritik qalıq" value={critical} detail={`${outOfStock} bitmiş məhsul`} icon={AlertTriangle} iconClassName="bg-amber-50 text-amber-600 group-hover:bg-amber-100" valueClassName="text-amber-600" selected={stockFilter === "low"} onClick={() => setStockFilter("low")} />
-      <ProductMetricCard label="Qalıq maya dəyəri" value={money(value, currencyCode)} detail="Maya qiyməti ilə cəmi" icon={CircleDollarSign} iconClassName="bg-purple-50 text-purple-600" compactValue />
+      <ProductMetricCard label={translateUi("Ümumi çeşid")} value={scopeProducts.length} detail={selectedWarehouse === "all" ? translateUi("Bütün anbarlar üzrə") : translateUi("Seçilmiş anbar üzrə")} icon={Package} iconClassName="bg-slate-100 text-slate-700 group-hover:bg-brand-primary group-hover:text-black" selected={stockFilter === "all"} onClick={() => setStockFilter("all")} />
+      <ProductMetricCard label={translateUi("Kifayət qədər")} value={inStock} detail={translateUi("Normal qalıq səviyyəsi")} icon={Check} iconClassName="bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100" selected={stockFilter === "available"} onClick={() => setStockFilter("available")} />
+      <ProductMetricCard label={translateUi("Kritik qalıq")} value={critical} detail={`${outOfStock} bitmiş məhsul`} icon={AlertTriangle} iconClassName="bg-amber-50 text-amber-600 group-hover:bg-amber-100" valueClassName="text-amber-600" selected={stockFilter === "low"} onClick={() => setStockFilter("low")} />
+      <ProductMetricCard label={translateUi("Qalıq maya dəyəri")} value={money(value, currencyCode)} detail={translateUi("Maya qiyməti ilə cəmi")} icon={CircleDollarSign} iconClassName="bg-purple-50 text-purple-600" compactValue />
     </div>}
     {tab === "catalog" && <ProductCatalogMetrics products={scopeProducts} categoryCount={data.categories.length} stockFilter={stockFilter} onStockFilterChange={setStockFilter} />}
     {tab === "balances" && productList}
@@ -137,6 +140,6 @@ export default function BusinessProducts({ session }: { session: BusinessSession
     {editing && (editing.kind === "category" || editing.kind === "supplier") && <SimpleDialog key={editing.initial?.id ?? editing.kind} kind={editing.kind} initial={editing.initial as ProductCategory | Supplier | undefined} error={error} onClose={() => { setEditing(null); setError(""); }} onSave={saveSimple} />}
     {stockMode === "inventory" && <InventoryAuditDialog data={data} defaultWarehouseId={selectedWarehouse === "all" ? "" : selectedWarehouse} error={error} onClose={() => { setStockMode(null); setError(""); }} onSave={saveStock} />}
     {stockMode && stockMode !== "inventory" && <StockDialog key={`${stockMode}-${stockSupplierId}`} data={data} mode={stockMode} defaultSupplierId={stockSupplierId} defaultWarehouseId={selectedWarehouse === "all" ? "" : selectedWarehouse} error={error} onClose={() => { setStockMode(null); setStockSupplierId(""); setError(""); }} onSave={saveStock} onCreateSupplier={async (supplier) => { if (!activeContext) return false; try { const id = await saveInventoryRecord(activeContext.businessId, "suppliers", supplier); await refresh(); return id; } catch (cause) { setError(cause instanceof Error ? cause.message : "Təchizatçı saxlanmadı."); return false; } }} />}
-    {deleting && <BusinessDeleteDialog name={deleting.name} detail={deleting.kind === "category" ? "Bağlı məhsullar kateqoriyasız qalacaq." : deleting.kind === "warehouse" ? "Bağlı məhsullar anbarsız qalacaq." : undefined} error={error} onClose={() => { setDeleting(null); setError(""); }} onDelete={remove} />}
+    {deleting && <BusinessDeleteDialog name={deleting.name} detail={deleting.kind === "category" ? translateUi("Bağlı məhsullar kateqoriyasız qalacaq.") : deleting.kind === "warehouse" ? translateUi("Bağlı məhsullar anbarsız qalacaq.") : undefined} error={error} onClose={() => { setDeleting(null); setError(""); }} onDelete={remove} />}
   </div>;
 }

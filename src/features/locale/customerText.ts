@@ -1,5 +1,7 @@
 import { useLanguage, type Language } from "./language";
 import { uiTextCatalog } from "./uiTextCatalog";
+import { ruUiTextCatalog } from "./ruUiTextCatalog";
+import { trEnUiTextCatalog } from "./trEnUiTextCatalog";
 
 const copy: Record<string, [string, string, string, string]> = {
   "Seçilmişlər": ["Seçilmişlər", "Избранное", "Favoriler", "Favorites"],
@@ -198,5 +200,9 @@ const copy: Record<string, [string, string, string, string]> = {
 const index: Record<Language, number> = { az: 0, ru: 1, tr: 2, en: 3 };
 export function useCustomerText() {
   const { language } = useLanguage();
-  return (az: string) => (copy[az] ?? uiTextCatalog[az])?.[index[language]] ?? az;
+  return (az: string) => (copy[az] ?? uiTextCatalog[az])?.[index[language]]
+    ?? (language === "ru" ? ruUiTextCatalog[az] : undefined)
+    ?? (language === "tr" ? trEnUiTextCatalog[az]?.[0] : undefined)
+    ?? (language === "en" ? trEnUiTextCatalog[az]?.[1] : undefined)
+    ?? az;
 }

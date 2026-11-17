@@ -6,6 +6,8 @@ import { useCustomer } from "./useCustomer";
 import { useCustomerText } from "@/features/locale/customerText";
 import { showToast } from "@/components/common/toast";
 import type { Booking } from "./CustomerContext";
+import LocalizedText from "@/features/locale/LocalizedText";
+
 
 const statusStyle: Record<NonNullable<Booking["status"]>, string> = {
   "Gözlənilir": "bg-lime-50 text-lime-800 ring-lime-200",
@@ -43,7 +45,7 @@ export default function BookingsModal() {
   return <Dialog open={modal === "bookings"} onOpenChange={(open) => { if (!open) { setError(""); closeModal(); } }}>
     <DialogContent className="customer-drawer" overlayClassName="customer-overlay">
       <DialogHeader className="border-b border-slate-100 pb-4"><div className="flex items-center gap-2"><span className="flex size-9 items-center justify-center rounded-xl bg-lime-50 text-lime-700"><CalendarDays size={19} /></span><DialogTitle className="text-xl font-bold text-slate-900">{ct("Rezervasiyalarım")}</DialogTitle></div><p className="text-xs text-slate-500">{ct("Qəbullarınızı və onların statusunu izləyin")}</p></DialogHeader>
-      {error && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
+      {error && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700"><LocalizedText value={error} /></p>}
       <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pb-2">{bookings.length ? <><p className="text-xs font-semibold text-slate-500">{activeCount} {ct("aktiv rezervasiya")} · {bookings.length} {ct("cəmi")}</p>{bookings.map((booking) => <BookingCard key={booking.id} booking={booking} onCancel={cancel} />)}</> : <EmptyState title={ct("Hələ heç bir rezervasiyanız yoxdur")} description={ct("Yeni rezervasiyalarınız burada görünəcək.")} icon={CalendarDays} compact />}</div>
     </DialogContent>
   </Dialog>;

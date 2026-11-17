@@ -6,6 +6,8 @@ import { panel, type DeleteSetter } from "./FinanceViewShared";
 import BusinessStatusBadge from "../components/BusinessStatusBadge";
 import { useCustomerText } from "../../locale/customerText";
 import { useLanguage } from "../../locale/language";
+import LocalizedText from "@/features/locale/LocalizedText";
+
 
 type AccountsProps = {
   data: FinanceData;
@@ -47,7 +49,7 @@ export function FinanceAccountsView({ data, totalBalance, todayTxs, openShift, c
         [t("Nağd dövriyyə"), `+ ${formatMoney(cashTurnover)}`],
         [t("POS Terminal (Kart)"), `+ ${formatMoney(cardTurnover)}`],
         [t("Cəmi növbə dövriyyəsi"), formatMoney(cashTurnover + cardTurnover)],
-      ].map(([label, value]) => <div key={label} className="border-b border-r border-slate-100 p-3 sm:border-b-0 sm:p-4"><p className="text-xs text-slate-500">{label}</p><strong className="mt-1 block break-words text-sm sm:text-base">{value}</strong></div>)}</div></details>}
+      ].map(([label, value]) => <div key={label} className="border-b border-r border-slate-100 p-3 sm:border-b-0 sm:p-4"><p className="text-xs text-slate-500"><LocalizedText value={label} /></p><strong className="mt-1 block break-words text-sm sm:text-base">{value}</strong></div>)}</div></details>}
     </section>
 
     <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"><div><h3 className="text-lg font-bold">{t("Hesablar və kassalar")}</h3><p className="text-xs text-slate-500">{t("Nağd kassalar, POS terminallar və bank hesabları")}</p></div><button type="button" onClick={() => setAccountDialog(null)} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-slate-100 px-3.5 py-2 text-xs font-semibold hover:bg-slate-200 sm:min-h-0"><Plus size={14} />{t("Hesab əlavə et")}</button></div>

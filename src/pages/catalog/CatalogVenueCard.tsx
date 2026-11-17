@@ -3,6 +3,7 @@ import { ArrowUpRight, Heart, MapPin, Star } from "lucide-react";
 import type { Salon } from "@/features/marketplace/data";
 import { categories } from "@/features/marketplace/data";
 import { categoryName, useTranslations } from "@/features/locale/language";
+import LocalizedText from "@/features/locale/LocalizedText";
 
 interface Props { item: Salon; isFavorite: boolean; onToggleFavorite: () => void; onBook: () => void }
 
@@ -19,7 +20,7 @@ export default function CatalogVenueCard({ item, isFavorite, onToggleFavorite, o
       <Link to={`/salon/${item.id}`} aria-label={`${item.name} — ${t("details")}`} className="block size-full focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-brand-primary">
         {item.image && <img src={item.image} alt="" loading="lazy" className="size-full object-cover transition duration-300 group-hover:scale-[1.03]" />}
       </Link>
-      <span className="pointer-events-none absolute bottom-3 left-3 max-w-[calc(100%-5rem)] truncate rounded-full bg-white/95 px-3 py-1.5 text-[11px] font-bold text-primary shadow-sm backdrop-blur-sm">{label}</span>
+      <span className="pointer-events-none absolute bottom-3 left-3 max-w-[calc(100%-5rem)] truncate rounded-full bg-white/95 px-3 py-1.5 text-[11px] font-bold text-primary shadow-sm backdrop-blur-sm"><LocalizedText value={label} /></span>
       <button type="button" onClick={onToggleFavorite} aria-label={isFavorite ? t("removeFavorite") : t("addFavorite")} aria-pressed={isFavorite} className="absolute right-3 top-3 flex size-10 items-center justify-center rounded-full bg-white text-slate-600 shadow-sm transition hover:text-rose-500"><Heart size={19} className={isFavorite ? "fill-rose-500 text-rose-500" : ""} /></button>
     </div>
     <div className="flex min-w-0 flex-1 flex-col p-4 sm:p-5">
@@ -28,7 +29,7 @@ export default function CatalogVenueCard({ item, isFavorite, onToggleFavorite, o
       {item.services[0] && <p className="mt-4 line-clamp-1 text-xs text-slate-600"><span className="font-bold text-slate-800">{item.services[0].name}</span>{item.services.length > 1 ? ` · +${item.services.length - 1}` : ""}</p>}
       <div className="mt-auto flex items-end justify-between gap-2 border-t border-slate-100 pt-4">
         <div className="min-w-0"><span className="block text-[11px] text-slate-500">{t("startingAt")}</span><strong className="text-lg font-black text-primary">{startingPrice !== null ? `${startingPrice} ₼` : "—"}</strong></div>
-        {branches > 1 ? <Link to={`/salon/${item.id}`} className="inline-flex min-h-11 items-center justify-center gap-1 rounded-full bg-brand-primary px-4 text-xs font-black text-primary transition hover:bg-[#b9dc65]">Filial seç <ArrowUpRight size={16} /></Link> : <button type="button" onClick={onBook} className="inline-flex min-h-11 items-center justify-center gap-1 rounded-full bg-brand-primary px-4 text-xs font-black text-primary transition hover:bg-[#b9dc65]">Vaxt seç <ArrowUpRight size={16} /></button>}
+        {branches > 1 ? <Link to={`/salon/${item.id}`} className="inline-flex min-h-11 items-center justify-center gap-1 rounded-full bg-brand-primary px-4 text-xs font-black text-primary transition hover:bg-[#b9dc65]"><LocalizedText value={"Filial seç"} /> <ArrowUpRight size={16} /></Link> : <button type="button" onClick={onBook} className="inline-flex min-h-11 items-center justify-center gap-1 rounded-full bg-brand-primary px-4 text-xs font-black text-primary transition hover:bg-[#b9dc65]"><LocalizedText value={"Vaxt seç"} /> <ArrowUpRight size={16} /></button>}
       </div>
     </div>
   </article>;

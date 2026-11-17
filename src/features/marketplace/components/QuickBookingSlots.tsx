@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useCustomer } from "@/features/customer/useCustomer";
 import { fetchAvailableSlots } from "@/features/customer/onlineBookingApi";
 import type { Salon } from "@/features/marketplace/data";
+import LocalizedText from "@/features/locale/LocalizedText";
 
 export default function QuickBookingSlots({ salon }: { salon: Salon }) {
   const { openBooking } = useCustomer();
@@ -25,7 +26,7 @@ export default function QuickBookingSlots({ salon }: { salon: Salon }) {
 
   if (!slots.length) return null;
   return <div className="mt-3 border-t border-slate-100 pt-3">
-    <p className="mb-2 text-xs font-semibold text-slate-600">Yaxın boş vaxtlar · {salon.services[0].name}</p>
-    <div className="flex flex-wrap gap-2">{slots.map((slot) => <button key={`${slot.date}-${slot.time}`} type="button" onClick={() => openBooking(salon, undefined, salon.services[0], slot.time, salon.branches?.[0], slot.date)} className="min-h-10 rounded-xl border border-slate-200 bg-slate-50 px-3 text-xs font-bold text-primary hover:border-brand-primary hover:bg-brand-primary/20">{slot.label}</button>)}</div>
+    <p className="mb-2 text-xs font-semibold text-slate-600"><LocalizedText value={"Yaxın boş vaxtlar ·"} /> {salon.services[0].name}</p>
+    <div className="flex flex-wrap gap-2">{slots.map((slot) => <button key={`${slot.date}-${slot.time}`} type="button" onClick={() => openBooking(salon, undefined, salon.services[0], slot.time, salon.branches?.[0], slot.date)} className="min-h-10 rounded-xl border border-slate-200 bg-slate-50 px-3 text-xs font-bold text-primary hover:border-brand-primary hover:bg-brand-primary/20"><LocalizedText value={slot.label} /></button>)}</div>
   </div>;
 }

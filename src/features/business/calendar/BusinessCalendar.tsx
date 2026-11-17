@@ -19,6 +19,8 @@ import { checkoutBookingRecord, deleteBookingRecord, saveBookingRecord, setBooki
 import { useClients } from "../clients/useClients";
 import { useFinance } from "../finance/useFinance";
 import { useCustomerText } from "@/features/locale/customerText";
+import LocalizedText from "@/features/locale/LocalizedText";
+
 
 export default function BusinessCalendar({ session }: { session: BusinessSession }) {
   const t = useCustomerText();
@@ -136,7 +138,7 @@ export default function BusinessCalendar({ session }: { session: BusinessSession
         { value: "daily", label: t("Günlük (Ustalar)") },
         { value: "weekly", label: t("Həftəlik") },
         { value: "pending", label: `${t("Onlayn müraciətlər")}${pendingCount ? ` (${pendingCount})` : ""}` },
-      ] as { value: CalendarView; label: string }[]).map((item) => <BusinessTabButton key={item.value} active={view === item.value} onClick={() => setView(item.value)}>{item.label}</BusinessTabButton>)}</BusinessTabRail></div>
+      ] as { value: CalendarView; label: string }[]).map((item) => <BusinessTabButton key={item.value} active={view === item.value} onClick={() => setView(item.value)}><LocalizedText value={item.label} /></BusinessTabButton>)}</BusinessTabRail></div>
         <MasterFilter masters={masters} value={master} onChange={setMaster} />
         <button type="button" onClick={openNewBooking} className="flex min-h-10 w-full cursor-pointer items-center justify-center gap-1 rounded-xl bg-brand-primary px-4 text-xs font-bold sm:ml-auto sm:w-auto"><Plus size={16} />{t("Yeni qəbul")}</button>
       </div>

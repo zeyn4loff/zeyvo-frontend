@@ -6,8 +6,12 @@ import BusinessDeleteDialog from "../components/BusinessDeleteDialog";
 import { useLanguage } from "@/features/locale/language";
 import { profileCopy } from "./profileLocale";
 import { deletePartnerProfile } from "./profileApi";
+import { useCustomerText } from "@/features/locale/customerText";
+import LocalizedText from "@/features/locale/LocalizedText";
+
 
 export default function SecurityPanel({ session }: { session: BusinessSession }) {
+  const translateUi = useCustomerText();
   const { endSession } = useBusinessSession();
   const navigate = useNavigate();
   const [error, setError] = useState("");
@@ -31,8 +35,8 @@ export default function SecurityPanel({ session }: { session: BusinessSession })
         </div>
         <button type="button" onClick={() => setDeleting(true)} className="min-h-11 shrink-0 cursor-pointer rounded-xl border border-rose-200 bg-rose-50 px-5 text-xs font-bold text-rose-600 hover:bg-rose-100">{text.delete}</button>
       </div>
-      {error && <p role="alert" className="mt-3 rounded-xl bg-rose-50 p-3 text-sm text-rose-700">{error}</p>}
+      {error && <p role="alert" className="mt-3 rounded-xl bg-rose-50 p-3 text-sm text-rose-700"><LocalizedText value={error} /></p>}
     </section>
-    {deleting && <BusinessDeleteDialog name={session.businessName} detail="Profil, xidmətlər, müştərilər və qəbullar silinəcək. Bu əməliyyatı geri qaytarmaq mümkün deyil." onClose={() => setDeleting(false)} onDelete={() => { void removeProfile(); }} />}
+    {deleting && <BusinessDeleteDialog name={session.businessName} detail={translateUi("Profil, xidmətlər, müştərilər və qəbullar silinəcək. Bu əməliyyatı geri qaytarmaq mümkün deyil.")} onClose={() => setDeleting(false)} onDelete={() => { void removeProfile(); }} />}
   </div>;
 }

@@ -9,8 +9,12 @@ import { phoneIdentity } from "./phoneAccounts";
 import { CustomerApiError, requestCustomerCode, verifyCustomerCode, type CodeDelivery } from "./customerAuthApi";
 import { useTranslations } from "@/features/locale/language";
 import CodeInput from "@/components/common/CodeInput";
+import { useCustomerText } from "@/features/locale/customerText";
+import LocalizedText from "@/features/locale/LocalizedText";
+
 
 export default function AuthModal() {
+  const translateUi = useCustomerText();
   const { modal, closeModal, login } = useCustomer();
   const { t } = useTranslations();
   const [mode, setMode] = useState<"login" | "register">("login");
@@ -54,7 +58,7 @@ export default function AuthModal() {
       <DialogHeader><DialogTitle className="text-lg font-bold">{pending ? t("confirmPhone") : mode === "login" ? t("login") : t("createAccount")}</DialogTitle>
         <p className="text-xs text-slate-500">{pending ? `${t("code")}: +${phoneIdentity(phone)}` : t("authDescription")}</p>
       </DialogHeader>
-      {error && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-2 text-xs text-red-700">{error}</p>}
+      {error && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-2 text-xs text-red-700"><LocalizedText value={error} /></p>}
       {pending ? <form onSubmit={verify} className="space-y-4">
         <p className="text-xs text-slate-600">{pending.channel === "sms" ? t("codeViaSms") : t("codeViaWhatsapp")}</p>
         <div className="space-y-1.5"><p className="text-sm font-semibold">{t("code")}</p><CodeInput value={enteredCode} onChange={setEnteredCode} label={t("code")} autoFocus /></div>
@@ -64,7 +68,7 @@ export default function AuthModal() {
       </form> : <>
         <div className="flex rounded-xl bg-slate-100 p-1 text-xs font-semibold"><button type="button" onClick={() => { setMode("login"); reset(); }} className={`flex-1 rounded-lg py-2 ${mode === "login" ? "bg-white shadow-sm" : ""}`}>{t("login")}</button><button type="button" onClick={() => { setMode("register"); reset(); }} className={`flex-1 rounded-lg py-2 ${mode === "register" ? "bg-white shadow-sm" : ""}`}>{t("register")}</button></div>
         <form onSubmit={requestCode} className="space-y-3">
-          {mode === "register" && <label className="block space-y-1 text-xs font-semibold">{t("fullName")}<input value={name} onChange={(event) => setName(event.target.value)} autoComplete="name" required className={fieldClass} placeholder="Əli Əliyev" /></label>}
+          {mode === "register" && <label className="block space-y-1 text-xs font-semibold">{t("fullName")}<input value={name} onChange={(event) => setName(event.target.value)} autoComplete="name" required className={fieldClass} placeholder={translateUi("Əli Əliyev")} /></label>}
           <PhoneField value={phone} onChange={setPhone} />
           {mode === "register" && <div className="flex items-start gap-2 text-xs text-slate-600"><input id="auth-terms" checked={terms} onChange={(event) => setTerms(event.target.checked)} type="checkbox" className="mt-0.5 accent-brand-primary" /><span><label htmlFor="auth-terms">{t("termsIntro")} </label><button type="button" onClick={() => setLegalTab("terms")} className="font-semibold text-primary underline">{t("terms")}</button><span> {t("and")} </span><button type="button" onClick={() => setLegalTab("privacy")} className="font-semibold text-primary underline">{t("privacy")}</button><span> {t("termsOutro")}</span></span></div>}
           <button type="submit" disabled={busy || retryAfter > now} className={`${primaryClass} disabled:opacity-50`}>{busy ? t("sendingCode") : t("getCode")} <ArrowRight size={16} /></button>

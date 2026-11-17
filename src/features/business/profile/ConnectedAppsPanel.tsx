@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useLanguage } from "@/features/locale/language";
 import { authorizeGoogleCalendar, disconnectGoogleCalendar, readGoogleCalendarStatus, syncGoogleCalendar, type GoogleCalendarStatus } from "./profileApi";
 import { profileCopy } from "./profileLocale";
+import LocalizedText from "@/features/locale/LocalizedText";
+
 
 const messages = {
   az: { connected: "Qoşulub", connect: "Google hesabını qoş", disconnect: "Bağlantını kəs", unavailable: "Google Calendar hələ sazlanmayıb.", own: "Yalnız sizə təyin olunmuş qəbullar şəxsi təqviminizlə sinxronlaşdırılır.", done: "Sinxronlaşdırıldı", error: "Google hesabını qoşmaq mümkün olmadı.", loading: "Yüklənir..." },
@@ -70,6 +72,6 @@ export default function ConnectedAppsPanel() {
       </div>
     </div>
     {status && !status.configured && <p className="rounded-xl bg-slate-50 p-4 text-sm text-slate-600">{labels.unavailable}</p>}
-    {notice && <p role="status" className="rounded-xl bg-slate-50 p-4 text-sm text-slate-600">{notice}</p>}
+    {notice && <p role="status" className="rounded-xl bg-slate-50 p-4 text-sm text-slate-600"><LocalizedText value={notice} /></p>}
   </section>;
 }

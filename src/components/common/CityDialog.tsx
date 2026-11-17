@@ -18,6 +18,7 @@ interface CityDialogProps {
 }
 
 export default function CityDialog({ open, onOpenChange, selectedCity, onSelectCity }: CityDialogProps) {
+  const translateUi = useCustomerText();
     const t = useCustomerText();
     const [query, setQuery] = useState("");
     const { cities, status } = usePublicCities();
@@ -49,7 +50,7 @@ export default function CityDialog({ open, onOpenChange, selectedCity, onSelectC
                 </button>)}
                 {status === "loading" && <p role="status" className="py-6 text-center text-xs text-slate-500">{t("Şəhərlər yüklənir...")}</p>}
                 {status === "error" && <p role="alert" className="py-6 text-center text-xs text-red-600">{t("Şəhərləri yükləmək mümkün olmadı.")}</p>}
-                {status === "ready" && filteredCities.length === 0 && <EmptyState title="Şəhər tapılmadı" description="Axtarış sözünü dəyişin." compact className="border-0 shadow-none" />}
+                {status === "ready" && filteredCities.length === 0 && <EmptyState title={translateUi("Şəhər tapılmadı")} description={translateUi("Axtarış sözünü dəyişin.")} compact className="border-0 shadow-none" />}
             </div>
         </DialogContent>
     </Dialog>;

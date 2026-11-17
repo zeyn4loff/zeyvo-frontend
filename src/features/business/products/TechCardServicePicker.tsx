@@ -3,6 +3,8 @@ import { useMemo, useState } from "react";
 import { Search, Wrench } from "lucide-react";
 import BusinessFormDialog from "../components/BusinessFormDialog";
 import type { Service, ServiceCategory } from "../services/services";
+import LocalizedText from "@/features/locale/LocalizedText";
+import { useCustomerText } from "@/features/locale/customerText";
 
 type Props = {
   services: Service[];
@@ -13,6 +15,7 @@ type Props = {
 };
 
 export default function TechCardServicePicker({ services, categories, selectedId, onSelect, onClose }: Props) {
+  const translateUi = useCustomerText();
   const currencySign = useCurrencySymbol();
   const [query, setQuery] = useState("");
   const [categoryId, setCategoryId] = useState("all");
@@ -34,22 +37,22 @@ export default function TechCardServicePicker({ services, categories, selectedId
   }, [services, categoryId, query, categoryNames]);
 
   return (
-    <BusinessFormDialog size="stock" title="Xidmət seçimi" description="Texnoloji kart üçün salon xidmətini seçin" onClose={onClose}>
+    <BusinessFormDialog size="stock" title={translateUi("Xidmət seçimi")} description={translateUi("Texnoloji kart üçün salon xidmətini seçin")} onClose={onClose}>
       <div className="min-w-0 space-y-3 text-xs">
         <div className="space-y-2.5">
           <label className="relative block">
-            <span className="sr-only">Xidmət adı ilə axtarın</span>
+            <span className="sr-only"><LocalizedText value={"Xidmət adı ilə axtarın"} /></span>
             <Search aria-hidden="true" size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               autoFocus
               type="search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Xidmət adı ilə axtarın..."
+              placeholder={translateUi("Xidmət adı ilə axtarın...")}
               className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 pl-9 pr-3 font-medium text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-900 focus:bg-white focus:ring-2 focus:ring-brand-primary/40"
             />
           </label>
-          <div aria-label="Xidmət kateqoriyaları" className="flex max-w-full gap-1.5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div aria-label={translateUi("Xidmət kateqoriyaları")} className="flex max-w-full gap-1.5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {[{ id: "all", name: "Bütün xidmətlər" }, ...availableCategories].map((category) => (
               <button
                 key={category.id}
@@ -82,27 +85,27 @@ export default function TechCardServicePicker({ services, categories, selectedId
                   <span className="min-w-0">
                     <span className="block break-words font-bold text-slate-900">{service.name}</span>
                     <span className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-slate-400">
-                      <span className="rounded bg-slate-100 px-1.5 font-medium text-slate-600">{categoryNames.get(service.categoryId) ?? "Xidmət"}</span>
+                      <span className="rounded bg-slate-100 px-1.5 font-medium text-slate-600">{categoryNames.get(service.categoryId) ?? translateUi("Xidmət")}</span>
                       <span aria-hidden="true">•</span>
-                      <span>{service.duration} dəq</span>
+                      <span>{service.duration} <LocalizedText value={"dəq"} /></span>
                     </span>
                   </span>
                 </span>
                 <span className="flex shrink-0 flex-col items-end gap-1.5 sm:flex-row sm:items-center sm:gap-2.5">
                   <span className="tabular-nums font-bold text-slate-900">{service.price.toFixed(2)}{service.priceType === "range" ? `–${service.priceMax.toFixed(2)}` : ""} {currencySign}{service.priceType === "from" ? "+" : ""}</span>
                   <span className={`rounded-lg px-3 py-1.5 font-bold transition ${selected ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-800"}`}>
-                    {selected ? "Seçildi" : "Seç"}
+                    {selected ? translateUi("Seçildi") : translateUi("Seç")}
                   </span>
                 </span>
               </button>
             );
           })}
-          {!filtered.length && <div className="space-y-1 p-8 text-center text-slate-400"><Search aria-hidden="true" size={30} className="mx-auto text-slate-300" /><p className="font-bold text-slate-700">Axtarışa uyğun xidmət tapılmadı</p><p>{services.length ? "Başqa açar söz və ya kateqoriya seçin" : "Əvvəlcə xidmət əlavə edin"}</p></div>}
+          {!filtered.length && <div className="space-y-1 p-8 text-center text-slate-400"><Search aria-hidden="true" size={30} className="mx-auto text-slate-300" /><p className="font-bold text-slate-700"><LocalizedText value={"Axtarışa uyğun xidmət tapılmadı"} /></p><p>{services.length ? translateUi("Başqa açar söz və ya kateqoriya seçin") : translateUi("Əvvəlcə xidmət əlavə edin")}</p></div>}
         </div>
 
         <div className="flex items-center justify-between gap-3 border-t border-slate-100 pt-3">
-          <span aria-live="polite" className="font-medium text-slate-400">{filtered.length} xidmət tapıldı</span>
-          <button type="button" onClick={onClose} className="min-h-11 cursor-pointer rounded-xl bg-slate-100 px-5 font-bold text-slate-900">Bağla</button>
+          <span aria-live="polite" className="font-medium text-slate-400">{filtered.length} <LocalizedText value={"xidmət tapıldı"} /></span>
+          <button type="button" onClick={onClose} className="min-h-11 cursor-pointer rounded-xl bg-slate-100 px-5 font-bold text-slate-900"><LocalizedText value={"Bağla"} /></button>
         </div>
       </div>
     </BusinessFormDialog>

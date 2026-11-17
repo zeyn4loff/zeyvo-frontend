@@ -35,6 +35,7 @@ function getOpenStatus(hours?: string, scheduleDays?: Props["scheduleDays"]) {
 }
 
 export default function SalonHero({ salon, branchName, location, hours, phone, scheduleDays, image, whatsapp, instagram: branchInstagram, facebook, isFavorite, onToggleFavorite, onBook }: Props) {
+  const translateUi = useCustomerText();
   const ct = useCustomerText();
   const { t } = useTranslations();
   const open = getOpenStatus(hours || salon.workHours, scheduleDays);
@@ -56,7 +57,7 @@ export default function SalonHero({ salon, branchName, location, hours, phone, s
         <p className="mt-1 flex items-start gap-1 text-xs font-medium text-slate-500"><MapPin size={14} className="mt-px shrink-0 text-slate-400" />{branchName && branchName !== salon.name ? `${branchName} · ` : ""}{location || salon.location}</p>
         {(digits || socialLinks.length > 0) && <div className="mt-2 flex flex-wrap items-center gap-3 text-xs">
           {digits && <a href={`tel:+${digits}`} className="inline-flex items-center gap-1 font-semibold text-slate-600"><Phone size={14} className="text-slate-400" />{contactPhone}</a>}
-          {socialLinks.length > 0 && <div className="flex items-center gap-1.5" aria-label="Sosial şəbəkələr">{socialLinks.map(({ type, href, color }) => <a key={type} href={href} target="_blank" rel="noopener noreferrer" aria-label={type} className={`flex size-7 items-center justify-center rounded-lg ${color}`}><SocialIcon type={type} /></a>)}</div>}
+          {socialLinks.length > 0 && <div className="flex items-center gap-1.5" aria-label={translateUi("Sosial şəbəkələr")}>{socialLinks.map(({ type, href, color }) => <a key={type} href={href} target="_blank" rel="noopener noreferrer" aria-label={type} className={`flex size-7 items-center justify-center rounded-lg ${color}`}><SocialIcon type={type} /></a>)}</div>}
         </div>}
         <div className="mt-2.5 flex items-center gap-1">{salon.reviewsCount ? <><strong className="text-sm">{salon.rating}</strong><span className="flex gap-0.5 text-amber-400">{Array.from({ length: 5 }, (_, index) => <Star key={index} size={12} fill={index < Math.round(salon.rating) ? "currentColor" : "none"} />)}</span><span className="text-xs text-slate-400">({salon.reviewsCount})</span></> : <span className="text-xs text-slate-500">{ct("Hələ rəy yoxdur")}</span>}</div>
       </div>

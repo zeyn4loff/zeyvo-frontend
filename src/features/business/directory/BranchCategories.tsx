@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { CarFront, Check, ChevronDown, CircleHelp, Dumbbell, GraduationCap, HeartPulse, Home, MoreHorizontal, Palette, PawPrint, Scale, Scissors, Search, Utensils, Wrench, X } from "lucide-react";
 import { useLanguage } from "@/features/locale/language";
 import EmptyState from "@/components/common/EmptyState";
+import LocalizedText from "@/features/locale/LocalizedText";
+import { useCustomerText } from "@/features/locale/customerText";
 
 type Props = { selected: string[]; onChange: (value: string[]) => void; individual?: boolean; server?: boolean };
 type TaxonomyCategory = { id: string; name: string; azName: string; subcategories: { id: string; name: string; azName: string }[] };
@@ -24,6 +26,7 @@ function normalizedSelections(selected: string[], categories: TaxonomyCategory[]
 }
 
 export default function BranchCategories({ selected, onChange, individual = false, server = false }: Props) {
+  const translateUi = useCustomerText();
   const { language } = useLanguage();
   const [categories, setCategories] = useState<TaxonomyCategory[]>([]);
   const [loadError, setLoadError] = useState("");
@@ -79,18 +82,18 @@ export default function BranchCategories({ selected, onChange, individual = fals
     return { category, subs };
   }).filter(({ subs }) => subs.length > 0);
 
-  return <section className="min-w-0 space-y-2" aria-label="Kateqoriyalar və alt-xidmətlər">
+  return <section className="min-w-0 space-y-2" aria-label={translateUi("Kateqoriyalar və alt-xidmətlər")}>
     <div className="flex items-center justify-between gap-2">
-      <label htmlFor="branch-category-search" className="text-xs font-medium text-slate-700">Kateqoriyalar və alt-xidmətlər *</label>
-      <span className="shrink-0 rounded-full bg-brand-primary/30 px-2.5 py-1 text-[11px] font-semibold text-slate-800">{current.length} seçilib</span>
+      <label htmlFor="branch-category-search" className="text-xs font-medium text-slate-700"><LocalizedText value={"Kateqoriyalar və alt-xidmətlər *"} /></label>
+      <span className="shrink-0 rounded-full bg-brand-primary/30 px-2.5 py-1 text-[11px] font-semibold text-slate-800">{current.length} <LocalizedText value={"seçilib"} /></span>
     </div>
     <div className="flex min-w-0 gap-2">
       <div className="relative min-w-0 flex-1">
         <Search size={16} aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-3 my-auto text-slate-400" />
-        <input id="branch-category-search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Kateqoriya və ya xidmət axtar" className="h-10 w-full min-w-0 rounded-xl border border-slate-200 bg-white pr-9 pl-9 text-xs font-medium text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-900 focus:ring-2 focus:ring-brand-primary/40" />
-        {query && <button type="button" onClick={() => setQuery("")} aria-label="Axtarışı təmizlə" className="absolute inset-y-0 right-2 flex w-7 cursor-pointer items-center justify-center text-slate-400 transition hover:text-slate-700"><X size={14} /></button>}
+        <input id="branch-category-search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={translateUi("Kateqoriya və ya xidmət axtar")} className="h-10 w-full min-w-0 rounded-xl border border-slate-200 bg-white pr-9 pl-9 text-xs font-medium text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-900 focus:ring-2 focus:ring-brand-primary/40" />
+        {query && <button type="button" onClick={() => setQuery("")} aria-label={translateUi("Axtarışı təmizlə")} className="absolute inset-y-0 right-2 flex w-7 cursor-pointer items-center justify-center text-slate-400 transition hover:text-slate-700"><X size={14} /></button>}
       </div>
-      <button type="button" aria-pressed={showSelectedOnly} onClick={() => setShowSelectedOnly((value) => !value)} className={`min-h-10 shrink-0 cursor-pointer rounded-xl border px-3 text-xs font-semibold transition ${showSelectedOnly ? "border-brand-primary bg-brand-primary text-slate-950" : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"}`}>Seçilənlər</button>
+      <button type="button" aria-pressed={showSelectedOnly} onClick={() => setShowSelectedOnly((value) => !value)} className={`min-h-10 shrink-0 cursor-pointer rounded-xl border px-3 text-xs font-semibold transition ${showSelectedOnly ? "border-brand-primary bg-brand-primary text-slate-950" : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"}`}><LocalizedText value={"Seçilənlər"} /></button>
     </div>
     {loadError && <p role="alert" className="text-xs text-red-600">{loadError}</p>}
     <div className="max-h-64 space-y-1 overflow-y-auto rounded-xl border border-slate-200 bg-white p-1.5">
@@ -107,7 +110,7 @@ export default function BranchCategories({ selected, onChange, individual = fals
               <span className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-semibold ${count ? "bg-brand-primary/30 text-slate-800" : "bg-slate-100 text-slate-400"}`}>{count}/{category.subcategories.length}</span>
               <ChevronDown size={15} aria-hidden="true" className={`ml-auto shrink-0 text-slate-400 transition-transform ${expanded ? "rotate-180" : ""}`} />
             </button>
-            {expanded && !showSelectedOnly && <button type="button" onClick={() => toggleAll(category.id)} className="min-h-9 shrink-0 cursor-pointer px-1 text-[11px] font-semibold text-slate-600 hover:text-slate-950">{allSelected ? "Seçimi ləğv et" : "Hamısını seç"}</button>}
+            {expanded && !showSelectedOnly && <button type="button" onClick={() => toggleAll(category.id)} className="min-h-9 shrink-0 cursor-pointer px-1 text-[11px] font-semibold text-slate-600 hover:text-slate-950">{allSelected ? translateUi("Seçimi ləğv et") : translateUi("Hamısını seç")}</button>}
           </div>
           {expanded && <div className="flex flex-wrap gap-1.5 border-t border-slate-200/80 px-2 py-2">{subs.map((sub) => {
             const id = `${category.id}/${sub.id}`;
@@ -115,9 +118,9 @@ export default function BranchCategories({ selected, onChange, individual = fals
             return <button key={id} type="button" aria-pressed={active} onClick={() => toggle(id)} className={`inline-flex min-h-9 max-w-full cursor-pointer items-center gap-1.5 rounded-lg border px-2.5 py-1 text-left text-xs transition ${active ? "border-brand-primary bg-brand-primary font-semibold text-slate-950" : "border-slate-200 bg-white font-medium text-slate-600 hover:bg-slate-100"}`}><span className="truncate">{sub.name}</span>{active && <Check size={13} strokeWidth={2.5} aria-hidden="true" className="shrink-0" />}</button>;
           })}</div>}
         </div>;
-      }) : <EmptyState title={showSelectedOnly ? "Hələ xidmət seçilməyib" : `“${query}” üzrə heç bir xidmət tapılmadı`} description={showSelectedOnly ? "Kateqoriyaları açıb xidmət seçin" : "Axtarış sözünü dəyişin"} icon={Search} compact actionLabel="Hamısını göstər" onAction={() => { setQuery(""); setShowSelectedOnly(false); }} />}
+      }) : <EmptyState title={showSelectedOnly ? translateUi("Hələ xidmət seçilməyib") : `“${query}” üzrə heç bir xidmət tapılmadı`} description={showSelectedOnly ? translateUi("Kateqoriyaları açıb xidmət seçin") : translateUi("Axtarış sözünü dəyişin")} icon={Search} compact actionLabel={translateUi("Hamısını göstər")} onAction={() => { setQuery(""); setShowSelectedOnly(false); }} />}
     </div>
-    {warning && <p role="alert" className="text-[11px] text-amber-700">{warning}</p>}
-    <p className="sr-only">{individual ? "Ustanın" : "Filialın"} aid olduğu xidmətləri seçin.</p>
+    {warning && <p role="alert" className="text-[11px] text-amber-700"><LocalizedText value={warning} /></p>}
+    <p className="sr-only">{individual ? translateUi("Ustanın") : translateUi("Filialın")} <LocalizedText value={"aid olduğu xidmətləri seçin."} /></p>
   </section>;
 }

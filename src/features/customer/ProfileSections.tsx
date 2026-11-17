@@ -4,6 +4,8 @@ import { getPublicSalons } from "@/features/marketplace/publicCatalog";
 import type { Booking, CustomerContextValue } from "./CustomerContext";
 import EmptyState from "@/components/common/EmptyState";
 import { useCustomerText } from "@/features/locale/customerText";
+import LocalizedText from "@/features/locale/LocalizedText";
+
 
 export function ProfileBookings({ bookings, onCancel, onExplore }: { bookings: Booking[]; onCancel: (id: string) => void; onExplore: () => void }) {
   const ct = useCustomerText();
@@ -36,7 +38,7 @@ export function ProfileFavorites({ salons, masters, onOpenSalon, onOpenMaster, o
     {masters.map((master) => {
       const salon = getPublicSalons().find((item) => item.id === master.salonId);
       return <article key={`m-${master.id}`} className="flex min-w-0 items-center gap-2 rounded-2xl border border-slate-200 bg-white p-3">
-        <button type="button" onClick={() => onOpenMaster(master.id)} className="flex min-w-0 flex-1 cursor-pointer items-center gap-3 text-left"><img src={master.photo} alt="" className="size-12 shrink-0 rounded-xl object-cover" /><span className="min-w-0"><strong className="block truncate text-xs">{master.name}</strong><span className="block truncate text-[10px] text-slate-400">{master.title}</span><span className="mt-0.5 flex items-center gap-1 text-[10px] font-bold text-amber-500"><Star size={11} fill="currentColor" /> {master.rating} · {ct("Usta")}</span></span></button>
+        <button type="button" onClick={() => onOpenMaster(master.id)} className="flex min-w-0 flex-1 cursor-pointer items-center gap-3 text-left"><img src={master.photo} alt="" className="size-12 shrink-0 rounded-xl object-cover" /><span className="min-w-0"><strong className="block truncate text-xs">{master.name}</strong><span className="block truncate text-[10px] text-slate-400"><LocalizedText value={master.title} /></span><span className="mt-0.5 flex items-center gap-1 text-[10px] font-bold text-amber-500"><Star size={11} fill="currentColor" /> {master.rating} · {ct("Usta")}</span></span></button>
         {salon && <button type="button" onClick={() => onBook(salon, master)} className="cursor-pointer rounded-xl bg-brand-primary px-2.5 py-1.5 text-[11px] font-black">{ct("Yazıl")}</button>}
         <button type="button" onClick={() => onRemoveMaster(master.id)} aria-label={`${master.name} sil`} className="flex size-7 cursor-pointer items-center justify-center rounded-xl bg-slate-100 text-slate-500"><X size={15} /></button>
       </article>;

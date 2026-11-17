@@ -8,6 +8,8 @@ import { NavLink, useLocation } from "react-router";
 import { menuItems } from "@/consts";
 import { useCustomer } from "@/features/customer/useCustomer";
 import { useTranslations } from "@/features/locale/language";
+import LocalizedText from "@/features/locale/LocalizedText";
+
 
 const icons = [
     LayoutGrid,
@@ -42,7 +44,7 @@ export default function BottomNavbar() {
                     const Icon = item.icon;
                     const label = item.path === "/favorites" ? t("favorites") : item.path === "/bookings" ? t("bookings") : t("catalog");
 
-                    if (item.path === "/favorites" || item.path === "/bookings") return <button key={item.path} type="button" onClick={() => openModal(item.path === "/favorites" ? "favorites" : "bookings")} className="flex min-w-0 flex-1 flex-col items-center justify-center gap-1 text-muted-foreground"><span className="flex h-8 w-12 items-center justify-center rounded-xl"><Icon size={19} strokeWidth={1.8} /></span><span className="whitespace-nowrap text-[10px] font-medium leading-none">{label}</span></button>;
+                    if (item.path === "/favorites" || item.path === "/bookings") return <button key={item.path} type="button" onClick={() => openModal(item.path === "/favorites" ? "favorites" : "bookings")} className="flex min-w-0 flex-1 flex-col items-center justify-center gap-1 text-muted-foreground"><span className="flex h-8 w-12 items-center justify-center rounded-xl"><Icon size={19} strokeWidth={1.8} /></span><span className="whitespace-nowrap text-[10px] font-medium leading-none"><LocalizedText value={label} /></span></button>;
                     return (
                         <NavLink
                             key={item.path}
@@ -69,7 +71,7 @@ export default function BottomNavbar() {
                                     </div>
 
                                     <span className="whitespace-nowrap text-[10px] font-medium leading-none">
-                    {label}
+                    <LocalizedText value={label} />
                   </span>
                                 </>
                             )}

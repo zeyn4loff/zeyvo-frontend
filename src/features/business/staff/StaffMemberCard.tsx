@@ -1,6 +1,9 @@
 import { Pencil, Trash2 } from "lucide-react";
 import type { StaffMember } from "./staff";
 import BusinessStatusBadge from "../components/BusinessStatusBadge";
+import LocalizedText from "@/features/locale/LocalizedText";
+import { useCustomerText } from "@/features/locale/customerText";
+
 
 type Props = {
   member: StaffMember;
@@ -32,6 +35,7 @@ function CardActions({ name, onEdit, onDelete, className }: { name: string; onEd
 }
 
 export default function StaffMemberCard({ member, roleName, branchName, serviceCount, onEdit, onDelete, onOnline, onServices, onSchedule, onPay, onEmployment, onHistory }: Props) {
+  const translateUi = useCustomerText();
   const active = member.status === "active";
   const initials = member.name.split(" ").map((part) => part[0]).join("").slice(0, 2).toLocaleUpperCase("az-AZ");
   return (
@@ -43,19 +47,19 @@ export default function StaffMemberCard({ member, roleName, branchName, serviceC
             <h3 className="break-words font-bold">{member.name}</h3>
             <BusinessStatusBadge tone={active ? "success" : member.status === "vacation" ? "warning" : "danger"}>{statusLabels[member.status]}</BusinessStatusBadge>
           </div>
-          <p className="mt-1 break-words text-sm text-slate-600">{roleName} · {member.specialization || "İxtisas qeyd edilməyib"}</p>
+          <p className="mt-1 break-words text-sm text-slate-600">{roleName} · {member.specialization || translateUi("İxtisas qeyd edilməyib")}</p>
           <p className="mt-1 break-words text-xs text-slate-500">{branchName}{member.phone && <> · <a className="underline" href={`tel:${member.phone.replace(/[^+\d]/g, "")}`}>{member.phone}</a></>}</p>
         </div>
         <CardActions name={member.name} onEdit={onEdit} onDelete={onDelete} className="hidden shrink-0 gap-1 sm:flex" />
       </div>
       <CardActions name={member.name} onEdit={onEdit} onDelete={onDelete} className="mt-2 flex justify-end gap-1 sm:hidden" />
       <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3">
-        <button type="button" onClick={onOnline} aria-label={`${member.name}: onlayn qəbul ayarlarını redaktə et`} className={`min-h-9 rounded-lg px-3 text-xs font-bold cursor-pointer ${active && member.onlineBooking ? "bg-brand-primary" : "bg-slate-100 text-slate-500"}`}>Onlayn qəbul {active && member.onlineBooking ? "aktiv" : "bağlı"}</button>
-        <button type="button" onClick={onServices} className="min-h-9 cursor-pointer rounded-lg bg-slate-100 px-3 text-xs font-bold">{serviceCount} xidmət</button>
-        <button type="button" onClick={onSchedule} className="min-h-9 cursor-pointer rounded-lg bg-slate-100 px-3 text-xs font-bold">İş qrafiki</button>
+        <button type="button" onClick={onOnline} aria-label={`${member.name}: onlayn qəbul ayarlarını redaktə et`} className={`min-h-9 rounded-lg px-3 text-xs font-bold cursor-pointer ${active && member.onlineBooking ? "bg-brand-primary" : "bg-slate-100 text-slate-500"}`}><LocalizedText value={"Onlayn qəbul"} /> {active && member.onlineBooking ? "aktiv" : translateUi("bağlı")}</button>
+        <button type="button" onClick={onServices} className="min-h-9 cursor-pointer rounded-lg bg-slate-100 px-3 text-xs font-bold">{serviceCount} <LocalizedText value={"xidmət"} /></button>
+        <button type="button" onClick={onSchedule} className="min-h-9 cursor-pointer rounded-lg bg-slate-100 px-3 text-xs font-bold"><LocalizedText value={"İş qrafiki"} /></button>
         <button type="button" onClick={onPay} className="min-h-9 cursor-pointer rounded-lg bg-slate-100 px-3 text-xs font-bold">Komissiya: {member.serviceCommission}%</button>
-        <button type="button" onClick={onEmployment} className={`min-h-9 cursor-pointer rounded-lg px-3 text-xs font-bold ${member.status === "dismissed" ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"}`}>{member.status === "dismissed" ? "İşə bərpa et" : "İşdən azad et"}</button>
-        {!!member.employmentHistory?.length && <button type="button" onClick={onHistory} className="min-h-9 cursor-pointer rounded-lg bg-slate-100 px-3 text-xs font-bold">Tarixçə ({member.employmentHistory.length})</button>}
+        <button type="button" onClick={onEmployment} className={`min-h-9 cursor-pointer rounded-lg px-3 text-xs font-bold ${member.status === "dismissed" ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"}`}>{member.status === "dismissed" ? translateUi("İşə bərpa et") : translateUi("İşdən azad et")}</button>
+        {!!member.employmentHistory?.length && <button type="button" onClick={onHistory} className="min-h-9 cursor-pointer rounded-lg bg-slate-100 px-3 text-xs font-bold"><LocalizedText value={"Tarixçə ("} />{member.employmentHistory.length})</button>}
       </div>
     </article>
   );

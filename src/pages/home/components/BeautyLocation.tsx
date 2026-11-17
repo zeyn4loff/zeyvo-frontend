@@ -5,6 +5,7 @@ import BeautyLocationCard from "@/features/marketplace/components/SalonCard";
 import type { Category, Salon } from "@/features/marketplace/data";
 import { categoryName, useTranslations } from "@/features/locale/language";
 import { useCustomerText } from "@/features/locale/customerText";
+import LocalizedText from "@/features/locale/LocalizedText";
 
 type SortOrder = "default" | "rating" | "price";
 interface Props {
@@ -31,7 +32,7 @@ export default function BeautyLocation({ category, items, sortOrder, onSortChang
         <option value="price">{t("price")}</option>
       </select>
     </SectionHeader>
-    {query && <p className="mb-4 text-sm text-slate-600">Axtarış: “{query}”</p>}
+    {query && <p className="mb-4 text-sm text-slate-600"><LocalizedText value={"Axtarış: “"} />{query}”</p>}
     {items.length ? <div className="grid min-w-0 grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {items.map((item) => <BeautyLocationCard key={item.id} item={item} isFavorite={favoriteIds.includes(item.id)} onToggleFavorite={() => onToggleFavorite(item.id)} />)}
     </div> : <EmptyState title={ct("Bu kriteriyada nəticə tapılmadı")} description={ct("Başqa kateqoriya seçin və ya filtrləri sıfırlayın.")} icon={SearchX} actionLabel={ct("Filtrləri sıfırla")} onAction={onClearFilters} />}

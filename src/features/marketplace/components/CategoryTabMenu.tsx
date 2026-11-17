@@ -3,6 +3,8 @@ import { Grid3X3 } from "lucide-react";
 import { useState } from "react";
 import { categories as categoryIcons } from "@/consts";
 import { categoryName, useTranslations } from "@/features/locale/language";
+import LocalizedText from "@/features/locale/LocalizedText";
+
 
 interface Props { activeId: string; onSelect: (id: string) => void }
 
@@ -21,7 +23,7 @@ export default function CategoryTabMenu({ activeId, onSelect }: Props) {
   };
   const toggleButton = (label: string, hidden = false, showActive = false) => <button type="button" disabled={hidden} aria-expanded={expanded} aria-label={showActive ? `${label} seçilib — daha çox kateqoriya` : label} onClick={() => setExpanded((current) => !current)} className={`flex h-25 w-full min-w-20 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl p-2 shadow-sm transition-[transform,background-color] duration-200 hover:-translate-y-0.5 disabled:cursor-default motion-reduce:transition-none ${showActive ? "bg-brand-primary text-primary hover:bg-[#b9dc65]" : "bg-primary text-white hover:bg-[#2b2c30]"}`}>
     <span className="flex size-9 items-center justify-center rounded-xl bg-slate-100 text-primary"><Grid3X3 size={22} /></span>
-    <span className="text-xs font-bold">{label}</span>
+    <span className="text-xs font-bold"><LocalizedText value={label} /></span>
   </button>;
 
   return <div className="overflow-x-auto pb-2">

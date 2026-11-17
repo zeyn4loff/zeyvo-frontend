@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useLocationCity } from "@/features/location/useLocationCity";
 import { useCityPicker } from "@/features/location/city-picker-context";
 import type { ResultType, SortOrder } from "./catalogTypes";
+import LocalizedText from "@/features/locale/LocalizedText";
 
 interface Props {
   sort: SortOrder;
@@ -34,6 +35,6 @@ export default function CatalogFilters(props: Props) {
   return <>
     <div className="order-first lg:hidden"><button type="button" onClick={() => setOpen(true)} className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-primary shadow-sm hover:border-brand-primary"><SlidersHorizontal size={18} />{ct("Filtrlər")}</button></div>
     <Dialog open={open} onOpenChange={setOpen}><DialogContent className="customer-modal bottom-0 top-auto max-h-[85dvh] w-full max-w-none translate-y-0 overflow-y-auto rounded-t-3xl rounded-b-none p-5 sm:top-1/2 sm:bottom-auto sm:max-w-xl sm:-translate-y-1/2 sm:rounded-3xl" overlayClassName="customer-overlay"><DialogHeader><DialogTitle>{ct("Filtrlər")}</DialogTitle></DialogHeader><FilterFields {...props} radioName="catalog-mobile-result-type" onCategorySelect={() => setOpen(false)} onCitySelect={() => setOpen(false)} /><button type="button" onClick={() => setOpen(false)} className="w-full rounded-xl bg-brand-primary px-4 py-3 text-sm font-semibold">{ct("Nəticələrə bax")}</button></DialogContent></Dialog>
-    <aside className="hidden min-w-0 rounded-[26px] border border-slate-200 bg-white p-5 shadow-[0_8px_30px_-24px_rgba(15,23,42,.55)] lg:sticky lg:top-5 lg:block"><h2 className="mb-5 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-black text-primary"><span className="flex size-9 items-center justify-center rounded-xl bg-brand-primary/35"><SlidersHorizontal size={18} /></span> Filtrlər</h2><FilterFields {...props} radioName="catalog-desktop-result-type" /></aside>
+    <aside className="hidden min-w-0 rounded-[26px] border border-slate-200 bg-white p-5 shadow-[0_8px_30px_-24px_rgba(15,23,42,.55)] lg:sticky lg:top-5 lg:block"><h2 className="mb-5 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-black text-primary"><span className="flex size-9 items-center justify-center rounded-xl bg-brand-primary/35"><SlidersHorizontal size={18} /></span> <LocalizedText value={"Filtrlər"} /></h2><FilterFields {...props} radioName="catalog-desktop-result-type" /></aside>
   </>;
 }

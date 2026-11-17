@@ -4,6 +4,7 @@ import { cn } from "cn"
 
 import { Button } from "@/components/ui/button"
 import { XIcon } from "lucide-react"
+import LocalizedText from "@/features/locale/LocalizedText";
 
 function Dialog({ ...props }: DialogPrimitive.Root.Props) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />
@@ -71,7 +72,7 @@ function DialogContent({
             }
           >
             <XIcon size={16} strokeWidth={2} aria-hidden="true" />
-            <span className="sr-only">Bağla</span>
+            <span className="sr-only"><LocalizedText value={"Bağla"} /></span>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Popup>
