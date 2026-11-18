@@ -30,27 +30,28 @@ function ProductRow({ product, onEdit, onDelete }: { product: Product; onEdit: (
     <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-1.5 sm:gap-2"><strong className="min-w-0 break-words text-sm text-slate-900">{product.name}</strong><span className="rounded-md border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-900">{product.kind === "retail" ? translateUi("Satış üçün") : translateUi("Sərfiyyat")}</span></div>
-        <p className="mt-1 break-all text-xs text-slate-400">{product.sku || "Artikol yoxdur"}</p>
+        <p className="mt-1 break-all text-xs text-slate-400">{product.sku || translateUi("Artikol yoxdur")}</p>
       </div>
       <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 sm:justify-end">
-        <div className="text-left sm:text-right"><strong className="block text-sm text-slate-900">{product.kind === "retail" ? money(product.price, currencyCode) : "—"}</strong><span className="text-xs text-slate-400">Maya: {money(product.cost, currencyCode)}</span></div>
-        <span className={`rounded-lg border px-2 py-1 text-xs font-semibold ${stockTone}`}>● {product.quantity} {product.unit}</span>
-        <div className="flex items-center gap-1"><button type="button" onClick={onEdit} aria-label={`${product.name} redaktə et`} className={productAction}><Pencil size={16} /></button><button type="button" onClick={onDelete} aria-label={`${product.name} sil`} className={`${productAction} hover:text-rose-600`}><Trash2 size={16} /></button></div>
+        <div className="text-left sm:text-right"><strong className="block text-sm text-slate-900">{product.kind === "retail" ? money(product.price, currencyCode) : "—"}</strong><span className="text-xs text-slate-400"><LocalizedText value={"Maya:"} /> {money(product.cost, currencyCode)}</span></div>
+        <span className={`rounded-lg border px-2 py-1 text-xs font-semibold ${stockTone}`}>● {product.quantity} {translateUi(product.unit)}</span>
+        <div className="flex items-center gap-1"><button type="button" onClick={onEdit} aria-label={`${product.name}: ${translateUi("redaktə et")}`} className={productAction}><Pencil size={16} /></button><button type="button" onClick={onDelete} aria-label={`${product.name}: ${translateUi("sil")}`} className={`${productAction} hover:text-rose-600`}><Trash2 size={16} /></button></div>
       </div>
     </div>
   </div>;
 }
 
 function CategoryGroup({ category, products, onEditCategory, onDeleteCategory, onCreateProduct, onEditProduct, onDeleteProduct }: Omit<Props, "categories" | "showEmptyCategories" | "onCreateCategory"> & { category: ProductCategory }) {
+  const translateUi = useCustomerText();
   const [collapsed, setCollapsed] = useState(false);
   return <article className="min-w-0 px-4 py-5 sm:px-6 sm:py-6">
     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
       <div className="flex min-w-0 items-start gap-2 sm:items-center sm:gap-3">
         <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-amber-100 bg-amber-50 text-amber-700"><CategoryIconView name={category.icon} size={20} /></span>
-        <button type="button" onClick={() => setCollapsed(!collapsed)} aria-expanded={!collapsed} aria-label={`${category.name}: ${collapsed ? "məhsulları göstər" : "məhsulları qatla"}`} className="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100"><ChevronDown size={16} className={`transition-transform duration-200 ${collapsed ? "-rotate-90" : ""}`} /></button>
+        <button type="button" onClick={() => setCollapsed(!collapsed)} aria-expanded={!collapsed} aria-label={`${category.name}: ${translateUi(collapsed ? "məhsulları göstər" : "məhsulları qatla")}`} className="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100"><ChevronDown size={16} className={`transition-transform duration-200 ${collapsed ? "-rotate-90" : ""}`} /></button>
         <div className="min-w-0"><div className="flex flex-wrap items-center gap-2"><button type="button" onClick={() => setCollapsed(!collapsed)} className="min-w-0 cursor-pointer break-words text-left text-sm font-bold text-slate-900 hover:underline">{category.name}</button><span className="shrink-0 rounded-md border border-amber-200/60 bg-amber-100/70 px-2 py-0.5 text-[10px] font-semibold text-amber-900">{products.length} <LocalizedText value={"məhsul"} /></span></div>{category.description && <p className="mt-1 break-words text-xs text-slate-500">{category.description}</p>}</div>
       </div>
-      <div className="flex shrink-0 self-end items-center gap-1"><button type="button" onClick={() => onEditCategory(category)} aria-label={`${category.name} kateqoriyasını redaktə et`} className={categoryAction}><Pencil size={15} /></button><button type="button" onClick={() => onDeleteCategory(category)} aria-label={`${category.name} kateqoriyasını sil`} className={`${categoryAction} hover:border-rose-200 hover:text-rose-600`}><Trash2 size={15} /></button></div>
+      <div className="flex shrink-0 self-end items-center gap-1"><button type="button" onClick={() => onEditCategory(category)} aria-label={`${category.name}: ${translateUi("kateqoriyasını redaktə et")}`} className={categoryAction}><Pencil size={15} /></button><button type="button" onClick={() => onDeleteCategory(category)} aria-label={`${category.name}: ${translateUi("kateqoriyasını sil")}`} className={`${categoryAction} hover:border-rose-200 hover:text-rose-600`}><Trash2 size={15} /></button></div>
     </div>
     {!collapsed && <div className="ml-2 mt-3 space-y-2 border-l-2 border-slate-200 pl-4 sm:ml-3 sm:pl-5">
       {products.map((product) => <ProductRow key={product.id} product={product} onEdit={() => onEditProduct(product)} onDelete={() => onDeleteProduct(product)} />)}

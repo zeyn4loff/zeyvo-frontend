@@ -113,8 +113,8 @@ export default function BusinessProducts({ session }: { session: BusinessSession
 
   return <div className="mx-auto w-full max-w-7xl space-y-6 px-4 py-5 sm:px-7 sm:py-7">
     <BusinessHeaderPortal slot="title"><LocalizedText value={tabs.find((item) => item.id === tab)?.label} /></BusinessHeaderPortal>
-    <BusinessHeaderPortal slot="subtitle">{tabSubtitles[tab]}</BusinessHeaderPortal>
-    <BusinessHeaderPortal slot="actions"><BusinessHeaderButton onClick={headerAction.onClick}><HeaderIcon /><LocalizedText value={headerAction.label} /></BusinessHeaderButton></BusinessHeaderPortal>
+    <BusinessHeaderPortal slot="subtitle">{translateUi(tabSubtitles[tab])}</BusinessHeaderPortal>
+    <BusinessHeaderPortal slot="actions"><BusinessHeaderButton onClick={headerAction.onClick}><HeaderIcon />{translateUi(headerAction.label)}</BusinessHeaderButton></BusinessHeaderPortal>
     <BusinessTabNav label={translateUi("Məhsullar bölmələri")}>{tabs.map((item) => <BusinessTabButton key={item.id} active={tab === item.id} onClick={() => { setTab(item.id); setError(""); }}><LocalizedText value={item.label} /></BusinessTabButton>)}</BusinessTabNav>
     {error && <div role="alert" className="rounded-xl bg-red-50 p-3 text-sm font-semibold text-red-700"><LocalizedText value={error} /></div>}
     {loadError && <div role="alert" className="rounded-xl bg-red-50 p-3 text-sm font-semibold text-red-700">{loadError}</div>}
@@ -123,7 +123,7 @@ export default function BusinessProducts({ session }: { session: BusinessSession
     {tab === "balances" && <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
       <ProductMetricCard label={translateUi("Ümumi çeşid")} value={scopeProducts.length} detail={selectedWarehouse === "all" ? translateUi("Bütün anbarlar üzrə") : translateUi("Seçilmiş anbar üzrə")} icon={Package} iconClassName="bg-slate-100 text-slate-700 group-hover:bg-brand-primary group-hover:text-black" selected={stockFilter === "all"} onClick={() => setStockFilter("all")} />
       <ProductMetricCard label={translateUi("Kifayət qədər")} value={inStock} detail={translateUi("Normal qalıq səviyyəsi")} icon={Check} iconClassName="bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100" selected={stockFilter === "available"} onClick={() => setStockFilter("available")} />
-      <ProductMetricCard label={translateUi("Kritik qalıq")} value={critical} detail={`${outOfStock} bitmiş məhsul`} icon={AlertTriangle} iconClassName="bg-amber-50 text-amber-600 group-hover:bg-amber-100" valueClassName="text-amber-600" selected={stockFilter === "low"} onClick={() => setStockFilter("low")} />
+      <ProductMetricCard label={translateUi("Kritik qalıq")} value={critical} detail={`${translateUi("Stokda yoxdur:")} ${outOfStock}`} icon={AlertTriangle} iconClassName="bg-amber-50 text-amber-600 group-hover:bg-amber-100" valueClassName="text-amber-600" selected={stockFilter === "low"} onClick={() => setStockFilter("low")} />
       <ProductMetricCard label={translateUi("Qalıq maya dəyəri")} value={money(value, currencyCode)} detail={translateUi("Maya qiyməti ilə cəmi")} icon={CircleDollarSign} iconClassName="bg-purple-50 text-purple-600" compactValue />
     </div>}
     {tab === "catalog" && <ProductCatalogMetrics products={scopeProducts} categoryCount={data.categories.length} stockFilter={stockFilter} onStockFilterChange={setStockFilter} />}

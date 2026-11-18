@@ -20,9 +20,9 @@ export default function ProductCatalogMetrics({ products, categoryCount, stockFi
   const cost = products.reduce((sum, product) => sum + product.quantity * product.cost, 0);
   const retail = products.reduce((sum, product) => sum + product.quantity * product.price, 0);
   const metrics = [
-    { label: "Ümumi məhsullar", value: String(products.length), detail: `${categoryCount} ${t("kateqoriya")}`, filter: "all", Icon: Package, iconClass: "bg-slate-100 text-slate-700", valueClass: "text-slate-900" },
+    { label: "Ümumi məhsullar", value: String(products.length), detail: `${t("Kateqoriyalar:")} ${categoryCount}`, filter: "all", Icon: Package, iconClass: "bg-slate-100 text-slate-700", valueClass: "text-slate-900" },
     { label: "Stokda var", value: String(available), detail: "Kifayət qədər qalıq", filter: "available", Icon: Check, iconClass: "bg-emerald-50 text-emerald-600", valueClass: "text-slate-900" },
-    { label: "Kritik qalıq", value: String(critical), detail: `${out} ${t("bitmiş")}`, filter: "low", Icon: AlertTriangle, iconClass: "bg-amber-50 text-amber-600", valueClass: "text-amber-600" },
+    { label: "Kritik qalıq", value: String(critical), detail: `${t("Stokda yoxdur:")} ${out}`, filter: "low", Icon: AlertTriangle, iconClass: "bg-amber-50 text-amber-600", valueClass: "text-amber-600" },
     { label: "Stok dəyəri", value: money(cost, currencyCode), detail: `${t("Satış:")} ${money(retail, currencyCode)}`, filter: "", Icon: CircleDollarSign, iconClass: "bg-purple-50 text-purple-600", valueClass: "text-slate-900" },
   ];
   return <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">{metrics.map(({ label, value, detail, filter, Icon, iconClass, valueClass }) => {

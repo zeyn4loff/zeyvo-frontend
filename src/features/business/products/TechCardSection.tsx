@@ -48,11 +48,11 @@ export default function TechCardSection({ cards, products, services, onCreate, o
               <ul className="divide-y divide-slate-100 overflow-hidden rounded-xl border border-slate-200 bg-slate-50/70">
                 {ingredients.map((ingredient) => {
                   const product = products.find((item) => item.id === ingredient.productId);
-                  return <li key={ingredient.productId} className="flex items-start justify-between gap-2 px-3 py-2 text-xs"><span className="min-w-0 break-words font-medium text-slate-800">{product?.name ?? translateUi("Silinmiş məhsul")}</span><span className="shrink-0 font-semibold text-slate-500">{ingredient.quantity} {product?.unit ?? translateUi("ədəd")}</span></li>;
+                  return <li key={ingredient.productId} className="flex items-start justify-between gap-2 px-3 py-2 text-xs"><span className="min-w-0 break-words font-medium text-slate-800">{product?.name ?? translateUi("Silinmiş məhsul")}</span><span className="shrink-0 font-semibold text-slate-500">{ingredient.quantity} {translateUi(product?.unit ?? "ədəd")}</span></li>;
                 })}
               </ul>
             </div>
-            {card.note && <p className="text-[11px] leading-relaxed text-slate-500"><strong className="text-slate-700">Qeyd:</strong> {card.note}</p>}
+            {card.note && <p className="text-[11px] leading-relaxed text-slate-500"><strong className="text-slate-700"><LocalizedText value={"Qeyd:"} /></strong> {card.note}</p>}
           </div>
           <div className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-3 text-xs"><span className="text-slate-500"><LocalizedText value={"Xidmət üzrə sərfiyyat maya dəyəri:"} /></span><strong className="rounded-xl border border-amber-300 bg-amber-50 px-2.5 py-1 font-black text-slate-900">{cost.toFixed(2)} {currencySign}</strong></div>
         </article>;

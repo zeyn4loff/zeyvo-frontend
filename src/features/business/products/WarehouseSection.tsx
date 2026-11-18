@@ -25,8 +25,8 @@ function WarehouseCard({ warehouse, productCount, onEdit, onDelete }: { warehous
           <div className="min-w-0"><h3 className="truncate text-sm font-bold text-slate-900" title={warehouse.name}>{warehouse.name}</h3><span className={`mt-0.5 inline-block rounded-md border px-2 py-0.5 text-[10px] font-semibold ${typeTone}`}>{typeName}</span></div>
         </div>
         <div className="flex shrink-0 items-center gap-1">
-          <button type="button" onClick={onEdit} aria-label={`${warehouse.name}: redaktə et`} className="flex size-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-800"><Pencil size={16} /></button>
-          {!isDefault && <button type="button" onClick={onDelete} aria-label={`${warehouse.name}: sil`} className="flex size-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-rose-50 hover:text-rose-600"><Trash2 size={16} /></button>}
+          <button type="button" onClick={onEdit} aria-label={`${warehouse.name}: ${translateUi("redaktə et")}`} className="flex size-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-800"><Pencil size={16} /></button>
+          {!isDefault && <button type="button" onClick={onDelete} aria-label={`${warehouse.name}: ${translateUi("sil")}`} className="flex size-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-rose-50 hover:text-rose-600"><Trash2 size={16} /></button>}
         </div>
       </div>
       <div className="space-y-1.5 border-t border-slate-100 pt-1 text-xs text-slate-600">

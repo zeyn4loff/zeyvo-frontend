@@ -38,17 +38,17 @@ function SupplierCard({ supplier, operations, onEdit, onDelete, onReceipt }: { s
           <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-amber-200 bg-amber-100 text-xs font-bold text-amber-900" aria-hidden="true">{initials}</div>
           <div className="min-w-0">
             <h3 className="truncate text-sm font-bold text-slate-900" title={supplier.name}>{supplier.name}</h3>
-            {supplier.voen ? <span className="mt-0.5 inline-block max-w-full truncate rounded-md border border-slate-200 bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600"><LocalizedText value={"VÖEN:"} /> {supplier.voen}</span> : <span className="mt-0.5 block text-[10px] text-slate-400">Kontragent</span>}
+            {supplier.voen ? <span className="mt-0.5 inline-block max-w-full truncate rounded-md border border-slate-200 bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600"><LocalizedText value={"VÖEN:"} /> {supplier.voen}</span> : <span className="mt-0.5 block text-[10px] text-slate-400"><LocalizedText value={"Kontragent"} /></span>}
           </div>
         </div>
         <div className="flex shrink-0 items-center gap-1">
-          <button type="button" onClick={onEdit} aria-label={`${supplier.name} redaktə et`} className="flex size-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-800"><Pencil size={16} /></button>
-          <button type="button" onClick={onDelete} aria-label={`${supplier.name} sil`} className="flex size-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-rose-50 hover:text-rose-600"><Trash2 size={16} /></button>
+          <button type="button" onClick={onEdit} aria-label={`${supplier.name}: ${translateUi("redaktə et")}`} className="flex size-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-800"><Pencil size={16} /></button>
+          <button type="button" onClick={onDelete} aria-label={`${supplier.name}: ${translateUi("sil")}`} className="flex size-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-rose-50 hover:text-rose-600"><Trash2 size={16} /></button>
         </div>
       </div>
       <div className="space-y-1.5 border-t border-slate-100 pt-2 text-slate-600">
         {supplier.contact && <SupplierDetail icon={UserRound} label={translateUi("Şəxs")}>{supplier.contact}</SupplierDetail>}
-        {supplier.phone && <SupplierDetail icon={Phone} label="Tel"><a href={`tel:${supplier.phone}`} className="hover:text-amber-700">{supplier.phone}</a></SupplierDetail>}
+        {supplier.phone && <SupplierDetail icon={Phone} label={translateUi("Tel")}><a href={`tel:${supplier.phone}`} className="hover:text-amber-700">{supplier.phone}</a></SupplierDetail>}
         {supplier.email && <SupplierDetail icon={Mail} label={translateUi("E-poçt")}><a href={`mailto:${supplier.email}`} className="hover:text-amber-700">{supplier.email}</a></SupplierDetail>}
         {supplier.address && <SupplierDetail icon={MapPin} label={translateUi("Ünvan")}>{supplier.address}</SupplierDetail>}
       </div>
@@ -70,7 +70,7 @@ export default function SupplierSection({ suppliers, operations, onCreate, onEdi
 
   return <section className="space-y-5" aria-label={translateUi("Təchizatçılar siyahısı")}>
     <div className="grid gap-3 sm:grid-cols-3">
-      <ProductMetricCard label={translateUi("Ümumi təchizatçılar")} value={suppliers.length} detail="kontragent" icon={Truck} iconClassName="bg-blue-50 text-blue-600" />
+      <ProductMetricCard label={translateUi("Ümumi təchizatçılar")} value={suppliers.length} detail={translateUi("kontragent")} icon={Truck} iconClassName="bg-blue-50 text-blue-600" />
       <ProductMetricCard label={translateUi("Aktiv tərəfdaşlar")} value={suppliers.length} detail={translateUi("şirkət")} icon={Handshake} iconClassName="bg-emerald-50 text-emerald-600" valueClassName="text-emerald-700" />
       <ProductMetricCard label={translateUi("Mədaxil əməliyyatları")} value={receiptCount} detail={translateUi("sənəd")} icon={FileInput} iconClassName="bg-amber-50 text-amber-600" />
     </div>

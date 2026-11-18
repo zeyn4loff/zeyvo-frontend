@@ -61,7 +61,7 @@ export default function TechCardServicePicker({ services, categories, selectedId
                 onClick={() => setCategoryId(category.id)}
                 className={`min-h-9 shrink-0 cursor-pointer whitespace-nowrap rounded-lg px-3 py-1 font-semibold transition ${categoryId === category.id ? "bg-slate-900 text-white shadow-sm" : "bg-slate-100 text-slate-700 hover:bg-slate-200"}`}
               >
-                {category.name}
+                {translateUi(category.name)}
               </button>
             ))}
           </div>
@@ -75,7 +75,7 @@ export default function TechCardServicePicker({ services, categories, selectedId
                 key={service.id}
                 type="button"
                 onClick={() => onSelect(service.id)}
-                aria-label={`${service.name} xidmətini seç`}
+                aria-label={`${service.name}: ${translateUi("xidmətini seç")}`}
                 className={`flex min-h-16 w-full cursor-pointer items-center justify-between gap-2 p-3 text-left transition hover:bg-amber-50/50 sm:gap-3 sm:px-4 ${selected ? "border-l-4 border-brand-primary bg-amber-50/70" : ""}`}
               >
                 <span className="flex min-w-0 items-center gap-2.5 sm:gap-3">
