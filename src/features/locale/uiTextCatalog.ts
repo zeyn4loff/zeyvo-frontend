@@ -1,6 +1,16 @@
 // Static interface copy shared by the customer and partner applications.
 // Keep the Azerbaijani source as the key; the other locales are reviewed here.
 export const uiTextCatalog: Record<string, [string, string, string, string]> = {
+  "Bazar ertəsi": ["Bazar ertəsi", "Понедельник", "Pazartesi", "Monday"],
+  "Çərşənbə axşamı": ["Çərşənbə axşamı", "Вторник", "Salı", "Tuesday"],
+  "Çərşənbə": ["Çərşənbə", "Среда", "Çarşamba", "Wednesday"],
+  "Cümə axşamı": ["Cümə axşamı", "Четверг", "Perşembe", "Thursday"],
+  "Cümə": ["Cümə", "Пятница", "Cuma", "Friday"],
+  "Şənbə": ["Şənbə", "Суббота", "Cumartesi", "Saturday"],
+  "açılış": ["açılış", "открытие", "açılış", "opening"],
+  "bağlanış": ["bağlanış", "закрытие", "kapanış", "closing"],
+  "istirahət günü": ["istirahət günü", "выходной", "izin günü", "day off"],
+  "Google Maps açarı etibarsızdır və ya bu sayt üçün icazə verilməyib.": ["Google Maps açarı etibarsızdır və ya bu sayt üçün icazə verilməyib.", "Ключ Google Maps недействителен или не разрешён для этого сайта.", "Google Haritalar anahtarı geçersiz veya bu site için izin verilmemiş.", "The Google Maps key is invalid or is not allowed for this site."],
   "Yeni Biznes və ya Fərdi Usta": ["Yeni Biznes və ya Fərdi Usta", "Новый бизнес или частный мастер", "Yeni işletme veya bağımsız uzman", "New business or independent specialist"],
   "İdarə etmək istədiyiniz biznes və ya filialı seçin": ["İdarə etmək istədiyiniz biznes və ya filialı seçin", "Выберите бизнес или филиал для управления", "Yönetmek istediğiniz işletme veya şubeyi seçin", "Select a business or branch to manage"],
   "Seçimi yadda saxlamaq mümkün olmadı.": ["Seçimi yadda saxlamaq mümkün olmadı.", "Не удалось сохранить выбор.", "Seçim kaydedilemedi.", "Could not save selection."],
