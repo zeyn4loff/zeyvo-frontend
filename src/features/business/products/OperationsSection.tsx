@@ -1,9 +1,10 @@
 import { useCurrencySymbol } from "../finance/businessCurrency";
 import { useState } from "react";
-import { ClipboardList, Search, Trash2, X } from "lucide-react";
+import { ClipboardList, Trash2 } from "lucide-react";
 import EmptyState from "../../../components/common/EmptyState";
 import BusinessStatusBadge from "../components/BusinessStatusBadge";
 import BusinessFilterButton from "../components/BusinessFilterButton";
+import ProductSearchField from "./ProductSearchField";
 import BusinessFormDialog from "../components/BusinessFormDialog";
 import { businessControlClass, businessLabelClass } from "../components/BusinessField";
 import type { ProductData, StockOperation } from "./products";
@@ -97,8 +98,8 @@ export default function OperationsSection({ data, onCreate, onDelete }: Props) {
   const reset = () => { setSearch(""); setFilters(emptyFilters); setPage(1); };
   const dateAndWarehouse = (document: Document) => `${document.first.warehouseName || "Əsas anbar"}${document.first.destinationWarehouseName ? ` → ${document.first.destinationWarehouseName}` : ""}`;
   return <div className="space-y-4">
-    <div className="rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm sm:p-4"><div className="flex min-w-0 flex-col gap-2.5 sm:flex-row">
-      <label className="relative min-w-0 flex-1"><Search aria-hidden="true" size={17} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" /><span className="sr-only"><LocalizedText value={"Sənəd, anbar və ya məhsul axtar"} /></span><input value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder={translateUi("Sənəd №, anbar və ya məhsul axtarışı...")} className="h-11 w-full min-w-0 rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-10 text-xs font-medium outline-none transition placeholder:text-slate-400 focus:border-slate-900 focus:bg-white focus:ring-2 focus:ring-slate-900/10" />{search && <button type="button" aria-label={translateUi("Axtarışı təmizlə")} onClick={() => { setSearch(""); setPage(1); }} className="absolute right-2 top-1/2 flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center text-slate-400"><X size={16} /></button>}</label>
+    <div><div className="flex min-w-0 gap-2">
+      <ProductSearchField value={search} onChange={(value) => { setSearch(value); setPage(1); }} ariaLabel={translateUi("Sənəd, anbar və ya məhsul axtar")} placeholder={translateUi("Sənəd №, anbar və ya məhsul axtarışı...")} clearLabel={translateUi("Axtarışı təmizlə")} />
       <BusinessFilterButton count={activeCount} onClick={() => setFilterOpen(true)} />
     </div>{activeCount > 0 && <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] text-slate-600"><span><LocalizedText value={"Aktiv filtrlər:"} /></span>{filters.type !== "all" && <span className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1">{typeNames[filters.type]}</span>}{filters.warehouse !== "all" && <span className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1">{filters.warehouse}</span>}{filters.period !== "all" && <span className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1">{({ today: "Bu gün", week: "Son 7 gün", month: "Bu ay" } as const)[filters.period]}</span>}<button type="button" onClick={reset} className="cursor-pointer font-semibold text-rose-600"><LocalizedText value={"Filtrləri sıfırla"} /></button></div>}</div>
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">{shown.length ? <>

@@ -1,8 +1,9 @@
 import EmptyState from "../../../components/common/EmptyState";
-import { FileInput, Handshake, Mail, MapPin, Pencil, Phone, Plus, Search, Trash2, UserRound, X, Truck } from "lucide-react";
+import { FileInput, Handshake, Mail, MapPin, Pencil, Phone, Plus, Trash2, UserRound, Truck } from "lucide-react";
 import { useState } from "react";
 import type { ProductData, Supplier } from "./products";
 import ProductMetricCard from "./ProductMetricCard";
+import ProductSearchField from "./ProductSearchField";
 import LocalizedText from "@/features/locale/LocalizedText";
 import { useCustomerText } from "@/features/locale/customerText";
 
@@ -74,13 +75,7 @@ export default function SupplierSection({ suppliers, operations, onCreate, onEdi
       <ProductMetricCard label={translateUi("Aktiv tərəfdaşlar")} value={suppliers.length} detail={translateUi("şirkət")} icon={Handshake} iconClassName="bg-emerald-50 text-emerald-600" valueClassName="text-emerald-700" />
       <ProductMetricCard label={translateUi("Mədaxil əməliyyatları")} value={receiptCount} detail={translateUi("sənəd")} icon={FileInput} iconClassName="bg-amber-50 text-amber-600" />
     </div>
-    <div className="rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm sm:p-4">
-      <label className="flex min-h-10 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3.5 focus-within:border-slate-900 focus-within:bg-white focus-within:ring-2 focus-within:ring-brand-primary/40">
-        <Search size={16} className="shrink-0 text-slate-400" aria-hidden="true" />
-        <input aria-label={translateUi("Təchizatçı axtar")} value={query} onChange={(event) => setQuery(event.target.value)} placeholder={translateUi("Təchizatçı adı, VÖEN, əlaqədar şəxs və ya nömrə ilə axtarın...")} className="min-w-0 flex-1 bg-transparent text-xs font-medium outline-none placeholder:text-slate-400" />
-        {query && <button type="button" onClick={() => setQuery("")} aria-label={translateUi("Axtarışı təmizlə")} className="flex size-8 shrink-0 cursor-pointer items-center justify-center text-slate-400 hover:text-slate-700"><X size={16} /></button>}
-      </label>
-    </div>
+    <ProductSearchField value={query} onChange={setQuery} ariaLabel={translateUi("Təchizatçı axtar")} placeholder={translateUi("Təchizatçı adı, VÖEN, əlaqədar şəxs və ya nömrə ilə axtarın...")} clearLabel={translateUi("Axtarışı təmizlə")} />
     {filtered.length ? <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">{filtered.map((supplier) => <SupplierCard key={supplier.id} supplier={supplier} operations={operations} onEdit={() => onEdit(supplier)} onDelete={() => onDelete(supplier)} onReceipt={() => onReceipt(supplier)} />)}</div> : <EmptyState title={normalizedQuery ? translateUi("Axtarışa uyğun təchizatçı tapılmadı") : translateUi("Təchizatçı siyahısı boşdur")} description={normalizedQuery ? translateUi("Axtarışı dəyişərək yenidən yoxlayın") : translateUi("Yeni təchizatçı əlavə edin")} icon={Truck} actionLabel={normalizedQuery ? translateUi("Axtarışı sıfırla") : translateUi("Yeni təchizatçı əlavə et")} onAction={normalizedQuery ? () => setQuery("") : onCreate} />}
   </section>;
 }

@@ -1,8 +1,9 @@
 import { useCurrencySymbol } from "../finance/businessCurrency";
 import { useState } from "react";
-import { FileText, Search, Wrench } from "lucide-react";
+import { FileText, Wrench } from "lucide-react";
 import EmptyState from "../../../components/common/EmptyState";
 import { RowActions } from "./ProductList";
+import ProductSearchField from "./ProductSearchField";
 import type { Product, TechCard } from "./products";
 import LocalizedText from "@/features/locale/LocalizedText";
 import { useCustomerText } from "@/features/locale/customerText";
@@ -25,11 +26,7 @@ export default function TechCardSection({ cards, products, services, onCreate, o
   });
 
   return <section className="space-y-5">
-    <label className="relative block">
-      <Search size={17} aria-hidden="true" className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-      <span className="sr-only"><LocalizedText value={"Texnoloji kartları axtar"} /></span>
-      <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={translateUi("Texnoloji kart və ya xidmət adı ilə axtarın...")} className="h-11 w-full rounded-xl border border-slate-200 bg-white pl-10 pr-3 text-xs font-medium text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-900 focus:ring-2 focus:ring-brand-primary/40" />
-    </label>
+    <ProductSearchField value={query} onChange={setQuery} ariaLabel={translateUi("Texnoloji kartları axtar")} placeholder={translateUi("Texnoloji kart və ya xidmət adı ilə axtarın...")} clearLabel={translateUi("Axtarışı təmizlə")} />
     {visible.length ? <div className="grid gap-4 lg:grid-cols-2">
       {visible.map((card) => {
         const ingredients = card.items?.length ? card.items : card.productId ? [{ productId: card.productId, quantity: card.quantity }] : [];

@@ -3,7 +3,7 @@ import BusinessPageLoading from "../components/BusinessPageLoading";
 import { showToast } from "@/components/common/toast";
 import { useContext, useState } from "react";
 import BusinessFilterButton from "../components/BusinessFilterButton";
-import { AlertTriangle, Check, CircleDollarSign, Package, Plus, Search, ShoppingBag } from "lucide-react";
+import { AlertTriangle, Check, CircleDollarSign, Package, Plus, ShoppingBag } from "lucide-react";
 import type { BusinessSession } from "../auth/businessSession";
 import BusinessDeleteDialog from "../components/BusinessDeleteDialog";
 import BusinessHeaderPortal from "../components/BusinessHeaderPortal";
@@ -20,6 +20,7 @@ import ProductSections, { type Editing, type Deleting } from "./ProductSections"
 import ProductFilterDialog from "./ProductFilterDialog";
 import ProductCatalog from "./ProductCatalog";
 import ProductCatalogMetrics from "./ProductCatalogMetrics";
+import ProductSearchField from "./ProductSearchField";
 import TechCardDialog from "./TechCardDialog";
 import SupplierSection from "./SupplierSection";
 import WarehouseDialog from "./WarehouseDialog";
@@ -119,7 +120,7 @@ export default function BusinessProducts({ session }: { session: BusinessSession
     {error && <div role="alert" className="rounded-xl bg-red-50 p-3 text-sm font-semibold text-red-700"><LocalizedText value={error} /></div>}
     {loadError && <div role="alert" className="rounded-xl bg-red-50 p-3 text-sm font-semibold text-red-700">{loadError}</div>}
     {loading && <div role="status" className="rounded-xl bg-slate-50 p-3 text-sm text-slate-600"><LocalizedText value={"Məhsullar yüklənir..."} /></div>}
-    {(tab === "balances" || tab === "catalog") && <div className="flex min-w-0 gap-2"><label className="business-search-control flex min-h-11 min-w-0 flex-1 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3"><Search size={17} className="shrink-0 text-slate-400" /><input aria-label={translateUi("Məhsul axtar")} value={search} onChange={(event) => setSearch(event.target.value)} placeholder={translateUi("Məhsul adı, artikol və ya barkod ilə axtarın")} className="min-w-0 flex-1 bg-transparent text-sm outline-none" /></label><BusinessFilterButton onClick={() => setFilterOpen(true)} count={Number(warehouse !== "auto") + Number(category !== "all") + Number(stockFilter !== "all")} /></div>}
+    {(tab === "balances" || tab === "catalog") && <div className="flex min-w-0 gap-2"><ProductSearchField value={search} onChange={setSearch} ariaLabel={translateUi("Məhsul axtar")} placeholder={translateUi("Məhsul adı, artikol və ya barkod ilə axtarın")} clearLabel={translateUi("Axtarışı təmizlə")} /><BusinessFilterButton onClick={() => setFilterOpen(true)} count={Number(warehouse !== "auto") + Number(category !== "all") + Number(stockFilter !== "all")} /></div>}
     {tab === "balances" && <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
       <ProductMetricCard label={translateUi("Ümumi çeşid")} value={scopeProducts.length} detail={selectedWarehouse === "all" ? translateUi("Bütün anbarlar üzrə") : translateUi("Seçilmiş anbar üzrə")} icon={Package} iconClassName="bg-slate-100 text-slate-700 group-hover:bg-brand-primary group-hover:text-black" selected={stockFilter === "all"} onClick={() => setStockFilter("all")} />
       <ProductMetricCard label={translateUi("Kifayət qədər")} value={inStock} detail={translateUi("Normal qalıq səviyyəsi")} icon={Check} iconClassName="bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100" selected={stockFilter === "available"} onClick={() => setStockFilter("available")} />
