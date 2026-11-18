@@ -1,6 +1,9 @@
 // Static interface copy shared by the customer and partner applications.
 // Keep the Azerbaijani source as the key; the other locales are reviewed here.
 export const uiTextCatalog: Record<string, [string, string, string, string]> = {
+  "Məhsul əlavə etməzdən əvvəl anbar yaradın.": ["Məhsul əlavə etməzdən əvvəl anbar yaradın.", "Перед добавлением товара создайте склад.", "Ürün eklemeden önce bir depo oluşturun.", "Create a warehouse before adding a product."],
+  "Təchizatçıdan gələn mal üçün qalıq 0 saxlayın, sonra mədaxil əməliyyatı yaradın.": ["Təchizatçıdan gələn mal üçün qalıq 0 saxlayın, sonra mədaxil əməliyyatı yaradın.", "Для поставки от поставщика оставьте остаток 0, затем оформите приход.", "Tedarikçiden gelen ürünler için stoku 0 bırakın, ardından stok giriş işlemi oluşturun.", "For goods from a supplier, leave stock at 0, then create a receipt."],
+  "Anbarı dəyişmək üçün anbar əməliyyatlarında yerdəyişmə yaradın.": ["Anbarı dəyişmək üçün anbar əməliyyatlarında yerdəyişmə yaradın.", "Чтобы переместить товар на другой склад, создайте перемещение в складских операциях.", "Ürünü başka bir depoya taşımak için depo işlemlerinde transfer oluşturun.", "To move the product to another warehouse, create a transfer in warehouse operations."],
   "VÖEN": ["VÖEN", "VÖEN (ИНН)", "VÖEN (vergi numarası)", "VÖEN (tax ID)"],
   "Təchizatçını saxla": ["Təchizatçını saxla", "Сохранить поставщика", "Tedarikçiyi kaydet", "Save supplier"],
   "Ümumi çeşid": ["Ümumi çeşid", "Всего товаров", "Toplam ürün", "Total products"],
