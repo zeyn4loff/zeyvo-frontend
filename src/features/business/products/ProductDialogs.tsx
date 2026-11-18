@@ -16,19 +16,19 @@ import { useCustomerText } from "@/features/locale/customerText";
 
 const field = businessControlClass;
 const actions = "flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:justify-end";
-function Buttons({ onClose, submitLabel = "Yadda saxla", cancelLabel = "İmtina", inlineOnMobile = false }: { onClose: () => void; submitLabel?: string; cancelLabel?: string; inlineOnMobile?: boolean }) { return <div className={inlineOnMobile ? "flex items-center justify-end gap-2 pt-2" : actions}><button type="button" onClick={onClose} className="min-h-11 cursor-pointer rounded-xl bg-slate-100 px-3 font-semibold sm:px-5">{cancelLabel}</button><button type="submit" className="min-h-11 cursor-pointer rounded-xl bg-brand-primary px-3 font-semibold sm:px-5">{submitLabel}</button></div>; }
+function Buttons({ onClose, submitLabel = "Yadda saxla", cancelLabel = "Ləğv et", inlineOnMobile = false }: { onClose: () => void; submitLabel?: string; cancelLabel?: string; inlineOnMobile?: boolean }) { return <div className={inlineOnMobile ? "flex items-center justify-end gap-2 pt-2" : actions}><button type="button" onClick={onClose} className="min-h-11 cursor-pointer rounded-xl bg-slate-100 px-3 font-semibold sm:px-5"><LocalizedText value={cancelLabel} /></button><button type="submit" className="min-h-11 cursor-pointer rounded-xl bg-brand-primary px-3 font-semibold sm:px-5"><LocalizedText value={submitLabel} /></button></div>; }
 const number = (data: FormData, name: string) => Number(data.get(name));
 
 function SupplierFields({ item }: { item?: Partial<Supplier> }) {
   const translateUi = useCustomerText();
   return <>
-    <BusinessField label={translateUi("Şirkət və ya kontragent adı *")}><BusinessInput name="name" required maxLength={120} autoFocus defaultValue={item?.name} placeholder={translateUi("Məs: Beauty Trade MMC və ya L'Oréal Paris")} /></BusinessField>
-    <BusinessField label={translateUi("Əlaqədar şəxs")}><BusinessInput name="contact" maxLength={100} defaultValue={item?.contact} placeholder={translateUi("Məs: Emin Məmmədov")} /></BusinessField>
+    <BusinessField label={translateUi("Şirkət və ya kontragent adı *")}><BusinessInput name="name" required maxLength={120} autoFocus defaultValue={item?.name} /></BusinessField>
+    <BusinessField label={translateUi("Əlaqədar şəxs")}><BusinessInput name="contact" maxLength={100} defaultValue={item?.contact} /></BusinessField>
     <BusinessField label={translateUi("Əlaqə nömrəsi")}><AzPhoneInput name="phone" defaultValue={item?.phone} /></BusinessField>
-    <BusinessField label={translateUi("E-poçt ünvanı")}><BusinessInput name="email" type="email" maxLength={100} defaultValue={item?.email} placeholder="orders@supplier.az" /></BusinessField>
-    <BusinessField label={translateUi("VÖEN")}><BusinessInput name="voen" inputMode="numeric" maxLength={20} defaultValue={item?.voen} placeholder={translateUi("Məs: 1402847291")} /></BusinessField>
-    <BusinessField label={translateUi("Hüquqi və ya çatdırılma ünvanı")}><BusinessInput name="address" maxLength={200} defaultValue={item?.address} placeholder={translateUi("Məs: Bakı ş., Əhməd Rəcəbli 19")} /></BusinessField>
-    <BusinessField label={translateUi("Qeydlər")}><BusinessTextarea name="note" maxLength={300} rows={2} defaultValue={item?.note} placeholder={translateUi("Şərtlər, ödəniş qaydası və ya distribütorluq...")} /></BusinessField>
+    <BusinessField label={translateUi("E-poçt ünvanı")}><BusinessInput name="email" type="email" maxLength={100} defaultValue={item?.email} /></BusinessField>
+    <BusinessField label={translateUi("VÖEN")}><BusinessInput name="voen" inputMode="numeric" maxLength={20} defaultValue={item?.voen} /></BusinessField>
+    <BusinessField label={translateUi("Hüquqi və ya çatdırılma ünvanı")}><BusinessInput name="address" maxLength={200} defaultValue={item?.address} /></BusinessField>
+    <BusinessField label={translateUi("Qeydlər")}><BusinessTextarea name="note" maxLength={300} rows={2} defaultValue={item?.note} /></BusinessField>
   </>;
 }
 

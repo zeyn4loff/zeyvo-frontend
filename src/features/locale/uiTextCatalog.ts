@@ -1,6 +1,8 @@
 // Static interface copy shared by the customer and partner applications.
 // Keep the Azerbaijani source as the key; the other locales are reviewed here.
 export const uiTextCatalog: Record<string, [string, string, string, string]> = {
+  "VÖEN": ["VÖEN", "VÖEN (ИНН)", "VÖEN (vergi numarası)", "VÖEN (tax ID)"],
+  "Təchizatçını saxla": ["Təchizatçını saxla", "Сохранить поставщика", "Tedarikçiyi kaydet", "Save supplier"],
   "Ümumi çeşid": ["Ümumi çeşid", "Всего товаров", "Toplam ürün", "Total products"],
   "Kifayət qədər": ["Kifayət qədər", "Достаточный запас", "Yeterli stok", "Sufficient stock"],
   "Qalıq maya dəyəri": ["Qalıq maya dəyəri", "Себестоимость остатков", "Kalan stok maliyeti", "Cost of remaining stock"],
