@@ -18,7 +18,7 @@ import StaffMaterialsDialog from "./StaffMaterialsDialog";
 import ServiceTranslations from "./ServiceTranslations";
 import LocalizedText from "@/features/locale/LocalizedText";
 import { useCustomerText } from "@/features/locale/customerText";
-function Actions({ onClose }: { onClose: () => void }) { return <div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:justify-end"><button type="button" onClick={onClose} className="min-h-11 cursor-pointer rounded-xl bg-slate-100 px-5 font-semibold"><LocalizedText value={"İmtina"} /></button><button type="submit" className="min-h-11 cursor-pointer rounded-xl bg-brand-primary px-5 font-bold">Yadda saxla</button></div>; }
+function Actions({ onClose }: { onClose: () => void }) { return <div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:justify-end"><button type="button" onClick={onClose} className="min-h-11 cursor-pointer rounded-xl bg-slate-100 px-5 font-semibold"><LocalizedText value={"İmtina"} /></button><button type="submit" className="min-h-11 cursor-pointer rounded-xl bg-brand-primary px-5 font-bold"><LocalizedText value={"Yadda saxla"} /></button></div>; }
 export function ServiceCategoryDialog({ initial, error, onClose, onSave }: { initial?: ServiceCategory; error?: string; onClose: () => void; onSave: (item: ServiceCategory) => Promise<void> | void }) {
   const translateUi = useCustomerText();
   const [icon, setIcon] = useState<CategoryIcon>((initial?.icon as CategoryIcon) ?? "scissors");

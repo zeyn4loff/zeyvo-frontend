@@ -1,6 +1,12 @@
 // Static interface copy shared by the customer and partner applications.
 // Keep the Azerbaijani source as the key; the other locales are reviewed here.
 export const uiTextCatalog: Record<string, [string, string, string, string]> = {
+  "Şəkilləri yükləmək mümkün olmadı. Yenidən cəhd edin.": ["Şəkilləri yükləmək mümkün olmadı. Yenidən cəhd edin.", "Не удалось загрузить фотографии. Попробуйте ещё раз.", "Fotoğraflar yüklenemedi. Tekrar deneyin.", "Could not upload the photos. Please try again."],
+  "PNG, JPG və ya WebP şəkilləri seçin.": ["PNG, JPG və ya WebP şəkilləri seçin.", "Выберите изображения PNG, JPG или WebP.", "PNG, JPG veya WebP görselleri seçin.", "Choose PNG, JPG or WebP images."],
+  "Ən çox 8 şəkil əlavə etmək olar.": ["Ən çox 8 şəkil əlavə etmək olar.", "Можно добавить не более 8 изображений.", "En fazla 8 görsel eklenebilir.", "You can add up to 8 images."],
+  "Şəkilləri saxlamaq mümkün olmadı. Şəkilləri yenidən əlavə edib cəhd edin.": ["Şəkilləri saxlamaq mümkün olmadı. Şəkilləri yenidən əlavə edib cəhd edin.", "Не удалось сохранить фотографии. Добавьте их заново и повторите попытку.", "Fotoğraflar kaydedilemedi. Yeniden ekleyip tekrar deneyin.", "Could not save the photos. Add them again and retry."],
+  "Dili sil": ["Dili sil", "Удалить язык", "Dili kaldır", "Remove language"],
+  "Onlayn aktiv": ["Onlayn aktiv", "Онлайн-запись включена", "Çevrimiçi rezervasyon açık", "Online booking enabled"],
   "İkon": ["İkon", "Значок", "Simge", "Icon"],
   "Qovluq": ["Qovluq", "Папка", "Klasör", "Folder"],
   "Tibb": ["Tibb", "Медицина", "Tıp", "Medical"],

@@ -1,4 +1,4 @@
-import { businessPath, partnerDelete, partnerGet, saveRecord } from "../api/client";
+import { businessPath, partnerDelete, partnerGet, partnerPost, saveRecord } from "../api/client";
 import type { Service, ServiceCategory, ServiceData } from "./services";
 
 const base = (businessId: string) => businessPath(businessId, "services");
@@ -18,7 +18,27 @@ export async function deleteServiceCategory(businessId: string, id: string): Pro
 }
 
 export async function saveBusinessService(businessId: string, service: Service, existing: boolean): Promise<void> {
-  await saveRecord(base(businessId), existing ? service.id : null, {
+  const uploaded: string[] = [];
+  const imageUrls: string[] = [];
+  try {
+    for (const imageUrl of service.onlineSettings?.imageUrls ?? []) {
+      if (!imageUrl.startsWith("data:")) { imageUrls.push(imageUrl); continue; }
+      let image: { url: string; filename: string };
+      try {
+        const [header, encoded] = imageUrl.split(",", 2);
+        if (!encoded) throw new Error("Invalid image data");
+        const bytes = Uint8Array.from(atob(encoded), (character) => character.charCodeAt(0));
+        const blob = new Blob([bytes], { type: header.slice(5).split(";")[0] });
+        const form = new FormData();
+        form.append("file", blob, `service-image.${blob.type === "image/png" ? "png" : blob.type === "image/jpeg" ? "jpg" : "webp"}`);
+        image = await partnerPost<{ url: string; filename: string }>(`${base(businessId)}/media`, form);
+      } catch {
+        throw new Error("Şəkilləri yükləmək mümkün olmadı. Yenidən cəhd edin.");
+      }
+      uploaded.push(image.filename);
+      imageUrls.push(image.url);
+    }
+    await saveRecord(base(businessId), existing ? service.id : null, {
     name: service.name,
     description: service.description,
     categoryId: service.categoryId || null,
@@ -37,12 +57,16 @@ export async function saveBusinessService(businessId: string, service: Service, 
     staffIds: service.staffIds,
     staffOverrides: service.staffOverrides ?? {},
     staffProductIds: service.staffProductIds ?? {},
-    onlineSettings: service.onlineSettings ?? null,
+    onlineSettings: service.onlineSettings ? { ...service.onlineSettings, imageUrls } : null,
     resourceIds: service.resourceIds,
     materialItems: (service.materialItems ?? []).map((item) => ({ ...item, productId: item.productId.split("@")[0] })),
     comboItems: service.comboItems ?? [],
     translations: Object.fromEntries(Object.entries(service.translations ?? {}).filter(([, value]) => value.name.trim())),
-  });
+    });
+  } catch (error) {
+    await Promise.allSettled(uploaded.map((filename) => partnerDelete(`${base(businessId)}/media/${filename}`)));
+    throw error;
+  }
 }
 
 export async function deleteBusinessService(businessId: string, id: string): Promise<void> {
