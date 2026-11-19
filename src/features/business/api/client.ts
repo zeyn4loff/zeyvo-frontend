@@ -47,13 +47,17 @@ function baseHeaders(): Record<string, string> {
 async function readEnvelope<T>(response: Response): Promise<T> {
   const body = await response.json().catch(() => ({})) as Partial<ApiEnvelope<T>>;
   if (!response.ok || !body.success) {
-    const details = Object.values(body.error?.details ?? {}).flatMap((value) => Array.isArray(value) ? value : [value]);
-    const fieldMessage = details.find((value): value is string => typeof value === "string" && value.length > 0);
     const fields = body.error?.details?.fields;
-    const fieldNames = fields && typeof fields === "object" ? Object.keys(fields) : [];
+    const fieldMessages = fields && typeof fields === "object"
+      ? Object.values(fields).flatMap((value) => Array.isArray(value) ? value : [value])
+      : [];
+    const details = Object.entries(body.error?.details ?? {})
+      .filter(([key]) => key !== "fields")
+      .flatMap(([, value]) => Array.isArray(value) ? value : [value]);
+    const fieldMessage = [...fieldMessages, ...details].find((value): value is string => typeof value === "string" && value.length > 0);
     const message = fieldMessage || body.error?.message || translate(currentLanguage(), "requestFailed");
     throw new PartnerApiError(
-      fieldNames.length ? `${message} (${fieldNames.join(", ")})` : message,
+      message,
       body.error?.code || "request_failed",
       body.meta?.retry_after || 0,
       body.meta?.channel,
