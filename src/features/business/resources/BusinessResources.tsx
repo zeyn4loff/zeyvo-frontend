@@ -50,7 +50,7 @@ export default function BusinessResources({ session }: { session: BusinessSessio
     try {
       await saveBusinessResource(activeContext.businessId, resource, editingResource ?? undefined);
       await refresh();
-      setSaveError(""); setEditingResource(undefined); showToast("Resurs saxlanıldı.");
+      setSaveError(""); setEditingResource(undefined); showToast(translateUi("Resurs saxlanıldı."));
     } catch (cause) { setSaveError(cause instanceof Error ? cause.message : "Resurs saxlanılmadı."); }
   }
   async function saveCategory(next: ResourceCategory) {
@@ -58,14 +58,14 @@ export default function BusinessResources({ session }: { session: BusinessSessio
     try {
       await saveResourceCategory(activeContext.businessId, next, !!editingCategory);
       await refresh();
-      setSaveError(""); setEditingCategory(undefined); showToast("Kateqoriya saxlanıldı.");
+      setSaveError(""); setEditingCategory(undefined); showToast(translateUi("Kateqoriya saxlanıldı."));
     } catch (cause) { setSaveError(cause instanceof Error ? cause.message : "Kateqoriya saxlanılmadı."); }
   }
   async function remove() {
     if (!deleting) return;
     if (deleting.kind === "resource") {
       const linkedService = serviceData.services.find((service) => service.resourceIds.includes(deleting.id));
-      if (linkedService) { setSaveError(`Bu resurs “${linkedService.name}” xidmətində istifadə olunur. Əvvəlcə xidmətdən çıxarın.`); return; }
+      if (linkedService) { setSaveError(`${translateUi("Bu resurs")} “${linkedService.name}” ${translateUi("xidmətində istifadə olunur. Əvvəlcə xidmətdən çıxarın.")}`); return; }
     }
     if (!activeContext) return;
     try {
@@ -73,12 +73,12 @@ export default function BusinessResources({ session }: { session: BusinessSessio
       else await deleteResourceCategory(activeContext.businessId, deleting.id);
       await refresh();
       if (category === deleting.id) setCategory("all");
-      setSaveError(""); setDeleting(null); showToast("Silindi.");
+      setSaveError(""); setDeleting(null); showToast(translateUi("Silindi."));
     } catch (cause) { setSaveError(cause instanceof Error ? cause.message : "Silmək mümkün olmadı."); }
   }
   async function changeUnitStatus(resource: Resource, unitId: string, status: ResourceStatus) {
     if (!activeContext) return;
-    try { await updateResourceUnit(activeContext.businessId, resource.id, unitId, status); await refresh(); showToast("Resurs vəziyyəti yeniləndi."); }
+    try { await updateResourceUnit(activeContext.businessId, resource.id, unitId, status); await refresh(); showToast(translateUi("Resurs vəziyyəti yeniləndi.")); }
     catch (cause) { setSaveError(cause instanceof Error ? cause.message : "Vəziyyət saxlanılmadı."); }
   }
   function openResource(initial?: Resource, categoryId = "") { setSaveError(""); setDefaultCategoryId(categoryId); setEditingResource(initial ?? null); }
@@ -89,7 +89,7 @@ export default function BusinessResources({ session }: { session: BusinessSessio
   const hasFilter = type !== "all" || category !== "all" || search !== "";
   if (loading || servicesLoading) return <BusinessPageLoading />;
   return <div className="mx-auto w-full max-w-7xl space-y-6 px-4 py-5 sm:px-7 sm:py-7">
-    <BusinessHeaderPortal><BusinessHeaderButton variant="secondary" disabled={!activeContext} onClick={() => { setSaveError(""); setEditingCategory(null); }} className="flex-1 sm:flex-none"><Plus /><LocalizedText value={"Yeni kateqoriya"} /></BusinessHeaderButton><BusinessHeaderButton disabled={!activeContext} onClick={() => openResource()} className="flex-1 sm:flex-none"><Plus />Yeni resurs</BusinessHeaderButton></BusinessHeaderPortal>
+    <BusinessHeaderPortal><BusinessHeaderButton variant="secondary" disabled={!activeContext} onClick={() => { setSaveError(""); setEditingCategory(null); }} className="flex-1 sm:flex-none"><Plus /><LocalizedText value={"Yeni kateqoriya"} /></BusinessHeaderButton><BusinessHeaderButton disabled={!activeContext} onClick={() => openResource()} className="flex-1 sm:flex-none"><Plus /><LocalizedText value={"Yeni resurs"} /></BusinessHeaderButton></BusinessHeaderPortal>
     {!activeContext && <p className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900"><LocalizedText value={"Resurs əlavə etmək üçün əvvəlcə biznes və ya fərdi usta profili yaradın."} /></p>}
     {loading && <p className="text-sm text-slate-500"><LocalizedText value={"Resurslar yüklənir..."} /></p>}
     {loadError && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{loadError}</p>}
