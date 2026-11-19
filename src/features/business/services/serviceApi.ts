@@ -1,4 +1,4 @@
-import { businessPath, partnerDelete, partnerGet, partnerPost, saveRecord } from "../api/client";
+import { PartnerApiError, businessPath, partnerDelete, partnerGet, partnerPost, saveRecord } from "../api/client";
 import type { Service, ServiceCategory, ServiceData } from "./services";
 
 const base = (businessId: string) => businessPath(businessId, "services");
@@ -32,8 +32,15 @@ export async function saveBusinessService(businessId: string, service: Service, 
         const form = new FormData();
         form.append("file", blob, `service-image.${blob.type === "image/png" ? "png" : blob.type === "image/jpeg" ? "jpg" : "webp"}`);
         image = await partnerPost<{ url: string; filename: string }>(`${base(businessId)}/media`, form);
-      } catch {
-        throw new Error("Şəkilləri yükləmək mümkün olmadı. Yenidən cəhd edin.");
+      } catch (cause) {
+        if (cause instanceof PartnerApiError) {
+          if (cause.status === 401 || cause.status === 419) throw new Error("Sessiya bitib. Yenidən daxil olun.", { cause });
+          if (cause.status === 404 || cause.status === 405) throw new Error("Şəkil yükləmə xidməti serverdə mövcud deyil.", { cause });
+          if (cause.status === 413) throw new Error("Şəkil server üçün çox böyükdür. Daha kiçik şəkil seçin.", { cause });
+          if (cause.status === 422) throw new Error("Şəkil qəbul edilmədi. PNG, JPG və ya WebP seçin (maksimum 5 MB).", { cause });
+          if (cause.status >= 500) throw new Error("Server şəkli saxlaya bilmədi. Bir az sonra yenidən cəhd edin.", { cause });
+        }
+        throw new Error("Şəkilləri yükləmək mümkün olmadı. İnternet bağlantısını yoxlayıb yenidən cəhd edin.", { cause });
       }
       uploaded.push(image.filename);
       imageUrls.push(image.url);
