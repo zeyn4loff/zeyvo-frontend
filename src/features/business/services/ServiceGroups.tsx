@@ -53,7 +53,8 @@ export default function ServiceGroups({ categories, filtered, categoryFilter, ge
     setCollapsed((current) => current.includes(id) ? current.filter((value) => value !== id) : [...current, id]);
   }
 
-  if (!filtered.length) return <EmptyState title={translateUi("Heç bir xidmət tapılmadı")} description={translateUi("Axtarış və ya filtr meyarlarını dəyişin, yaxud kateqoriya üzrə yeni xidmət əlavə edin")} icon={Scissors} action={<>
+  const hasVisibleCategory = categories.some((category) => categoryFilter === "all" || categoryFilter === category.id);
+  if (!filtered.length && (filtersActive || !hasVisibleCategory)) return <EmptyState title={translateUi("Heç bir xidmət tapılmadı")} description={translateUi("Axtarış və ya filtr meyarlarını dəyişin, yaxud kateqoriya üzrə yeni xidmət əlavə edin")} icon={Scissors} action={<>
     <button type="button" onClick={onResetFilters} className="min-h-11 cursor-pointer rounded-xl bg-slate-100 px-4 text-xs font-medium text-slate-800 transition hover:bg-slate-200"><LocalizedText value={"Filtrləri sıfırla"} /></button>
     <button type="button" onClick={() => onAddService("")} className="min-h-11 cursor-pointer rounded-xl bg-brand-primary px-4 text-xs font-medium text-slate-900 transition hover:brightness-95"><LocalizedText value={"Yeni xidmət"} /></button>
     <button type="button" onClick={onAddCategory} className="min-h-11 cursor-pointer rounded-xl bg-slate-100 px-4 text-xs font-medium text-slate-800 transition hover:bg-slate-200"><LocalizedText value={"Yeni kateqoriya"} /></button>
