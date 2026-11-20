@@ -32,8 +32,11 @@ export function ServiceDialog({ initial, initialTab = "general", businessId, def
   const [saving, setSaving] = useState(false);
   const [format, setFormat] = useState<"individual" | "group">(initial?.format === "group" ? "group" : "individual");
   const [isCombo, setIsCombo] = useState(initial?.isCombo ?? initial?.format === "combo");
-  const [techCardId, setTechCardId] = useState(initial?.techCardId ?? "");
-  const [materialItems, setMaterialItems] = useState(initial?.materialItems ?? cardItems(techCards.find((card) => card.id === initial?.techCardId)));
+  const linkedCard = techCards.find((card) => card.id === initial?.techCardId)
+    ?? techCards.find((card) => card.serviceId === initial?.id);
+  const [techCardId, setTechCardId] = useState(initial?.techCardId || linkedCard?.id || "");
+  const [materialItems, setMaterialItems] = useState(initial?.materialItems?.length
+    ? initial.materialItems : cardItems(linkedCard));
   const [gender, setGender] = useState<ServiceGender>(initial?.gender ?? "all");
   const [priceType, setPriceType] = useState<PriceType>(initial?.priceType ?? "fixed");
   const [staffIds, setStaffIds] = useState(initial?.staffIds ?? []);
