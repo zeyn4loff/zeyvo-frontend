@@ -286,6 +286,7 @@ export const trEnUiTextCatalog: Record<string, [string, string]> = {
   "Xidmət seç": ["Bir hizmet seçin", "Select a service"],
   "xidmət seçilib": ["hizmet seçildi", "Service selected"],
   "Xidmət seçimi": ["Hizmet seçimi", "Service selection"],
+  "Ustanın göstərəcəyi xidmətləri seçin": ["Uzmanın sunacağı hizmetleri seçin", "Select the services the specialist will provide"],
   "Xidmət seçimini sil": ["Hizmetin seçimini kaldırın", "Delete service selection"],
   "Xidmət seçin": ["Bir hizmet seçin", "Select a service"],
   "Xidmət seçin *": ["Hizmet seçin *", "Select a service *"],

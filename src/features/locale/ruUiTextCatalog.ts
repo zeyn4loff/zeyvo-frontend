@@ -286,6 +286,7 @@ export const ruUiTextCatalog: Record<string, string> = {
   "Xidmət seç": "Выберите услугу",
   "xidmət seçilib": "услуга выбрана",
   "Xidmət seçimi": "Выбор услуги",
+  "Ustanın göstərəcəyi xidmətləri seçin": "Выберите услуги, которые будет оказывать мастер",
   "Xidmət seçimini sil": "Отменить выбор услуги",
   "Xidmət seçin": "Выберите услугу",
   "Xidmət seçin *": "Выберите услугу *",
