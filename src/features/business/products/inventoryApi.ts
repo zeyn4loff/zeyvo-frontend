@@ -26,6 +26,10 @@ export async function fetchInventory(businessId: string): Promise<ProductData> {
 }
 
 function recordBody(kind: RecordKind, record: InventoryRecord): Record<string, unknown> {
+  if (kind === "products") {
+    const product = record as Product;
+    return { ...product, categoryId: product.categoryId || null };
+  }
   if (kind !== "tech-cards") return { ...record };
   const card = record as TechCard;
   return {
