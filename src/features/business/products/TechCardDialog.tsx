@@ -1,6 +1,6 @@
 import { useCurrencySymbol } from "../finance/businessCurrency";
 import { useState, type FormEvent } from "react";
-import { Box, ChevronDown, Search, Wrench, X } from "lucide-react";
+import { Box, Search, Wrench, X } from "lucide-react";
 import BusinessFormDialog from "../components/BusinessFormDialog";
 import { businessControlClass as field, businessLabelClass as label, businessTextareaClass as textarea } from "../components/BusinessField";
 import type { Product, ProductCategory, TechCard, Warehouse } from "./products";
@@ -28,21 +28,25 @@ export default function TechCardDialog({ initial, products, productCategories, w
   const [query, setQuery] = useState("");
   const [warehouseId, setWarehouseId] = useState("");
   const [draftIds, setDraftIds] = useState<string[]>([]);
-  const [collapsedCategoryIds, setCollapsedCategoryIds] = useState<string[]>([]);
+  const [categoryId, setCategoryId] = useState("all");
   const [error, setError] = useState("");
   const service = services.find((item) => item.id === serviceId);
   const warehouses = [...new Set(products.map((item) => item.warehouseId))];
   const total = items.reduce((sum, item) => sum + (products.find((product) => product.id === item.productId)?.cost ?? 0) * item.quantity, 0);
   const normalizedQuery = query.trim().toLocaleLowerCase("az-AZ");
-  const visibleProducts = products.filter((item) => item.warehouseId === warehouseId && `${item.name} ${item.sku}`.toLocaleLowerCase("az-AZ").includes(normalizedQuery));
-  const productGroups = productCategories
-    .map((category) => ({ id: category.id, name: category.name, items: visibleProducts.filter((item) => item.categoryId === category.id) }))
-    .filter((group) => group.items.length > 0);
-  const uncategorized = visibleProducts.filter((item) => !productCategories.some((category) => category.id === item.categoryId));
-  if (uncategorized.length) productGroups.push({ id: "uncategorized", name: translateUi("Kateqoriyasız"), items: uncategorized });
+  const categoryNames = new Map(productCategories.map((category) => [category.id, category.name]));
+  const warehouseProducts = products.filter((item) => item.warehouseId === warehouseId);
+  const usedCategoryIds = new Set(warehouseProducts.map((item) => item.categoryId));
+  const availableCategories = productCategories.filter((category) => usedCategoryIds.has(category.id));
+  const hasUncategorized = warehouseProducts.some((item) => !categoryNames.has(item.categoryId));
+  const visibleProducts = warehouseProducts.filter((item) => {
+    const matchesCategory = categoryId === "all" || (categoryId === "uncategorized" ? !categoryNames.has(item.categoryId) : item.categoryId === categoryId);
+    const matchesSearch = !normalizedQuery || `${item.name} ${item.sku} ${categoryNames.get(item.categoryId) ?? translateUi("Kateqoriyasız")}`.toLocaleLowerCase("az-AZ").includes(normalizedQuery);
+    return matchesCategory && matchesSearch;
+  });
   function openPicker(kind: Picker) {
     setQuery("");
-    setCollapsedCategoryIds([]);
+    setCategoryId("all");
     if (kind === "product") {
       setWarehouseId(products.find((product) => product.id === items[0]?.productId)?.warehouseId ?? warehouses[0] ?? "");
       setDraftIds(items.map((item) => item.productId));
@@ -100,20 +104,13 @@ export default function TechCardDialog({ initial, products, productCategories, w
     )}
     {picker === "product" && <BusinessFormDialog size="medium" title={translateUi("Sərfiyyat məhsullarının seçimi")} description={translateUi("Texnoloji karta daxil ediləcək material və preparatları seçin")} onClose={() => setPicker(null)}>
       <div className="space-y-3">
-        <label className={label}><LocalizedText value={"Məhsul anbarı"} /><select value={warehouseId} onChange={(event) => setWarehouseId(event.target.value)} className={`${field} cursor-pointer`}>{warehouses.map((id) => <option key={id} value={id}>{warehouseOptions.find((item) => item.id === id)?.name ?? translateUi("Anbarsız")}</option>)}</select></label>
+        <label className={label}><LocalizedText value={"Məhsul anbarı"} /><select value={warehouseId} onChange={(event) => { setWarehouseId(event.target.value); setCategoryId("all"); }} className={`${field} cursor-pointer`}>{warehouses.map((id) => <option key={id} value={id}>{warehouseOptions.find((item) => item.id === id)?.name ?? translateUi("Anbarsız")}</option>)}</select></label>
         <PickerSearch value={query} onChange={setQuery} placeholder={translateUi("Məhsul adı ilə axtarın...")} />
-        <div className="max-h-72 divide-y divide-slate-200 overflow-y-auto rounded-xl border border-slate-200 bg-slate-50/50">
-          {productGroups.map((group) => {
-            const collapsed = !normalizedQuery && collapsedCategoryIds.includes(group.id);
-            return <section key={group.id}>
-              <button type="button" aria-expanded={!collapsed} onClick={() => setCollapsedCategoryIds((current) => current.includes(group.id) ? current.filter((id) => id !== group.id) : [...current, group.id])} className="flex min-h-11 w-full items-center gap-2 bg-white px-4 py-2 text-left text-xs font-bold text-slate-900 hover:bg-slate-50">
-                <ChevronDown size={16} className={`shrink-0 text-slate-400 transition-transform ${collapsed ? "-rotate-90" : ""}`} />
-                <span className="min-w-0 flex-1 break-words">{group.name}</span>
-                <span className="rounded-md bg-amber-50 px-2 py-0.5 text-amber-800">{group.items.length}</span>
-              </button>
-              {!collapsed && <div className="divide-y divide-slate-100 border-t border-slate-100">{group.items.map((item) => <label key={item.id} className="flex min-h-11 cursor-pointer items-center gap-3 px-4 py-2 pl-10 hover:bg-amber-50"><input type="checkbox" checked={draftIds.includes(item.id)} onChange={(event) => setDraftIds((current) => event.target.checked ? [...current, item.id] : current.filter((id) => id !== item.id))} className="size-4 shrink-0 accent-slate-900" /><span className="min-w-0 flex-1 break-words text-xs font-semibold">{item.name}</span><span className="shrink-0 text-[11px] text-slate-500">{item.cost.toFixed(2)} {currencySign} / {translateUi(item.unit)}</span></label>)}</div>}
-            </section>;
-          })}
+        <div aria-label={translateUi("Məhsul kateqoriyaları")} className="flex max-w-full gap-1.5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {[{ id: "all", name: translateUi("Bütün məhsullar") }, ...availableCategories, ...(hasUncategorized ? [{ id: "uncategorized", name: translateUi("Kateqoriyasız") }] : [])].map((category) => <button key={category.id} type="button" aria-pressed={categoryId === category.id} onClick={() => setCategoryId(category.id)} className={`min-h-9 shrink-0 cursor-pointer whitespace-nowrap rounded-lg px-3 py-1 text-xs font-semibold transition ${categoryId === category.id ? "bg-slate-900 text-white shadow-sm" : "bg-slate-100 text-slate-700 hover:bg-slate-200"}`}>{category.name}</button>)}
+        </div>
+        <div className="max-h-72 divide-y divide-slate-100 overflow-y-auto rounded-xl border border-slate-200 bg-slate-50/50">
+          {visibleProducts.map((item) => <label key={item.id} className="flex min-h-14 cursor-pointer items-center gap-2.5 px-3 py-2 hover:bg-amber-50 sm:gap-3 sm:px-4"><input type="checkbox" checked={draftIds.includes(item.id)} onChange={(event) => setDraftIds((current) => event.target.checked ? [...current, item.id] : current.filter((id) => id !== item.id))} className="size-4 shrink-0 accent-slate-900" /><span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-700"><Box aria-hidden="true" size={17} /></span><span className="min-w-0 flex-1"><span className="block break-words text-xs font-bold text-slate-900">{item.name}</span><span className="mt-0.5 inline-block rounded bg-slate-100 px-1.5 text-[11px] font-medium text-slate-600">{categoryNames.get(item.categoryId) ?? translateUi("Kateqoriyasız")}</span></span><span className="shrink-0 text-[11px] text-slate-500">{item.cost.toFixed(2)} {currencySign} / {translateUi(item.unit)}</span></label>)}
           {!visibleProducts.length && <p className="p-4 text-xs text-slate-500"><LocalizedText value={products.length ? "Heç bir məhsul tapılmadı" : "Əvvəlcə məhsul əlavə edin."} /></p>}
         </div>
         <div className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-3"><span className="text-xs text-slate-500">{draftIds.length} <LocalizedText value={"məhsul seçilib"} /></span><div className="flex gap-2"><button type="button" onClick={() => setPicker(null)} className={secondary}><LocalizedText value={"Bağla"} /></button><button type="button" onClick={applyProducts} className={primary}><LocalizedText value={"Tətbiq et"} /></button></div></div>
