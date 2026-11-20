@@ -1004,6 +1004,7 @@ export const trEnUiTextCatalog: Record<string, [string, string]> = {
   "Bağlı xidmətlər kateqoriyasız qalacaq.": ["Bağlı hizmetler kategorize edilmeden kalacaktır.", "Affiliated services will remain uncategorized."],
   "Bağlı məhsullar anbarsız qalacaq.": ["Kapalı ürünler stoklarımızda kalmayacaktır.", "Closed products will be out of stock."],
   "Bağlı məhsullar kateqoriyasız qalacaq.": ["Bağlı ürünler kategorize edilmeden kalacaktır.", "Affiliated products will remain uncategorized."],
+  "Qalıqlar avtomatik məxaric ediləcək, məhsul kataloqdan çıxarılacaq. Anbar sənədləri tarixçədə qalacaq.": ["Stoklar otomatik olarak düşülecek, ürün katalogdan kaldırılacak. Depo belgeleri geçmişte kalacak.", "Remaining stock will be written off automatically, and the product will be removed from the catalog. Warehouse documents will remain in the history."],
   "Başqa açar söz və ya kateqoriya seçin": ["Başka bir anahtar kelime veya kategori seçin", "Choose another keyword or category"],
   "Başladılır…": ["Başlıyor…", "Starting…"],
   "başlanğıc": ["başlangıç", "beginning"],

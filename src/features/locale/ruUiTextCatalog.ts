@@ -1004,6 +1004,7 @@ export const ruUiTextCatalog: Record<string, string> = {
   "Bağlı xidmətlər kateqoriyasız qalacaq.": "Дочерние услуги останутся без категорий.",
   "Bağlı məhsullar anbarsız qalacaq.": "Закрытой продукции не будет на складе.",
   "Bağlı məhsullar kateqoriyasız qalacaq.": "Дочерние продукты останутся без категорий.",
+  "Qalıqlar avtomatik məxaric ediləcək, məhsul kataloqdan çıxarılacaq. Anbar sənədləri tarixçədə qalacaq.": "Остатки автоматически спишутся, товар исчезнет из каталога. Складские документы сохранятся в истории.",
   "Başqa açar söz və ya kateqoriya seçin": "Выберите другое ключевое слово или категорию",
   "Başladılır…": "Начало…",
   "başlanğıc": "начало",
