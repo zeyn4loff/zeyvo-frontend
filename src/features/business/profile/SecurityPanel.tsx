@@ -1,3 +1,4 @@
+import { partnerPath } from "@/features/business/partnerPath";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import type { BusinessSession } from "../auth/businessSession";
@@ -23,7 +24,7 @@ export default function SecurityPanel({ session }: { session: BusinessSession })
     try { await deletePartnerProfile(); }
     catch (cause) { setError(cause instanceof Error ? cause.message : "Profili silmək mümkün olmadı."); setDeleting(false); return; }
     endSession();
-    navigate("/partner/auth", { replace: true });
+    navigate(partnerPath("/auth"), { replace: true });
   }
 
   return <div className="space-y-4">

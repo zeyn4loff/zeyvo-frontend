@@ -11,6 +11,8 @@ import { useCityPicker } from "@/features/location/city-picker-context";
 import { SiteBrandingProvider } from "@/features/branding/SiteBrandingProvider";
 import { hasPublicCatalogError, isPublicCatalogSettled, refreshPublicCatalog, useMarketplaceRevision } from "@/features/marketplace/publicCatalog";
 import { useCustomerText } from "@/features/locale/customerText";
+import { isPartnerHost, partnerPath } from "@/features/business/partnerPath";
+import { useBusinessSession } from "@/features/business/auth/useBusinessSession";
 
 const Home = lazy(() => import("@/pages/home"));
 const CatalogPage = lazy(() => import("@/pages/catalog"));
@@ -34,7 +36,12 @@ const BusinessProfilePage = lazy(() => import("@/pages/business-profile"));
 
 function LegacyPartnerRedirect() {
   const { pathname, search, hash } = useLocation();
-  return <Navigate to={`/partner${pathname.slice("/business".length)}${search}${hash}`} replace />;
+  return <Navigate to={`${partnerPath(pathname.slice("/business".length))}${search}${hash}`} replace />;
+}
+
+function LegacyPrefixedPartnerRedirect() {
+  const { pathname, search, hash } = useLocation();
+  return <Navigate to={`${pathname.slice("/partner".length) || "/"}${search}${hash}`} replace />;
 }
 
 function LegacyCitiesRedirect() {
@@ -58,9 +65,14 @@ function PublicCatalogGate() {
 
 function PartnerAuthRoute() {
   const { search, hash } = useLocation();
-  return window.location.hostname === "partner.zeyvo.app"
+  return isPartnerHost()
     ? <Navigate to={`/${search}${hash}`} replace />
     : <BusinessAuthPage />;
+}
+
+function PartnerHomeRoute() {
+  const { session } = useBusinessSession();
+  return session ? <BusinessDashboardPage /> : <BusinessAuthPage />;
 }
 
 export default function AppRouter() {
@@ -72,26 +84,27 @@ export default function AppRouter() {
         <CustomerProvider>
           <Suspense fallback={<PageLoadingIndicator />}>
             <Routes>
-              {window.location.hostname === "partner.zeyvo.app" && <Route index element={<BusinessAuthPage />} />}
-              <Route path="partner/auth" element={<PartnerAuthRoute />} />
-              <Route path="partner" element={<BusinessDashboardPage />} />
-              <Route path="partner/biznes" element={<BusinessDashboardPage />} />
-              <Route path="partner/calendar" element={<BusinessCalendarPage />} />
-              <Route path="partner/resources" element={<BusinessResourcesPage />} />
-              <Route path="partner/products" element={<BusinessProductsPage />} />
-              <Route path="partner/staff" element={<BusinessStaffPage />} />
-              <Route path="partner/services" element={<BusinessServicesPage />} />
-              <Route path="partner/clients" element={<BusinessClientsPage />} />
-              <Route path="partner/loyalty" element={<BusinessLoyaltyPage />} />
-              <Route path="partner/marketing" element={<BusinessMarketingPage />} />
-              <Route path="partner/integrations" element={<BusinessIntegrationsPage />} />
-              <Route path="partner/finance" element={<BusinessFinancePage />} />
-              <Route path="partner/profile" element={<BusinessProfilePage />} />
-              <Route path="partner/profile/:tab" element={<BusinessProfilePage />} />
+              {isPartnerHost() && <Route index element={<PartnerHomeRoute />} />}
+              {isPartnerHost() && <Route path="partner/*" element={<LegacyPrefixedPartnerRedirect />} />}
+              <Route path={partnerPath("/auth")} element={<PartnerAuthRoute />} />
+              {!isPartnerHost() && <Route path={partnerPath()} element={<BusinessDashboardPage />} />}
+              <Route path={partnerPath("/biznes")} element={<BusinessDashboardPage />} />
+              <Route path={partnerPath("/calendar")} element={<BusinessCalendarPage />} />
+              <Route path={partnerPath("/resources")} element={<BusinessResourcesPage />} />
+              <Route path={partnerPath("/products")} element={<BusinessProductsPage />} />
+              <Route path={partnerPath("/staff")} element={<BusinessStaffPage />} />
+              <Route path={partnerPath("/services")} element={<BusinessServicesPage />} />
+              <Route path={partnerPath("/clients")} element={<BusinessClientsPage />} />
+              <Route path={partnerPath("/loyalty")} element={<BusinessLoyaltyPage />} />
+              <Route path={partnerPath("/marketing")} element={<BusinessMarketingPage />} />
+              <Route path={partnerPath("/integrations")} element={<BusinessIntegrationsPage />} />
+              <Route path={partnerPath("/finance")} element={<BusinessFinancePage />} />
+              <Route path={partnerPath("/profile")} element={<BusinessProfilePage />} />
+              <Route path={partnerPath("/profile/:tab")} element={<BusinessProfilePage />} />
               <Route path="business/*" element={<LegacyPartnerRedirect />} />
               <Route element={<MainLayout />}>
                 <Route element={<PublicCatalogGate />}>
-                {window.location.hostname !== "partner.zeyvo.app" && <Route index element={<Home />} />}
+                {!isPartnerHost() && <Route index element={<Home />} />}
                 <Route path="catalog" element={<CatalogPage />} />
                 <Route path="catalog/:category" element={<CatalogPage />} />
                 <Route path="catalog/:category/:subcategory" element={<CatalogPage />} />

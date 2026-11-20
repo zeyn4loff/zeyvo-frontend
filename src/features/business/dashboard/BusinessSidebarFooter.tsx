@@ -1,3 +1,4 @@
+import { partnerPath } from "@/features/business/partnerPath";
 import { Link } from "react-router";
 import { ArrowLeftRight, Building2, LogOut } from "lucide-react";
 import type { BusinessSession } from "../auth/businessSession";
@@ -25,7 +26,7 @@ export default function BusinessSidebarFooter({ session, activeContext, profileA
       <ArrowLeftRight size={16} className="shrink-0 text-zinc-400" />
     </button>
     <div className={`flex min-w-0 items-center rounded-2xl transition-colors hover:bg-white/10 ${profileActive ? "bg-white/10" : ""}`}>
-      <Link to="/partner/profile/personal" onClick={onProfile} aria-current={profileActive ? "page" : undefined} className="flex min-h-11 min-w-0 flex-1 items-center gap-2.5 rounded-l-2xl px-2 text-left hover:text-brand-primary">
+      <Link to={partnerPath("/profile/personal")} onClick={onProfile} aria-current={profileActive ? "page" : undefined} className="flex min-h-11 min-w-0 flex-1 items-center gap-2.5 rounded-l-2xl px-2 text-left hover:text-brand-primary">
         <span className="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-brand-primary text-[11px] font-black text-[#101114]">{session.avatar ? <img src={session.avatar} alt="" className="size-full object-cover" /> : initials}</span>
         <span className="min-w-0"><strong className="block truncate text-xs">{session.ownerName}</strong><span className="block truncate text-[10px] text-zinc-400">{session.phone || session.email}</span></span>
       </Link>

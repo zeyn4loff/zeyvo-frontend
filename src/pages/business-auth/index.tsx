@@ -1,3 +1,4 @@
+import { partnerPath } from "@/features/business/partnerPath";
 import { useState } from "react";
 import { Link, Navigate, useSearchParams } from "react-router";
 import { ArrowLeft } from "lucide-react";
@@ -20,7 +21,7 @@ export default function BusinessAuthPage() {
   const [mode, setMode] = useState<AuthMode>(() => searchParams.get("mode") === "register" ? "register" : "login");
   const [error, setError] = useState("");
 
-  if (session) return <Navigate to={session.startView === "profile" ? "/partner/profile/personal" : "/partner"} replace />;
+  if (session) return <Navigate to={session.startView === "profile" ? partnerPath("/profile/personal") : partnerPath()} replace />;
 
   function changeMode(next: AuthMode) {
     setMode(next);
