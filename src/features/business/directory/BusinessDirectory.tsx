@@ -12,7 +12,7 @@ import BusinessDeleteDialog from "../components/BusinessDeleteDialog";
 import BusinessHeaderPortal from "../components/BusinessHeaderPortal";
 import BusinessHeaderButton from "../components/BusinessHeaderButton";
 import BusinessDirectoryCard from "./BusinessDirectoryCard";
-import { createBusiness, updateBusiness, createIndividual, saveIndividual as saveIndividualApi, saveBranch as saveBranchApi, removeBusiness, removeBranch, fetchBusinesses } from "./businessDirectoryApi";
+import { createBusiness, updateBusiness, createIndividual, saveIndividual as saveIndividualApi, saveBranch as saveBranchApi, removeBusiness, removeBranch, fetchBusinesses, setBusinessPublication } from "./businessDirectoryApi";
 import { useCustomerText } from "@/features/locale/customerText";
 import LocalizedText from "@/features/locale/LocalizedText";
 
@@ -80,6 +80,16 @@ export default function BusinessDirectory({ session }: { session: BusinessSessio
       } catch (issue) { await reconcileServer(); setSaveError(issue instanceof Error ? issue.message : t("Filial saxlanılmadı.")); }
   }
 
+  async function togglePublication(business: Business) {
+    const publishing = business.status !== "published";
+    try {
+      const saved = await setBusinessPublication(business.id, publishing);
+      update(businesses.map((item) => item.id === saved.id ? saved : item));
+      setSaveError("");
+      showToast(t(publishing ? "Biznes kataloqda yayımlandı." : "Biznes kataloqdan gizlədildi."));
+    } catch (issue) { setSaveError(issue instanceof Error ? issue.message : t("Biznesin statusu dəyişmədi.")); }
+  }
+
   async function deleteItem() {
     if (!deleting || deletionBlock) return;
     try {
@@ -108,6 +118,7 @@ export default function BusinessDirectory({ session }: { session: BusinessSessio
         onEditBranch={(branch) => setEditingBranch({ businessId: business.id, branch })}
         onDeleteBranch={(branch) => setDeleting({ businessId: business.id, branchId: branch.id, name: branch.name })}
         onAddBranch={() => setEditingBranch({ businessId: business.id })}
+        onTogglePublication={() => void togglePublication(business)}
       />)}</div>)}
     </div>
     {saveError && <p role="alert" className="mt-3 rounded-xl bg-red-50 p-3 text-sm text-red-700"><LocalizedText value={saveError} /></p>}

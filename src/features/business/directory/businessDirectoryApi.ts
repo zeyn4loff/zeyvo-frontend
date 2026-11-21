@@ -31,6 +31,10 @@ export async function updateBusiness(value: Business): Promise<Business> {
   return (await partnerPatch<BusinessResponse>(`${base}/${value.id}`, businessPayload(value))).business;
 }
 
+export async function setBusinessPublication(id: string, published: boolean): Promise<Business> {
+  return (await partnerPatch<BusinessResponse>(`${base}/${id}/publication`, { published })).business;
+}
+
 export async function removeBusiness(id: string): Promise<void> {
   await partnerDelete(`${base}/${id}`);
 }

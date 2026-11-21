@@ -12,12 +12,13 @@ interface Props {
   onEditBranch: (branch: Branch) => void;
   onDeleteBranch: (branch: Branch) => void;
   onAddBranch: () => void;
+  onTogglePublication: () => void;
 }
 
 const actionButton = "flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-slate-200 text-slate-500 transition hover:bg-white sm:size-7";
 const branchActionButton = "flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-white sm:size-6";
 
-export default function BusinessDirectoryCard({ business, collapsed, onToggle, onEditBusiness, onDeleteBusiness, onEditBranch, onDeleteBranch, onAddBranch }: Props) {
+export default function BusinessDirectoryCard({ business, collapsed, onToggle, onEditBusiness, onDeleteBusiness, onEditBranch, onDeleteBranch, onAddBranch, onTogglePublication }: Props) {
   const t = useCustomerText();
   const isBusiness = business.type === "business";
   const [categoryId, subcategoryId] = (business.category ?? "").split("/");
@@ -33,11 +34,13 @@ export default function BusinessDirectoryCard({ business, collapsed, onToggle, o
           {isBusiness && <button type="button" onClick={onToggle} aria-label={collapsed ? t("Filialları göstər") : t("Filialları qatla")} aria-expanded={!collapsed} className="-ml-1 flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-800"><ChevronDown size={14} className={`transition-transform duration-200 ${collapsed ? "-rotate-90" : ""}`} /></button>}
           <button type="button" onClick={isBusiness ? onToggle : onEditBusiness} className="min-w-0 cursor-pointer truncate text-left text-sm font-bold text-slate-900 hover:underline">{business.name}</button>
           <span className={`shrink-0 rounded-md border px-2 py-0.5 text-[10px] font-semibold ${isBusiness ? "border-amber-200/50 bg-amber-100/70 text-amber-900" : "border-blue-200/50 bg-blue-100/70 text-blue-900"}`}>{isBusiness ? t("Biznes") : t("Fərdi usta")}</span>
+          <span className={`rounded-md px-2 py-0.5 text-[10px] font-semibold ${business.status === "published" ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-600"}`}>{t(business.status === "published" ? "Kataloqda yayımlanıb" : "Qaralama")}</span>
           {isBusiness && <button type="button" onClick={onToggle} aria-expanded={!collapsed} className="cursor-pointer text-[11px] text-slate-400 hover:text-slate-600">({business.branches.length} {t("filial")})</button>}
           {!isBusiness && <p className="w-full truncate text-[11px] text-slate-400">{individualDetails || business.description}</p>}
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-1.5">
+        <button type="button" onClick={onTogglePublication} className="min-h-9 rounded-xl bg-slate-100 px-3 text-xs font-semibold text-slate-800">{t(business.status === "published" ? "Kataloqdan gizlət" : "Kataloqda yayımla")}</button>
         <button type="button" onClick={onEditBusiness} aria-label={`${business.name} ${t("redaktə et")}`} className={actionButton}><Pencil size={14} /></button>
         <button type="button" onClick={onDeleteBusiness} aria-label={`${business.name} ${t("sil")}`} className={`${actionButton} hover:border-red-200 hover:bg-red-50 hover:text-red-600`}><Trash2 size={14} /></button>
       </div>
