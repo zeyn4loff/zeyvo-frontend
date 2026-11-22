@@ -14,12 +14,14 @@ interface Props {
   sortOrder: SortOrder;
   onSortChange: (order: SortOrder) => void;
   favoriteIds: number[];
+  favoriteMasterIds: number[];
   onToggleFavorite: (id: number) => void;
+  onToggleMasterFavorite: (id: number) => void;
   query: string;
   onClearFilters: () => void;
 }
 
-export default function BeautyLocation({ category, items, sortOrder, onSortChange, favoriteIds, onToggleFavorite, query, onClearFilters }: Props) {
+export default function BeautyLocation({ category, items, sortOrder, onSortChange, favoriteIds, favoriteMasterIds, onToggleFavorite, onToggleMasterFavorite, query, onClearFilters }: Props) {
   const { language, t } = useTranslations();
   const ct = useCustomerText();
   const name = categoryName(language, category.id, category.azName);
@@ -34,7 +36,10 @@ export default function BeautyLocation({ category, items, sortOrder, onSortChang
     </SectionHeader>
     {query && <p className="mb-4 text-sm text-slate-600"><LocalizedText value={"Axtarış: “"} />{query}”</p>}
     {items.length ? <div className="grid min-w-0 grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {items.map((item) => <BeautyLocationCard key={item.id} item={item} isFavorite={favoriteIds.includes(item.id)} onToggleFavorite={() => onToggleFavorite(item.id)} />)}
+      {items.map((item) => {
+        const masterId = item.isIndividual ? item.specialists?.[0]?.id : undefined;
+        return <BeautyLocationCard key={item.id} item={item} isFavorite={masterId !== undefined ? favoriteMasterIds.includes(masterId) : favoriteIds.includes(item.id)} onToggleFavorite={() => masterId !== undefined ? onToggleMasterFavorite(masterId) : onToggleFavorite(item.id)} />;
+      })}
     </div> : <EmptyState title={ct("Bu kriteriyada nəticə tapılmadı")} description={ct("Başqa kateqoriya seçin və ya filtrləri sıfırlayın.")} icon={SearchX} actionLabel={ct("Filtrləri sıfırla")} onAction={onClearFilters} />}
   </section>;
 }

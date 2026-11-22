@@ -1,7 +1,8 @@
-import { Heart, Scissors, Sparkles, Star, HeartPulse, CarFront, Dumbbell, GraduationCap } from "lucide-react";
+import { Heart, Scissors, Sparkles, Star, HeartPulse, CarFront, Dumbbell, GraduationCap, Store, UserRound } from "lucide-react";
 import { Link } from "react-router";
 import { categories, type Salon } from "@/features/marketplace/data";
 import { categoryName, useTranslations } from "@/features/locale/language";
+import { useCustomerText } from "@/features/locale/customerText";
 
 interface Props {
   item: Salon;
@@ -28,19 +29,22 @@ const categoryStyles: Record<string, { background: string; icon: typeof Sparkles
 
 export default function SalonCard({ item, isFavorite, onToggleFavorite }: Props) {
   const { language, t } = useTranslations();
+  const ct = useCustomerText();
   const startingPrice = item.services.length ? Math.min(...item.services.map((service) => service.price)) : null;
   const fallback = categories.find((category) => category.id === item.topCategory)?.subcategories.find((subcategory) => subcategory.id === item.category)?.azName || item.tag;
   const categoryLabel = categoryName(language, item.category, fallback);
   const area = item.location.match(/\(m\.\s*([^)]+)\)/)?.[1] || item.city || "Bakı";
   const style = categoryStyles[item.category] || categoryStyles[item.topCategory] || { background: "bg-[#EDF1E4]", icon: Sparkles };
   const Icon = style.icon;
+  const masterId = item.isIndividual ? item.specialists?.[0]?.id : undefined;
 
   return <article className="group relative min-w-0">
-    <Link to={`/salon/${item.id}`} className="block rounded-3xl outline-none focus-visible:ring-2 focus-visible:ring-brand-primary" aria-label={`${item.name} — ${t("details")}`}>
+    <Link to={masterId !== undefined ? `/master/${masterId}` : `/salon/${item.id}`} className="block rounded-3xl outline-none focus-visible:ring-2 focus-visible:ring-brand-primary" aria-label={`${item.name} — ${t("details")}`}>
       <div className={`relative flex aspect-[1.45] items-center justify-center overflow-hidden rounded-3xl ${style.background} transition-transform duration-200 group-hover:-translate-y-0.5`}>
         <Icon size={76} strokeWidth={1.35} className="text-primary/15" aria-hidden="true" />
         {item.image && <img src={item.image} alt="" loading="lazy" className="absolute inset-0 size-full object-cover transition-transform duration-300 group-hover:scale-[1.03]" />}
         <span className="absolute bottom-3 left-3 max-w-[calc(100%-5rem)] truncate rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-primary shadow-sm">{categoryLabel}</span>
+        <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-primary shadow-sm">{item.isIndividual ? <UserRound size={14} aria-hidden="true" /> : <Store size={14} aria-hidden="true" />}{item.isIndividual ? ct("Fərdi usta") : ct("Salon")}</span>
       </div>
       <div className="pt-3">
         <div className="flex min-w-0 items-start justify-between gap-2"><h3 className="min-w-0 line-clamp-2 text-base font-bold leading-snug text-primary">{item.name}</h3>{item.reviewsCount > 0 && <span className="flex shrink-0 items-center gap-1 text-xs font-semibold text-primary"><Star size={13} className="fill-amber-400 text-amber-500" />{item.rating}</span>}</div>

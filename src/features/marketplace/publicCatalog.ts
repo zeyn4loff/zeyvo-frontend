@@ -66,14 +66,16 @@ export function getPublicSalons(): Salon[] {
       salonId: id, rating: member.rating, photo: member.avatar || personalAvatar(member.name), bio: member.bio,
       services: business.services.filter((service) => service.staffIds.includes(member.id)).map((service) => services.find((item) => item.partnerServiceId === service.id)!).filter(Boolean),
     }));
-    if (business.type === "individual" && publicStaff.length === 0) publicStaff.push({ id: stableId(`server:${business.id}:individual`), topCategory: category, name: business.name, title: "Fərdi usta", salonName: "", salonId: id, rating: 0, photo: branch?.logo || personalAvatar(business.name), bio: business.description, services });
+    const specialists = business.type === "individual"
+      ? [{ id: stableId(`server:${business.id}:individual`), topCategory: category, name: business.name, title: "Fərdi usta", salonName: "", salonId: id, rating: business.rating, photo: branch?.logo || personalAvatar(business.name), bio: business.description, services }]
+      : publicStaff;
     return {
       id, isIndividual: business.type === "individual", partner: { ownerId: "server", businessId: business.id },
       city: branch?.city || "", topCategory: category, category: branch?.category?.split("/").at(-1) || "", name: business.name,
       tag: categories.find((item) => item.id === category)?.azName || category,
       rating: business.rating, reviewsCount: business.reviewsCount, location: branch?.address || branch?.city || "", workHours: branch?.hours,
       description: business.description || branch?.description || "", image: branch?.logo || branch?.photos[0] || "",
-      services, slots: [], specialists: publicStaff,
+      services, slots: [], specialists,
       branches: business.branches.map((item) => ({ id: item.id, name: item.name, address: item.address, city: item.city, hours: item.hours, phone: item.phone, amenities: item.amenities, description: item.description, logo: item.logo, photos: item.photos, scheduleDays: item.scheduleDays, whatsapp: item.whatsapp, instagram: item.instagram, facebook: item.facebook })),
       contact: { phone: branch?.phone, instagram: branch?.instagram },
     };
