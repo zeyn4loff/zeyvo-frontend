@@ -61,10 +61,10 @@ export default function StaffInvitationInbox({ session, businessId }: { email: s
       window.dispatchEvent(new CustomEvent(BOOKING_CHANGED_EVENT, { detail: event }));
       refresh();
       if (event.notificationId && soundEnabled) playNotificationSound();
-      if (event.notificationId) showToast("Yeni onlayn müraciət gəldi.");
+      if (event.notificationId) showToast(translateUi("Yeni onlayn müraciət gəldi."));
     }).then((stop) => { if (active) unsubscribe = stop; else stop(); }).catch(() => {});
     return () => { active = false; unsubscribe?.(); };
-  }, [businessId, soundEnabled]);
+  }, [businessId, soundEnabled, translateUi]);
   const displayedInvitations = serverInvitations;
   const unreadCount = displayedInvitations.filter((item) => item.status === "pending").length + notifications.filter((item) => !item.read).length;
   async function answerServer(id: string, accept: boolean) {
@@ -77,7 +77,7 @@ export default function StaffInvitationInbox({ session, businessId }: { email: s
   async function markRead(id: string) {
     if (businessId) {
       try { await readBookingNotification(businessId, id); setNotifications((items) => items.map((item) => item.id === id ? { ...item, read: true } : item)); }
-      catch { showToast("Bildirişi yeniləmək mümkün olmadı."); }
+      catch { showToast(translateUi("Bildirişi yeniləmək mümkün olmadı.")); }
       return;
     }
 

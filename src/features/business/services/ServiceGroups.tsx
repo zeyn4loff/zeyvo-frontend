@@ -87,8 +87,8 @@ export default function ServiceGroups({ categories, filtered, categoryFilter, ge
                   </div>
                 </div>
                 <div className="flex shrink-0 items-center gap-1">
-                  <button type="button" onClick={() => onEditCategory(category)} aria-label={`${category.name} redaktə et`} className={actionClass}><Pencil size={14} /></button>
-                  <button type="button" onClick={() => onDeleteCategory(category)} aria-label={`${category.name} sil`} className={`${actionClass} hover:border-red-200 hover:bg-red-50 hover:text-red-600`}><Trash2 size={14} /></button>
+                  <button type="button" onClick={() => onEditCategory(category)} aria-label={`${category.name} ${translateUi("redaktə et")}`} className={actionClass}><Pencil size={14} /></button>
+                  <button type="button" onClick={() => onDeleteCategory(category)} aria-label={`${category.name} ${translateUi("sil")}`} className={`${actionClass} hover:border-red-200 hover:bg-red-50 hover:text-red-600`}><Trash2 size={14} /></button>
                 </div>
               </div>
               {!isCollapsed && <ServiceTree services={services} onAdd={() => onAddService(category.id)} renderService={renderService} emptyMessage={translateUi("Bu kateqoriyaya hələ xidmət əlavə edilməyib.")} />}

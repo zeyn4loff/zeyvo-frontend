@@ -31,7 +31,7 @@ export default function SalonPage() {
   const branches = getPublicBranches(salon);
   const selectedBranch = branches.find((branch) => branch.id === branchId) || branches[0];
   const specialists = getPublicSpecialists().filter((item) => item.salonId === salon.id && (!item.partnerBranchId || item.partnerBranchId === selectedBranch.id));
-  const gallery = selectedBranch.photos?.length ? selectedBranch.photos.map((src, index) => ({ src, label: `${selectedBranch.name} · İnteryer ${index + 1}`, type: "interior" as const })) : salon.gallery ?? [];
+  const gallery = selectedBranch.photos?.length ? selectedBranch.photos.map((src, index) => ({ src, label: `${selectedBranch.name} · ${ct("İnteryer")} ${index + 1}`, type: "interior" as const })) : salon.gallery ?? [];
   const book = (service?: (typeof salon.services)[number]) => openBooking(salon, undefined, service, undefined, selectedBranch);
 
   return (
@@ -43,7 +43,7 @@ export default function SalonPage() {
       <SalonSpecialists specialists={specialists} />
       <ServiceList services={salon.services} onBook={book} />
       <LocalReviews subject={`salon-${salon.id}`} title={ct("Müştəri rəyləri")} />
-      <div className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between border-t border-slate-200 bg-white/95 px-4 py-3 shadow-2xl backdrop-blur-md pb-[calc(0.75rem+env(safe-area-inset-bottom))] sm:hidden"><div><p className="text-[10px] font-bold text-slate-400">{ct("Başlanğıc qiymət:")}</p><strong className="text-base">{Math.min(...salon.services.map((service) => service.price))} ₼-dan</strong></div><button type="button" onClick={() => book()} className="h-11 rounded-xl bg-brand-primary px-8 text-xs font-black">{ct("Onlayn yazıl")}</button></div>
+      <div className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between border-t border-slate-200 bg-white/95 px-4 py-3 shadow-2xl backdrop-blur-md pb-[calc(0.75rem+env(safe-area-inset-bottom))] sm:hidden"><div><p className="text-[10px] font-bold text-slate-400">{ct("Başlanğıc qiymət:")}</p><strong className="text-base">{ct("qiymətdən")} {Math.min(...salon.services.map((service) => service.price))} ₼</strong></div><button type="button" onClick={() => book()} className="h-11 rounded-xl bg-brand-primary px-8 text-xs font-black">{ct("Onlayn yazıl")}</button></div>
     </div>
   );
 }

@@ -28,9 +28,10 @@ const statusLabels: Record<StaffMember["status"], string> = {
 };
 
 function CardActions({ name, onEdit, onDelete, className }: { name: string; onEdit: () => void; onDelete: () => void; className: string }) {
+  const translateUi = useCustomerText();
   return <div className={className}>
-    <button type="button" onClick={onEdit} aria-label={`${name} redaktə et`} className="flex size-9 cursor-pointer items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100"><Pencil size={16} /></button>
-    <button type="button" onClick={onDelete} aria-label={`${name} sil`} className="flex size-9 cursor-pointer items-center justify-center rounded-lg text-slate-500 hover:bg-rose-50 hover:text-rose-600"><Trash2 size={16} /></button>
+    <button type="button" onClick={onEdit} aria-label={`${name} ${translateUi("redaktə et")}`} className="flex size-9 cursor-pointer items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100"><Pencil size={16} /></button>
+    <button type="button" onClick={onDelete} aria-label={`${name} ${translateUi("sil")}`} className="flex size-9 cursor-pointer items-center justify-center rounded-lg text-slate-500 hover:bg-rose-50 hover:text-rose-600"><Trash2 size={16} /></button>
   </div>;
 }
 
@@ -54,7 +55,7 @@ export default function StaffMemberCard({ member, roleName, branchName, serviceC
       </div>
       <CardActions name={member.name} onEdit={onEdit} onDelete={onDelete} className="mt-2 flex justify-end gap-1 sm:hidden" />
       <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3">
-        <button type="button" onClick={onOnline} aria-label={`${member.name}: onlayn qəbul ayarlarını redaktə et`} className={`min-h-9 rounded-lg px-3 text-xs font-bold cursor-pointer ${active && member.onlineBooking ? "bg-brand-primary" : "bg-slate-100 text-slate-500"}`}><LocalizedText value={"Onlayn qəbul"} /> {active && member.onlineBooking ? translateUi("aktiv") : translateUi("bağlı")}</button>
+        <button type="button" onClick={onOnline} aria-label={`${member.name}: ${translateUi("onlayn qəbul ayarlarını redaktə et")}`} className={`min-h-9 rounded-lg px-3 text-xs font-bold cursor-pointer ${active && member.onlineBooking ? "bg-brand-primary" : "bg-slate-100 text-slate-500"}`}><LocalizedText value={"Onlayn qəbul"} /> {active && member.onlineBooking ? translateUi("aktiv") : translateUi("bağlı")}</button>
         <button type="button" onClick={onServices} className="min-h-9 cursor-pointer rounded-lg bg-slate-100 px-3 text-xs font-bold">{serviceCount} <LocalizedText value={"xidmət"} /></button>
         <button type="button" onClick={onSchedule} className="min-h-9 cursor-pointer rounded-lg bg-slate-100 px-3 text-xs font-bold"><LocalizedText value={"İş qrafiki"} /></button>
         <button type="button" onClick={onPay} className="min-h-9 cursor-pointer rounded-lg bg-slate-100 px-3 text-xs font-bold"><LocalizedText value={"Komissiya:"} /> {member.serviceCommission}%</button>

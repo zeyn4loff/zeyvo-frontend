@@ -38,7 +38,7 @@ export default function MasterPage() {
         <div className="min-w-0 space-y-5">
           {(master.bio || !salon?.isIndividual) && <section className="rounded-3xl border border-slate-200 bg-white p-5">
             <h2 className="text-lg font-bold">{ct("Usta haqqında")}</h2>
-            <p className="mt-2 text-sm leading-relaxed text-slate-600">{master.bio || `${master.name} — ${master.experience ? `${master.experience}yə malik` : "təcrübəli"} peşəkar mütəxəssisdir. Hər bir müştəriyə fərdi yanaşır, ən son trendləri və gigiyena standartlarını tətbiq edir.`}</p>
+            <p className="mt-2 text-sm leading-relaxed text-slate-600">{master.bio || `${master.name} — ${ct("Peşəkar mütəxəssisdir. Hər bir müştəriyə fərdi yanaşır, ən son trendləri və gigiyena standartlarını tətbiq edir.")}`}</p>
           </section>}
           {linkedSalon && <>
             <section className="rounded-3xl border border-slate-200 bg-white p-5">
@@ -47,7 +47,7 @@ export default function MasterPage() {
             </section>
           </>}
           {salon && <ServiceList services={master.services ?? salon.services} onBook={book} />}
-          {portfolio.length ? <div><PhotoGallery images={portfolio} title="Portfolio" /></div> : <EmptyState title={ct("İş nümunələri hələ əlavə edilməyib")} icon={Images} />}
+          {portfolio.length ? <div><PhotoGallery images={portfolio} title={ct("Portfolio")} /></div> : <EmptyState title={ct("İş nümunələri hələ əlavə edilməyib")} icon={Images} />}
           <LocalReviews subject={`master-${master.id}`} title={ct("Rəylər")} />
         </div>
         {linkedSalon && <aside className="min-w-0 rounded-3xl border border-slate-200 bg-white p-5 lg:sticky lg:top-5"><p className="text-xs font-semibold text-slate-400">{ct("Onlayn rezervasiya")}</p><h2 className="mt-1 font-bold">{ct("Ustanın qəbuluna yazıl")}</h2><p className="mt-1 text-xs text-slate-500">{ct("Zəng etmədən boş vaxtı seçin")}</p><button type="button" onClick={() => book()} className="mt-5 min-h-11 w-full rounded-xl bg-brand-primary px-4 text-sm font-bold">{ct("Qəbula yazıl →")}</button></aside>}

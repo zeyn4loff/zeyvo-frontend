@@ -1,9 +1,16 @@
+import { useCallback } from "react";
 import { useLanguage, type Language } from "./language";
 import { uiTextCatalog } from "./uiTextCatalog";
 import { ruUiTextCatalog } from "./ruUiTextCatalog";
 import { trEnUiTextCatalog } from "./trEnUiTextCatalog";
 
 const copy: Record<string, [string, string, string, string]> = {
+  "Hüquqi səhifələr": ["Hüquqi səhifələr", "Юридические страницы", "Yasal sayfalar", "Legal pages"],
+  "Naviqasiya yolu": ["Naviqasiya yolu", "Навигационная цепочка", "Gezinme yolu", "Breadcrumb navigation"],
+  "Portfolio": ["Portfolio", "Портфолио", "Portföy", "Portfolio"],
+  "foto": ["foto", "фото", "fotoğraf", "photos"],
+  "Peşəkar mütəxəssisdir. Hər bir müştəriyə fərdi yanaşır, ən son trendləri və gigiyena standartlarını tətbiq edir.": ["Peşəkar mütəxəssisdir. Hər bir müştəriyə fərdi yanaşır, ən son trendləri və gigiyena standartlarını tətbiq edir.", "Профессиональный специалист. Индивидуально подходит к каждому клиенту, следит за новыми тенденциями и соблюдает стандарты гигиены.", "Profesyonel bir uzmandır. Her müşteriye özel yaklaşır, güncel trendleri ve hijyen standartlarını uygular.", "A professional specialist who takes an individual approach to every client and follows the latest trends and hygiene standards."],
+  "qiymətdən": ["qiymətdən", "от", "fiyattan başlayan", "from"],
   "Seçilmişlər": ["Seçilmişlər", "Избранное", "Favoriler", "Favorites"],
   "Hamısı": ["Hamısı", "Все", "Tümü", "All"],
   "Məlumatlar yüklənir": ["Məlumatlar yüklənir", "Загрузка данных", "Veriler yükleniyor", "Loading data"],
@@ -200,9 +207,9 @@ const copy: Record<string, [string, string, string, string]> = {
 const index: Record<Language, number> = { az: 0, ru: 1, tr: 2, en: 3 };
 export function useCustomerText() {
   const { language } = useLanguage();
-  return (az: string) => (copy[az] ?? uiTextCatalog[az])?.[index[language]]
+  return useCallback((az: string) => (copy[az] ?? uiTextCatalog[az])?.[index[language]]
     ?? (language === "ru" ? ruUiTextCatalog[az] : undefined)
     ?? (language === "tr" ? trEnUiTextCatalog[az]?.[0] : undefined)
     ?? (language === "en" ? trEnUiTextCatalog[az]?.[1] : undefined)
-    ?? az;
+    ?? az, [language]);
 }

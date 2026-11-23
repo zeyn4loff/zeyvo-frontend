@@ -56,6 +56,7 @@ function StaffServicePicker({ data, selected, onApply, onClose }: { data: Servic
 }
 
 export default function StaffServicesPane({ data, selected, memberId, onChange }: { data: ServiceData; selected: string[]; memberId?: string; onChange: (ids: string[]) => void }) {
+  const translateUi = useCustomerText();
   const [pickerOpen, setPickerOpen] = useState(false);
   const assigned = data.services.filter((service) => selected.includes(service.id));
 
@@ -63,7 +64,7 @@ export default function StaffServicesPane({ data, selected, memberId, onChange }
     <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-1"><div><h3 className="font-bold text-slate-900"><LocalizedText value={"Ustanın göstərdiyi xidmətlər"} /></h3><p className="text-[11px] font-normal text-slate-400"><LocalizedText value={"Xidmətləri burada seçin və yadda saxlayın"} /></p></div><button type="button" onClick={() => setPickerOpen(true)} className="inline-flex min-h-10 items-center gap-1.5 rounded-xl bg-brand-primary px-3 font-bold text-slate-900"><Plus size={16} /><LocalizedText value={"Xidmət seç"} /></button></div>
     <div className="flex items-start gap-2.5 rounded-2xl border border-slate-200/80 bg-slate-50 p-3 text-[11px] leading-relaxed text-slate-600"><Info size={16} className="mt-0.5 shrink-0 text-slate-400" /><p><LocalizedText value={"Fərdi qiymət və müddəti xidmətin heyət bölməsində dəyişə bilərsiniz."} /></p></div>
     <div className="max-h-[46vh] space-y-3 overflow-y-auto pr-1">
-      {assigned.length > 0 && <div className="flex flex-wrap gap-2">{assigned.map((service) => <button type="button" key={service.id} onClick={() => onChange(selected.filter((id) => id !== service.id))} className="min-h-9 rounded-xl bg-brand-primary px-3 font-semibold text-slate-900" aria-label={`${service.name} xidmətini çıxar`}>{service.name} ×</button>)}</div>}
+      {assigned.length > 0 && <div className="flex flex-wrap gap-2">{assigned.map((service) => <button type="button" key={service.id} onClick={() => onChange(selected.filter((id) => id !== service.id))} className="min-h-9 rounded-xl bg-brand-primary px-3 font-semibold text-slate-900" aria-label={`${service.name} ${translateUi("xidmətini çıxar")}`}>{service.name} ×</button>)}</div>}
       {assigned.map((service) => <AssignedService key={service.id} service={service} memberId={memberId} />)}
       {!assigned.length && <div className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-8 text-center"><FileText size={30} className="mx-auto text-slate-400" /><p className="font-bold text-slate-800"><LocalizedText value={"Bu ustaya hələ heç bir xidmət təyin edilməyib"} /></p><button type="button" onClick={() => setPickerOpen(true)} className="min-h-10 rounded-xl bg-brand-primary px-4 font-bold"><LocalizedText value={"Xidmət seç"} /></button></div>}
     </div>

@@ -37,8 +37,8 @@ export default function ServiceRow({ service, staff, onEdit, onDelete }: Props) 
           <span className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200/80 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700 shadow-2xs"><Clock3 size={14} className="text-slate-400" />{service.duration} <LocalizedText value={"dəq"} /></span>
           <div className="min-w-[70px] text-right"><strong className="text-xs text-slate-900 sm:text-sm">{formatPrice(service, currencyCode)}</strong>{service.priceType !== "fixed" && <p className={`text-[9px] font-medium ${service.priceType === "from" ? "text-amber-700" : "text-blue-700"}`}>{service.priceType === "from" ? translateUi("başlanğıc") : translateUi("aralıq")}</p>}</div>
           <div className="flex items-center gap-1">
-            <button type="button" onClick={onEdit} aria-label={`${service.name} redaktə et`} className="flex size-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-white hover:text-slate-700"><Pencil size={14} /></button>
-            <button type="button" onClick={onDelete} aria-label={`${service.name} sil`} className="flex size-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-white hover:text-red-600"><Trash2 size={14} /></button>
+            <button type="button" onClick={onEdit} aria-label={`${service.name} ${translateUi("redaktə et")}`} className="flex size-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-white hover:text-slate-700"><Pencil size={14} /></button>
+            <button type="button" onClick={onDelete} aria-label={`${service.name} ${translateUi("sil")}`} className="flex size-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-white hover:text-red-600"><Trash2 size={14} /></button>
           </div>
         </div>
       </article>

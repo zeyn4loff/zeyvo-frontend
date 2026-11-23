@@ -41,7 +41,7 @@ export default function MarketingReferral({ settings, onSave, serverMode = false
     <section className="flex flex-col justify-between gap-4 rounded-2xl bg-gradient-to-r from-slate-900 to-slate-800 p-5 text-white shadow-xs md:flex-row md:items-center">
       <div className="space-y-1.5">
         <div className="flex flex-wrap items-center gap-2">
-          <span className={`rounded-full border px-2.5 py-0.5 text-[10px] font-bold ${settings.enabled ? "border-emerald-500/30 bg-emerald-500/20 text-emerald-300" : "border-rose-500/30 bg-rose-500/20 text-rose-300"}`}>{serverMode ? settings.enabled ? translateUi("Qaydalar saxlanılıb") : "Qaydalar deaktivdir" : settings.enabled ? "Proqram aktivdir" : "Deaktivdir"}</span>
+          <span className={`rounded-full border px-2.5 py-0.5 text-[10px] font-bold ${settings.enabled ? "border-emerald-500/30 bg-emerald-500/20 text-emerald-300" : "border-rose-500/30 bg-rose-500/20 text-rose-300"}`}>{serverMode ? settings.enabled ? translateUi("Qaydalar saxlanılıb") : translateUi("Qaydalar deaktivdir") : settings.enabled ? translateUi("Proqram aktivdir") : translateUi("Deaktivdir")}</span>
           <h3 className="text-sm font-bold sm:text-base"><LocalizedText value={"«Dostunu gətir» referal proqramı"} /></h3>
         </div>
         <p className="text-xs text-slate-300"><LocalizedText value={"Dəvət edən müştəri:"} /> <strong className="font-mono text-brand-primary">{settings.referrerReward.toFixed(2)} ₼ <LocalizedText value={"bonus"} /></strong> <LocalizedText value={"• Dəvət olunan dost:"} /> <strong className="font-mono text-brand-primary">{settings.refereeDiscount}<LocalizedText value={"% endirim"} /></strong> <LocalizedText value={"(Min. sifariş:"} /> {settings.minOrder.toFixed(0)} ₼)</p>

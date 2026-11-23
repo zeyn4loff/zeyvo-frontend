@@ -84,7 +84,7 @@ export default function BusinessDatePicker({ value, onChange, name, label = "Tar
     <button type="button" id={id} aria-label={label} aria-expanded={open} aria-haspopup="dialog" onClick={toggle} className={`${businessControlClass} flex items-center justify-between text-left cursor-pointer`}>
       <span>{precision === "month" ? value ? `${months[Number(value.slice(5, 7)) - 1]} ${value.slice(0, 4)}` : translateUi("Ay seçin") : display(value)}</span><CalendarDays size={17} className="shrink-0 text-slate-400" />
     </button>
-    {open && portalTarget && createPortal(<div ref={popup} role="dialog" aria-label={`${label} seçimi`} style={position} className="fixed z-[100] box-border min-w-0 space-y-3 overflow-x-hidden overflow-y-auto rounded-2xl border border-slate-200 bg-white p-3.5 shadow-2xl">
+    {open && portalTarget && createPortal(<div ref={popup} role="dialog" aria-label={`${label} ${translateUi("seçimi")}`} style={position} className="fixed z-[100] box-border min-w-0 space-y-3 overflow-x-hidden overflow-y-auto rounded-2xl border border-slate-200 bg-white p-3.5 shadow-2xl">
       {view === "days" ? <>
         <div className="flex items-center justify-between border-b border-slate-100 pb-2">
           <button type="button" onClick={() => setView("months")} className="flex cursor-pointer items-center gap-1 text-xs font-bold hover:text-amber-700">{months[month]} {year}<ChevronDown size={14} /></button>
