@@ -13,9 +13,11 @@ import { promoIssue } from "../marketing/promoRules";
 import { localDate } from "../finance/finance";
 import { fetchPosSales, postPosSale } from "./posApi";
 import { readBusinesses } from "../directory/businesses";
+import { useCustomerText } from "@/features/locale/customerText";
 
 export default function usePosCheckout(session: BusinessSession, onClose: () => void) {
   const currencyCode = useBusinessCurrency();
+  const translateUi = useCustomerText();
   const activeContext = useActiveBusinessContext(session);
   const branchId = activeContext?.type === "individual" ? readBusinesses(session).find((item) => item.id === activeContext.businessId)?.primaryBranchId ?? activeContext.branchId : activeContext?.branchId;
   const { data: products, refresh: refreshProducts } = useProducts(session);
@@ -79,7 +81,7 @@ export default function usePosCheckout(session: BusinessSession, onClose: () => 
   const visible = sellable.filter((item) => (category === "all" || item.categoryId === category) && `${item.name} ${item.sku}`.toLocaleLowerCase().includes(query.toLocaleLowerCase().trim()));
   const subtotal = cart.reduce((sum, item) => sum + (sellable.find((product) => product.id === item.productId)?.price ?? 0) * item.quantity, 0);
   const selectedPromo = serverPromos.find((item) => item.code.toLocaleUpperCase("az-AZ") === promoCode.trim().toLocaleUpperCase("az-AZ"));
-  const promoError = promoCode.trim() ? promoIssue(selectedPromo, subtotal, localDate(), currencyCode) : null;
+  const promoError = promoCode.trim() ? promoIssue(selectedPromo, subtotal, localDate(), currencyCode, translateUi) : null;
   const totals = saleTotals(subtotal, !promoError && selectedPromo ? selectedPromo.discountType : discountType, !promoError && selectedPromo ? selectedPromo.discountValue : Number(discountValue) || 0);
   const balanceMethod = method === "deposit" || method === "bonus";
   const accounts = finance.accounts.filter((item) => method === "cash" ? item.type === "cash" || item.type === "safe" : item.type === "pos" || item.type === "bank");

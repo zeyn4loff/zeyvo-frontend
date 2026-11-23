@@ -95,7 +95,7 @@ export default function BranchCategories({ selected, onChange, individual = fals
       </div>
       <button type="button" aria-pressed={showSelectedOnly} onClick={() => setShowSelectedOnly((value) => !value)} className={`min-h-10 shrink-0 cursor-pointer rounded-xl border px-3 text-xs font-semibold transition ${showSelectedOnly ? "border-brand-primary bg-brand-primary text-slate-950" : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"}`}><LocalizedText value={"Seçilənlər"} /></button>
     </div>
-    {loadError && <p role="alert" className="text-xs text-red-600">{loadError}</p>}
+    {loadError && <p role="alert" className="text-xs text-red-600"><LocalizedText value={loadError} /></p>}
     <div className="max-h-64 space-y-1 overflow-y-auto rounded-xl border border-slate-200 bg-white p-1.5">
       {visible.length ? visible.map(({ category, subs }) => {
         const Icon = icons[category.id] ?? CircleHelp;

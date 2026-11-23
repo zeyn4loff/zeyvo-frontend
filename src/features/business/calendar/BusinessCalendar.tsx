@@ -144,7 +144,7 @@ export default function BusinessCalendar({ session }: { session: BusinessSession
       </div>
     </section>
 
-    {(actionError || bookingsError) && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{actionError || bookingsError}</p>}
+    {(actionError || bookingsError) && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{t(actionError || bookingsError)}</p>}
     {bookingsLoading && <div className="flex min-h-48 items-center justify-center" role="status"><span className="size-9 animate-spin rounded-full border-4 border-brand-primary border-t-transparent" /><span className="sr-only">{t("Qəbullar yüklənir")}</span></div>}
     {!bookingsLoading && <>
     {view === "daily" && <DailyView date={date} bookings={daily} masters={visibleMasters} staff={activeStaff} roles={staffData.roles} onEdit={editBooking} onStatus={setBookingStatus} onCreate={(time, masterName) => setEditing({ date, time, masterName })} />}

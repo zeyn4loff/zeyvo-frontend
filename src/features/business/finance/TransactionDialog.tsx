@@ -73,13 +73,13 @@ export function TransactionDialog({ entry, initialType, data, onClose, onSave }:
         </div>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
-        <label className={businessLabelClass}>Kassa / Hesab *
+        <label className={businessLabelClass}><LocalizedText value={"Kassa / Hesab *"} />
           <select required value={draft.accountId} onChange={(event) => patch({ accountId: event.target.value })} className={businessControlClass}>
             <option value="">{translateUi("Seçin")}</option>
             {data.accounts.map((account) => <option key={account.id} value={account.id}>{account.name} ({formatMoney(accountBalance(data, account.id))})</option>)}
           </select>
         </label>
-        <label className={businessLabelClass}>Kateqoriya *
+        <label className={businessLabelClass}><LocalizedText value={"Kateqoriya *"} />
           <select required value={draft.categoryId} onChange={(event) => patch({ categoryId: event.target.value })} className={businessControlClass}>
             <option value="">{translateUi("Seçin")}</option>
             {categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}

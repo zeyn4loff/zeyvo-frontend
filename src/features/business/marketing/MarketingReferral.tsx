@@ -44,7 +44,7 @@ export default function MarketingReferral({ settings, onSave, serverMode = false
           <span className={`rounded-full border px-2.5 py-0.5 text-[10px] font-bold ${settings.enabled ? "border-emerald-500/30 bg-emerald-500/20 text-emerald-300" : "border-rose-500/30 bg-rose-500/20 text-rose-300"}`}>{serverMode ? settings.enabled ? translateUi("Qaydalar saxlanılıb") : "Qaydalar deaktivdir" : settings.enabled ? "Proqram aktivdir" : "Deaktivdir"}</span>
           <h3 className="text-sm font-bold sm:text-base"><LocalizedText value={"«Dostunu gətir» referal proqramı"} /></h3>
         </div>
-        <p className="text-xs text-slate-300"><LocalizedText value={"Dəvət edən müştəri:"} /> <strong className="font-mono text-brand-primary">{settings.referrerReward.toFixed(2)} ₼ bonus</strong> <LocalizedText value={"• Dəvət olunan dost:"} /> <strong className="font-mono text-brand-primary">{settings.refereeDiscount}<LocalizedText value={"% endirim"} /></strong> <LocalizedText value={"(Min. sifariş:"} /> {settings.minOrder.toFixed(0)} ₼)</p>
+        <p className="text-xs text-slate-300"><LocalizedText value={"Dəvət edən müştəri:"} /> <strong className="font-mono text-brand-primary">{settings.referrerReward.toFixed(2)} ₼ <LocalizedText value={"bonus"} /></strong> <LocalizedText value={"• Dəvət olunan dost:"} /> <strong className="font-mono text-brand-primary">{settings.refereeDiscount}<LocalizedText value={"% endirim"} /></strong> <LocalizedText value={"(Min. sifariş:"} /> {settings.minOrder.toFixed(0)} ₼)</p>
       </div>
       <button type="button" onClick={() => { setDraft(settings); setEditing(true); }} className="inline-flex h-9 shrink-0 cursor-pointer items-center justify-center gap-2 self-start rounded-xl bg-brand-primary px-4 text-xs font-bold text-slate-900 md:self-auto"><Pencil size={14} /> <LocalizedText value={"Qaydaları redaktə et"} /></button>
     </section>
@@ -60,7 +60,7 @@ export default function MarketingReferral({ settings, onSave, serverMode = false
         <table className="w-full min-w-[750px] text-left text-xs text-slate-600">
           <thead className="bg-slate-50 font-semibold text-slate-500"><tr>
             <th className="whitespace-nowrap px-4 py-3 sm:px-5"><LocalizedText value={"Müştəri"} /></th>
-            <th className="whitespace-nowrap px-4 py-3">Referal kodu</th>
+            <th className="whitespace-nowrap px-4 py-3"><LocalizedText value={"Referal kodu"} /></th>
             <th className="whitespace-nowrap px-4 py-3"><LocalizedText value={"Dəvət sayı"} /></th>
             <th className="whitespace-nowrap px-4 py-3"><LocalizedText value={"Uğurlu alış"} /></th>
             <th className="whitespace-nowrap px-4 py-3"><LocalizedText value={"Qazanılan bonus"} /></th>
@@ -84,14 +84,14 @@ export default function MarketingReferral({ settings, onSave, serverMode = false
 
     {editing && <BusinessFormDialog title={translateUi("Referal Proqramı Qaydaları")} description={translateUi("«Dostunu gətir» bonus və endirim şərtləri")} size="compact" mobileSheet onClose={() => setEditing(false)}>
       <form onSubmit={(event) => { event.preventDefault(); save(); }} className="space-y-4 text-xs">
-        <label className="block space-y-1 font-bold text-slate-700"><span><LocalizedText value={"Proqram vəziyyəti"} /></span><select value={String(draft.enabled)} onChange={(event) => setDraft({ ...draft, enabled: event.target.value === "true" })} className="h-10 w-full cursor-pointer rounded-xl border border-slate-200 bg-slate-50 px-3 font-semibold text-slate-900 focus:border-black focus:bg-white focus:outline-none"><option value="true">Proqram aktivdir</option><option value="false">Proqram deaktivdir</option></select></label>
+        <label className="block space-y-1 font-bold text-slate-700"><span><LocalizedText value={"Proqram vəziyyəti"} /></span><select value={String(draft.enabled)} onChange={(event) => setDraft({ ...draft, enabled: event.target.value === "true" })} className="h-10 w-full cursor-pointer rounded-xl border border-slate-200 bg-slate-50 px-3 font-semibold text-slate-900 focus:border-black focus:bg-white focus:outline-none"><option value="true">{translateUi("Proqram aktivdir")}</option><option value="false">{translateUi("Proqram deaktivdir")}</option></select></label>
         {([
           ["referrerReward", "Dəvət edən müştəriyə bonus (₼)", "Dostu ilk POS alışını edəndə balansına əlavə edilir", 1, 0.5],
           ["refereeDiscount", "Dəvət olunan dostuna ilk endirim (%)", "İlk sifarişində tətbiq olunacaq endirim faizi", 1, 1],
           ["minOrder", "Minimum sifariş məbləği (₼)", "", 0, 1],
-        ] as const).map(([key, label, hint, min, step]) => <label key={key} className="block space-y-1 font-bold text-slate-700"><span><LocalizedText value={label} /></span><input type="number" required min={min} max={key === "refereeDiscount" ? 100 : undefined} step={step} value={draft[key]} onChange={(event) => setDraft({ ...draft, [key]: Number(event.target.value) })} className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 font-mono font-bold text-slate-900 focus:border-black focus:bg-white focus:outline-none" />{hint && <span className="block text-[11px] font-normal text-slate-400">{hint}</span>}</label>)}
+        ] as const).map(([key, label, hint, min, step]) => <label key={key} className="block space-y-1 font-bold text-slate-700"><span><LocalizedText value={label} /></span><input type="number" required min={min} max={key === "refereeDiscount" ? 100 : undefined} step={step} value={draft[key]} onChange={(event) => setDraft({ ...draft, [key]: Number(event.target.value) })} className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 font-mono font-bold text-slate-900 focus:border-black focus:bg-white focus:outline-none" />{hint && <span className="block text-[11px] font-normal text-slate-400"><LocalizedText value={hint} /></span>}</label>)}
         {error && <p role="alert" className="text-xs text-rose-600"><LocalizedText value={error} /></p>}
-        <div className="flex justify-end gap-2.5 border-t border-slate-100 pt-3"><button type="button" onClick={() => setEditing(false)} className="h-10 rounded-xl bg-slate-100 px-4 font-bold"><LocalizedText value={"Ləğv et"} /></button><button type="submit" className="h-10 rounded-xl bg-brand-primary px-4 font-bold">Yadda saxla</button></div>
+        <div className="flex justify-end gap-2.5 border-t border-slate-100 pt-3"><button type="button" onClick={() => setEditing(false)} className="h-10 rounded-xl bg-slate-100 px-4 font-bold"><LocalizedText value={"Ləğv et"} /></button><button type="submit" className="h-10 rounded-xl bg-brand-primary px-4 font-bold"><LocalizedText value={"Yadda saxla"} /></button></div>
       </form>
     </BusinessFormDialog>}
   </div>;

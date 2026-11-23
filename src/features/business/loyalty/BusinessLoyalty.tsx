@@ -63,19 +63,19 @@ export default function BusinessLoyalty({ session }: { session: BusinessSession 
   function applyFilters(values: FilterValues) { setFilters(values); setPage(1); }
   async function save(item: Entry) {
     const ok = await saveEntry(tab === "cards_cashback" ? "rule" : tab === "gift_cards" ? "gift_card" : "subscription", item, items.some((x) => x.id === item.id));
-    setMessage(ok ? "Yadda saxlanıldı." : "Yadda saxlamaq mümkün olmadı.");
+    setMessage(translateUi(ok ? "Yadda saxlanıldı." : "Yadda saxlamaq mümkün olmadı."));
     return ok;
   }
   async function remove() {
     if (!deleting) return;
-    if (await removeEntry(tab === "cards_cashback" ? "rule" : tab === "gift_cards" ? "gift_card" : "subscription", deleting.id)) { setMessage("Silindi."); setDeleting(null); } else setMessage("Silmək mümkün olmadı.");
+    if (await removeEntry(tab === "cards_cashback" ? "rule" : tab === "gift_cards" ? "gift_card" : "subscription", deleting.id)) { setMessage(translateUi("Silindi.")); setDeleting(null); } else setMessage(translateUi("Silmək mümkün olmadı."));
   }
   if (loading || servicesLoading) return <BusinessPageLoading />;
 
   return <main className="mx-auto w-full max-w-7xl space-y-6 px-4 py-5 sm:px-7 sm:py-7">
     <BusinessHeaderPortal slot="title"><LocalizedText value={"Loyallıq Proqramı"} /></BusinessHeaderPortal>
     <BusinessHeaderPortal slot="subtitle"><LocalizedText value={"Loyallıq kartları, hədiyyə kartları və abunəliklər"} /></BusinessHeaderPortal>
-    <BusinessHeaderPortal slot="actions"><BusinessHeaderButton onClick={() => setEditing(null)}><Plus />{tabs.find((x) => x.id === tab)?.action}</BusinessHeaderButton></BusinessHeaderPortal>
+    <BusinessHeaderPortal slot="actions"><BusinessHeaderButton onClick={() => setEditing(null)}><Plus />{translateUi(tabs.find((x) => x.id === tab)?.action ?? "")}</BusinessHeaderButton></BusinessHeaderPortal>
     <BusinessTabNav label={translateUi("Loyallıq bölmələri")}>{tabs.map((item) => <BusinessTabButton key={item.id} active={tab === item.id} count={counts[item.id]} onClick={() => selectTab(item.id)}><LocalizedText value={item.label} /></BusinessTabButton>)}</BusinessTabNav>
     {error && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700"><LocalizedText value={error} /></p>}
     {loading && <p className="text-sm text-slate-500"><LocalizedText value={"Yüklənir..."} /></p>}
@@ -84,7 +84,7 @@ export default function BusinessLoyalty({ session }: { session: BusinessSession 
     <LoyaltyFilters tab={tab} query={query} onQuery={(value) => { setQuery(value); setPage(1); }} filters={filters} onFilter={changeFilter} onApply={applyFilters} open={filterOpen} onOpen={setFilterOpen} onReset={resetFilters} />
 
     <LoyaltyTable tab={tab} entries={shown} onEdit={setEditing} onDelete={setDeleting} onCreate={() => setEditing(null)} />
-    <BusinessPagination totalItems={filtered.length} currentPage={page} pageSize={pageSize} onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} itemFromLabel={tab === "cards_cashback" ? "kart / qaydadan" : tab === "gift_cards" ? translateUi("hədiyyə kartından") : translateUi("abunəlikdən")} onPageChange={setPage} />
+    <BusinessPagination totalItems={filtered.length} currentPage={page} pageSize={pageSize} onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} itemFromLabel={tab === "cards_cashback" ? translateUi("kart / qaydadan") : tab === "gift_cards" ? translateUi("hədiyyə kartından") : translateUi("abunəlikdən")} onPageChange={setPage} />
     {programOpen && <LoyaltyProgramDialog value={data.program} onClose={() => setProgramOpen(false)} onSave={saveProgram} />}
     {editing !== undefined && <LoyaltyDialog key={`${tab}-${editing?.id ?? "new"}`} tab={tab} entry={editing} services={services} categories={serviceCategories} onClose={() => setEditing(undefined)} onSave={save} />}
     {deleting && <BusinessDeleteDialog name={deleting.name} onClose={() => setDeleting(null)} onDelete={remove} />}

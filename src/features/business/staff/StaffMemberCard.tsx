@@ -54,10 +54,10 @@ export default function StaffMemberCard({ member, roleName, branchName, serviceC
       </div>
       <CardActions name={member.name} onEdit={onEdit} onDelete={onDelete} className="mt-2 flex justify-end gap-1 sm:hidden" />
       <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3">
-        <button type="button" onClick={onOnline} aria-label={`${member.name}: onlayn qəbul ayarlarını redaktə et`} className={`min-h-9 rounded-lg px-3 text-xs font-bold cursor-pointer ${active && member.onlineBooking ? "bg-brand-primary" : "bg-slate-100 text-slate-500"}`}><LocalizedText value={"Onlayn qəbul"} /> {active && member.onlineBooking ? "aktiv" : translateUi("bağlı")}</button>
+        <button type="button" onClick={onOnline} aria-label={`${member.name}: onlayn qəbul ayarlarını redaktə et`} className={`min-h-9 rounded-lg px-3 text-xs font-bold cursor-pointer ${active && member.onlineBooking ? "bg-brand-primary" : "bg-slate-100 text-slate-500"}`}><LocalizedText value={"Onlayn qəbul"} /> {active && member.onlineBooking ? translateUi("aktiv") : translateUi("bağlı")}</button>
         <button type="button" onClick={onServices} className="min-h-9 cursor-pointer rounded-lg bg-slate-100 px-3 text-xs font-bold">{serviceCount} <LocalizedText value={"xidmət"} /></button>
         <button type="button" onClick={onSchedule} className="min-h-9 cursor-pointer rounded-lg bg-slate-100 px-3 text-xs font-bold"><LocalizedText value={"İş qrafiki"} /></button>
-        <button type="button" onClick={onPay} className="min-h-9 cursor-pointer rounded-lg bg-slate-100 px-3 text-xs font-bold">Komissiya: {member.serviceCommission}%</button>
+        <button type="button" onClick={onPay} className="min-h-9 cursor-pointer rounded-lg bg-slate-100 px-3 text-xs font-bold"><LocalizedText value={"Komissiya:"} /> {member.serviceCommission}%</button>
         <button type="button" onClick={onEmployment} className={`min-h-9 cursor-pointer rounded-lg px-3 text-xs font-bold ${member.status === "dismissed" ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"}`}>{member.status === "dismissed" ? translateUi("İşə bərpa et") : translateUi("İşdən azad et")}</button>
         {!!member.employmentHistory?.length && <button type="button" onClick={onHistory} className="min-h-9 cursor-pointer rounded-lg bg-slate-100 px-3 text-xs font-bold"><LocalizedText value={"Tarixçə ("} />{member.employmentHistory.length})</button>}
       </div>

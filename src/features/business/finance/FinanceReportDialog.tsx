@@ -44,7 +44,7 @@ export default function FinanceReportDialog({ data, filteredTransactions, defaul
     setFeedback("");
     try {
       const count = await sendFinanceReport(businessId, email, items.map((item) => item.id));
-      setFeedback(`Hesabat göndərildi: ${count} əməliyyat.`);
+      setFeedback(`${translateUi("Hesabat göndərildi:")} ${count} ${translateUi("əməliyyat.")}`);
     } catch (error) {
       setFeedback(error instanceof Error ? error.message : "Hesabat göndərilmədi. Yenidən cəhd edin.");
     } finally {
@@ -67,9 +67,9 @@ export default function FinanceReportDialog({ data, filteredTransactions, defaul
       <label className={businessLabelClass}><LocalizedText value={"Hesabat dövrü"} />
         <select value={period} onChange={(event) => setPeriod(event.target.value as Period)} className={businessControlClass}>
           <option value="filtered">{translateUi("Cari filtrlərə uyğun dövr")}</option>
-          <option value="this_month">Cari ay</option>
+          <option value="this_month">{translateUi("Cari ay")}</option>
           <option value="last_month">{translateUi("Keçən ay")}</option>
-          <option value="this_year">Cari il</option>
+          <option value="this_year">{translateUi("Cari il")}</option>
           <option value="all">{translateUi("Bütün tarixçə")}</option>
         </select>
       </label>

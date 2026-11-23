@@ -74,7 +74,7 @@ export default function WhatsAppConnectionPanel({ businessId, onStateChange }: {
       </div>
       {error && <p role="alert" className="mt-3 text-sm text-red-700"><LocalizedText value={error} /></p>}
       <div className="mt-4 flex flex-wrap gap-2">
-        <button type="button" disabled={busy || !businessId} onClick={() => void (state === "open" ? disconnect() : connect())} className="min-h-11 rounded-xl bg-brand-primary px-4 text-sm font-bold text-slate-900 disabled:opacity-50">{busy ? translateUi("Gözləyin...") : state === "open" ? translateUi("Bağlantını kəs") : qr ? "Yeni QR kodu al" : "QR kodu al"}</button>
+        <button type="button" disabled={busy || !businessId} onClick={() => void (state === "open" ? disconnect() : connect())} className="min-h-11 rounded-xl bg-brand-primary px-4 text-sm font-bold text-slate-900 disabled:opacity-50">{busy ? translateUi("Gözləyin...") : state === "open" ? translateUi("Bağlantını kəs") : qr ? translateUi("Yeni QR kodu al") : translateUi("QR kodu al")}</button>
         <button type="button" disabled={busy || !businessId} onClick={() => void refresh()} className="min-h-11 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold"><LocalizedText value={"Statusu yenilə"} /></button>
       </div>
     </div>

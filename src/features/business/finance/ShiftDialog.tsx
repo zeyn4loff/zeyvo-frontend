@@ -60,7 +60,7 @@ export function ShiftDialog({ mode, accountId, data, staff, onClose, onSave }: P
           <input value={note} onChange={(event) => setNote(event.target.value)} maxLength={200} placeholder={translateUi("məs. Növbə fərqsiz bağlandı")} className={businessControlClass} />
         </label>
       </> : <>
-        <label className={businessLabelClass}>Kassir / Administrator *
+        <label className={businessLabelClass}><LocalizedText value={"Kassir / Administrator *"} />
           <select required value={cashier} onChange={(event) => setCashier(event.target.value)} className={businessControlClass}>
             {cashierOptions.map((member) => <option key={member.id} value={member.name}>{member.name} ({member.specialization || translateUi("Əməkdaş")})</option>)}
           </select>

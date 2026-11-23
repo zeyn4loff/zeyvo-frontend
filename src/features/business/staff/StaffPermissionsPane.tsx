@@ -35,19 +35,19 @@ export default function StaffPermissionsPane({ role, permissions, phone, staffId
     setInviteError("");
     try {
       setServerInvitation(await sendStaffInvitation(businessId, staffId, invitePhone));
-      showToast("Dəvət göndərildi. Alıcı bildirişdən cavab verə bilər.");
+      showToast(translateUi("Dəvət göndərildi. Alıcı bildirişdən cavab verə bilər."));
     } catch (error) { setInviteError(error instanceof Error ? error.message : "Dəvət göndərilmədi."); }
     finally { setSending(false); }
   }
   return <div className="space-y-3.5 text-xs">
     <section className="rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm sm:p-4">
-      <div className="mb-3 flex min-w-0 items-center justify-between gap-2"><h3 className="flex items-center gap-2 font-bold text-slate-900"><span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-lime-100 text-slate-900"><ShieldCheck size={17} /></span><LocalizedText value={"Sistemdə rolu və hüquqlar"} /></h3><span className="shrink-0 rounded-full bg-lime-100 px-2.5 py-1 text-[10px] font-bold text-slate-800">{selected.badge}</span></div>
+      <div className="mb-3 flex min-w-0 items-center justify-between gap-2"><h3 className="flex items-center gap-2 font-bold text-slate-900"><span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-lime-100 text-slate-900"><ShieldCheck size={17} /></span><LocalizedText value={"Sistemdə rolu və hüquqlar"} /></h3><span className="shrink-0 rounded-full bg-lime-100 px-2.5 py-1 text-[10px] font-bold text-slate-800"><LocalizedText value={selected.badge} /></span></div>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3" role="group" aria-label={translateUi("Sistemdə rol")}>{roles.map((item) => <button key={item.id} type="button" aria-pressed={role === item.id} onClick={() => onRoleChange(item.id)} className={`min-h-10 cursor-pointer rounded-xl border px-2.5 py-2 text-left font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 ${role === item.id ? "border-lime-400 bg-lime-100 text-slate-900" : "border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300 hover:bg-white"}`}><LocalizedText value={item.label} /></button>)}</div>
-      <p className="mt-3 flex items-start gap-1.5 text-[11px] leading-5 text-slate-500"><Info size={14} className="mt-0.5 shrink-0" />{selected.description}</p>
+      <p className="mt-3 flex items-start gap-1.5 text-[11px] leading-5 text-slate-500"><Info size={14} className="mt-0.5 shrink-0" /><LocalizedText value={selected.description} /></p>
     </section>
     <section className="rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm sm:p-4">
       <div className="mb-3 border-b border-slate-100 pb-3"><h3 className="font-bold text-slate-900"><LocalizedText value={"Dəqiq icazələr"} /></h3><p className="mt-0.5 text-[11px] text-slate-500"><LocalizedText value={"Hər hüququ ayrıca dəyişə bilərsiniz."} /></p></div>
-      <div className="space-y-4">{permissionGroups.map((group) => <div key={group.title}><h4 className="mb-2 text-[11px] font-bold text-slate-500"><LocalizedText value={group.title} /></h4><div className="grid grid-cols-1 gap-2 sm:grid-cols-2">{group.items.map(([id, text]) => <label key={id} className={`flex min-h-11 cursor-pointer items-center gap-2.5 rounded-xl border px-3 py-2 font-medium transition ${permissions[id] ? "border-lime-300 bg-lime-50 text-slate-900" : "border-slate-200 bg-slate-50/70 text-slate-700 hover:border-slate-300"}`}><input type="checkbox" checked={Boolean(permissions[id])} onChange={(event) => onPermissionChange(id, event.target.checked)} className="peer sr-only" /><span aria-hidden="true" className={`flex size-5 shrink-0 items-center justify-center rounded-md border peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-slate-900 ${permissions[id] ? "border-lime-400 bg-brand-primary" : "border-slate-300 bg-white"}`}>{permissions[id] && <Check size={14} strokeWidth={3} />}</span><span>{text}</span></label>)}</div></div>)}</div>
+      <div className="space-y-4">{permissionGroups.map((group) => <div key={group.title}><h4 className="mb-2 text-[11px] font-bold text-slate-500"><LocalizedText value={group.title} /></h4><div className="grid grid-cols-1 gap-2 sm:grid-cols-2">{group.items.map(([id, text]) => <label key={id} className={`flex min-h-11 cursor-pointer items-center gap-2.5 rounded-xl border px-3 py-2 font-medium transition ${permissions[id] ? "border-lime-300 bg-lime-50 text-slate-900" : "border-slate-200 bg-slate-50/70 text-slate-700 hover:border-slate-300"}`}><input type="checkbox" checked={Boolean(permissions[id])} onChange={(event) => onPermissionChange(id, event.target.checked)} className="peer sr-only" /><span aria-hidden="true" className={`flex size-5 shrink-0 items-center justify-center rounded-md border peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-slate-900 ${permissions[id] ? "border-lime-400 bg-brand-primary" : "border-slate-300 bg-white"}`}>{permissions[id] && <Check size={14} strokeWidth={3} />}</span><span><LocalizedText value={text} /></span></label>)}</div></div>)}</div>
     </section>
     {session?.kind === "server" && <section className="space-y-3 rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm sm:p-4">
       <div><h3 className="font-bold text-slate-900"><LocalizedText value={"Telefonla komandaya dəvət"} /></h3><p className="mt-1 text-[11px] leading-5 text-slate-500"><LocalizedText value={"Qeydiyyatdan keçmiş partnyor nömrəsini daxil edin. Dəvət alıcı hesabındakı bildirişlərdə görünəcək."} /></p></div>
@@ -56,7 +56,7 @@ export default function StaffPermissionsPane({ role, permissions, phone, staffId
         {!staffId && <p className="text-[11px] text-slate-500"><LocalizedText value={"Dəvət üçün əvvəlcə usta profilini yadda saxlayın."} /></p>}
         {serverInvitation && <p className="text-slate-600"><LocalizedText value={"Son dəvət:"} /> {serverInvitation.recipientPhone} · {serverInvitation.status === "pending" ? translateUi("Cavab gözlənilir") : translateUi("Rədd edildi")}</p>}
       </>}
-      {inviteError && <p role="alert" className="text-rose-600">{inviteError}</p>}
+      {inviteError && <p role="alert" className="text-rose-600"><LocalizedText value={inviteError} /></p>}
     </section>}
 
   </div>;

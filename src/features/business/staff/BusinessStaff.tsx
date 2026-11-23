@@ -57,7 +57,7 @@ export default function BusinessStaff({ session }: { session: BusinessSession })
       if (!activeContext?.businessId) throw new Error("Biznes seçin.");
       await saveStaffMember(activeContext.businessId, item, selectedServiceIds, data.members.some((old) => old.id === item.id));
       await Promise.all([refresh(), refreshServices()]);
-      setEditingStaff(null); setError(""); showToast("Usta saxlanıldı.");
+      setEditingStaff(null); setError(""); showToast(translateUi("Usta saxlanıldı."));
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Ustanı saxlamaq mümkün olmadı."); }
   }
   async function saveRole(item: StaffRole) {
@@ -66,7 +66,7 @@ export default function BusinessStaff({ session }: { session: BusinessSession })
       if (!activeContext?.businessId) throw new Error("Biznes seçin.");
       await saveStaffRole(activeContext.businessId, item, data.roles.some((role) => role.id === item.id));
       await refresh();
-      setEditingRole(undefined); setError(""); showToast("Vəzifə saxlanıldı.");
+      setEditingRole(undefined); setError(""); showToast(translateUi("Vəzifə saxlanıldı."));
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Vəzifəni saxlamaq mümkün olmadı."); }
   }
   async function remove() {
@@ -75,7 +75,7 @@ export default function BusinessStaff({ session }: { session: BusinessSession })
       if (!activeContext?.businessId) throw new Error("Biznes seçin.");
       if (deleting.kind === "staff") { await deleteStaffMember(activeContext.businessId, deleting.id); await Promise.all([refresh(), refreshServices()]); }
       else { await deleteStaffRole(activeContext.businessId, deleting.id); await refresh(); }
-      setDeleting(null); showToast("Silindi.");
+      setDeleting(null); showToast(translateUi("Silindi."));
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Silmək mümkün olmadı."); }
   }
   async function saveEmployment(item: StaffMember) {
@@ -89,11 +89,11 @@ export default function BusinessStaff({ session }: { session: BusinessSession })
     <BusinessHeaderPortal slot="subtitle"><LocalizedText value={"Mütəxəssislər, iş cədvəli və komissiyalar"} /></BusinessHeaderPortal>
     <BusinessHeaderPortal>
       {tab === "team" && <BusinessHeaderButton variant="secondary" onClick={() => setTab("schedule")} className="flex-1 sm:flex-none"><CalendarDays /><LocalizedText value={"İş qrafiki"} /></BusinessHeaderButton>}
-      {tab === "roles" ? <BusinessHeaderButton onClick={() => setEditingRole(null)} className="flex-1 sm:flex-none"><Plus /><LocalizedText value={"Yeni vəzifə"} /></BusinessHeaderButton> : <BusinessHeaderButton onClick={() => openStaff()} className="flex-1 sm:flex-none"><Plus />Yeni usta</BusinessHeaderButton>}
+      {tab === "roles" ? <BusinessHeaderButton onClick={() => setEditingRole(null)} className="flex-1 sm:flex-none"><Plus /><LocalizedText value={"Yeni vəzifə"} /></BusinessHeaderButton> : <BusinessHeaderButton onClick={() => openStaff()} className="flex-1 sm:flex-none"><Plus /><LocalizedText value={"Yeni usta"} /></BusinessHeaderButton>}
     </BusinessHeaderPortal>
     <BusinessTabNav label={translateUi("Heyət bölmələri")} centered>{tabs.map((item) => <BusinessTabButton key={item.id} active={tab === item.id} count={item.count} onClick={() => { setTab(item.id); setError(""); }}><LocalizedText value={item.label} /></BusinessTabButton>)}</BusinessTabNav>
     {loading && <p className="text-sm text-slate-500"><LocalizedText value={"Ustalar yüklənir…"} /></p>}
-    {(error || loadError) && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm font-semibold text-red-700">{error || loadError}</p>}
+    {(error || loadError) && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm font-semibold text-red-700"><LocalizedText value={error || loadError} /></p>}
     {tab === "team" && <StaffTeamView data={{ ...data, members: branchMembers }} services={serviceData.services} filters={filters} setFilters={setFilters} search={search} setSearch={setSearch} setFilterOpen={setFilterOpen} page={page} setPage={setPage} todayKey={todayKey} roleName={roleName} branchName={branchName} filtered={filtered} shown={shown} totalPages={totalPages} activeFilterCount={activeFilterCount} avgRating={avgRating} openStaff={openStaff} setDeleting={setDeleting} setEmployment={setEmployment} />}
     {tab === "schedule" && <StaffScheduleTab members={branchMembers} today={todayKey} roleName={roleName} onEditSchedule={(item) => openStaff(item, "schedule")} />}
     {tab === "roles" && <StaffRolesTab roles={data.roles} members={branchMembers} onEdit={setEditingRole} onDelete={(role) => setDeleting({ kind: "role", id: role.id, name: role.name })} />}
