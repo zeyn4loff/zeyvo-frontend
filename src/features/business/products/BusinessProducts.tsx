@@ -79,23 +79,23 @@ export default function BusinessProducts({ session }: { session: BusinessSession
   const inStock = scopeProducts.filter((item) => item.quantity > item.minimum).length;
   const value = scopeProducts.reduce((sum, item) => sum + item.quantity * item.cost, 0);
   const openCreateProduct = (categoryId: string) => { setNewProductCategoryId(categoryId); setEditingProduct(null); };
-  async function saveProduct(item: Product) { if (item.sku && data.products.some((other) => other.sku.toLocaleLowerCase("az-AZ") === item.sku.toLocaleLowerCase("az-AZ") && other.warehouseId === item.warehouseId && other.id !== item.id)) { setError("Bu anbarda həmin SKU artıq mövcuddur."); return; } if (!activeContext) { setError("Biznes seçin."); return; } try { await saveInventoryRecord(activeContext.businessId, "products", item, Boolean(editingProduct)); await refresh(); setError(""); setEditingProduct(undefined); showToast("Məhsul saxlanıldı."); } catch (cause) { setError(cause instanceof Error ? cause.message : "Məhsul saxlanmadı."); } }
+  async function saveProduct(item: Product) { if (item.sku && data.products.some((other) => other.sku.toLocaleLowerCase("az-AZ") === item.sku.toLocaleLowerCase("az-AZ") && other.warehouseId === item.warehouseId && other.id !== item.id)) { setError("Bu anbarda həmin SKU artıq mövcuddur."); return; } if (!activeContext) { setError("Biznes seçin."); return; } try { await saveInventoryRecord(activeContext.businessId, "products", item, Boolean(editingProduct)); await refresh(); setError(""); setEditingProduct(undefined); showToast(translateUi("Məhsul saxlanıldı.")); } catch (cause) { setError(cause instanceof Error ? cause.message : "Məhsul saxlanmadı."); } }
   async function saveSimple(item: ProductCategory | Warehouse | Supplier | TechCard) {
     if (!editing) return;
     const key = ({ category: "categories", warehouse: "warehouses", supplier: "suppliers", techcard: "techCards" } as const)[editing.kind];
     if (!activeContext) { setError("Biznes seçin."); return; }
-    try { await saveInventoryRecord(activeContext.businessId, editing.kind === "techcard" ? "tech-cards" : key as "categories" | "warehouses" | "suppliers", item, Boolean(editing.initial)); await refresh(); setError(""); setEditing(null); showToast("Məlumat saxlanıldı."); } catch (cause) { setError(cause instanceof Error ? cause.message : "Məlumat saxlanmadı."); }
+    try { await saveInventoryRecord(activeContext.businessId, editing.kind === "techcard" ? "tech-cards" : key as "categories" | "warehouses" | "suppliers", item, Boolean(editing.initial)); await refresh(); setError(""); setEditing(null); showToast(translateUi("Məlumat saxlanıldı.")); } catch (cause) { setError(cause instanceof Error ? cause.message : "Məlumat saxlanmadı."); }
   }
   async function remove() {
     if (!deleting) return;
     const { kind, id } = deleting;
     if (kind === "operation" || kind === "inventory") { setError("Təsdiqlənmiş anbar sənədi silinmir. Düzəliş üçün yeni sənəd yaradın."); return; }
     if (!activeContext) { setError("Biznes seçin."); return; }
-    try { await deleteInventoryRecord(activeContext.businessId, ({ product: "products", category: "categories", warehouse: "warehouses", supplier: "suppliers", techcard: "tech-cards" } as const)[kind], id); await refresh(); setError(""); setDeleting(null); showToast("Silindi."); } catch (cause) { setError(cause instanceof Error ? cause.message : "Silmək mümkün olmadı."); }
+    try { await deleteInventoryRecord(activeContext.businessId, ({ product: "products", category: "categories", warehouse: "warehouses", supplier: "suppliers", techcard: "tech-cards" } as const)[kind], id); await refresh(); setError(""); setDeleting(null); showToast(translateUi("Silindi.")); } catch (cause) { setError(cause instanceof Error ? cause.message : "Silmək mümkün olmadı."); }
   }
   async function saveStock(input: StockInput) {
     if (!activeContext) { setError("Biznes seçin."); return; }
-    try { await postInventoryDocument(activeContext.businessId, input); await refresh(); setError(""); setStockMode(null); setStockSupplierId(""); showToast("Anbar əməliyyatı saxlanıldı."); } catch (cause) { setError(cause instanceof Error ? cause.message : "Əməliyyat saxlanmadı."); }
+    try { await postInventoryDocument(activeContext.businessId, input); await refresh(); setError(""); setStockMode(null); setStockSupplierId(""); showToast(translateUi("Anbar əməliyyatı saxlanıldı.")); } catch (cause) { setError(cause instanceof Error ? cause.message : "Əməliyyat saxlanmadı."); }
   }
   const openDelete = (kind: Deleting["kind"], item: { id: string; name: string }) => setDeleting({ kind, id: item.id, name: item.name });
   const productList = <ProductList products={filtered} data={data} onEdit={setEditingProduct} onDelete={(item) => openDelete("product", item)} />;

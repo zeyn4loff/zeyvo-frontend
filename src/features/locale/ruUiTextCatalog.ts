@@ -1496,7 +1496,7 @@ export const ruUiTextCatalog: Record<string, string> = {
   "Rəy saxlanmadı.": "Отзыв не сохранен.",
   "Məhsul saxlanıldı.": "Товар сохранен.",
   "Məlumat saxlanıldı.": "Информация сохранена.",
-  "Anbar əməliyyatı saxlanıldı.": "Работа склада приостановлена.",
+  "Anbar əməliyyatı saxlanıldı.": "Складская операция сохранена.",
   "Resurs saxlanıldı.": "Ресурс сохранен.",
   "Kateqoriya saxlanıldı.": "Категория сохранена.",
   "Resurs vəziyyəti yeniləndi.": "Состояние ресурса обновлено.",

@@ -70,7 +70,7 @@ export default function TechCardDialog({ initial, products, productCategories, w
     setError(""); setPicker(null);
   }
   return <>
-    <BusinessFormDialog size="large" title={initial ? translateUi("Texnoloji kartı redaktə et") : "Yeni texnoloji kart"} description={translateUi("Xidmət üzrə material və vasitələrin sərfiyyat norması")} error={saveError} onClose={onClose}>
+    <BusinessFormDialog size="large" title={initial ? translateUi("Texnoloji kartı redaktə et") : translateUi("Yeni texnoloji kart")} description={translateUi("Xidmət üzrə material və vasitələrin sərfiyyat norması")} error={saveError} onClose={onClose}>
       <form onSubmit={submit} className="space-y-4 text-xs">
         <label className={label}><LocalizedText value={"Texnoloji kartın adı *"} /><input autoFocus required maxLength={120} value={name} onChange={(event) => setName(event.target.value)} placeholder={translateUi("Məs: Saç boyama (Orta uzunluq)")} className={field} /></label>
         <div className="space-y-1.5"><p className={label}><LocalizedText value={"Aid olduğu xidmət *"} /></p><div className="flex gap-2">
