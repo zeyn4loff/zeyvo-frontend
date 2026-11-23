@@ -2,10 +2,12 @@ import { useCurrencySymbol } from "../finance/businessCurrency";
 import { Check, CircleDollarSign, Clock3, Scissors } from "lucide-react";
 import type { Service } from "./services";
 import LocalizedText from "@/features/locale/LocalizedText";
+import { useCustomerText } from "@/features/locale/customerText";
 
 
 export default function ServiceMetrics({ services, categoryCount, onlineOnly, onToggleOnline }: { services: Service[]; categoryCount: number; onlineOnly: boolean; onToggleOnline: () => void }) {
   const currencySign = useCurrencySymbol();
+  const t = useCustomerText();
   const count = services.length;
   const online = services.filter((service) => service.onlineBooking).length;
   const prices = services.map((service) => service.price);
@@ -13,9 +15,9 @@ export default function ServiceMetrics({ services, categoryCount, onlineOnly, on
   const averageDuration = count ? Math.round(services.reduce((sum, service) => sum + service.duration, 0) / count) : 0;
   const card = "min-w-0 rounded-2xl border border-slate-200/80 bg-white p-4 text-left shadow-xs sm:p-5";
   const metrics = [
-    { title: "Ümumi xidmətlər", value: count, detail: `${categoryCount} kateqoriya`, icon: Scissors, iconClass: "bg-amber-50 text-amber-700", valueClass: "text-2xl sm:text-3xl" },
-    { title: "Onlayn qəbul", value: online, detail: `${count ? Math.round(online / count * 100) : 0}% aktiv`, icon: Check, iconClass: "bg-emerald-50 text-emerald-600", valueClass: "text-2xl sm:text-3xl" },
-    { title: "Orta qiymət", value: `${averagePrice.toFixed(2)} ${currencySign}`, detail: `${count ? Math.min(...prices) : 0} ${currencySign} – ${count ? Math.max(...prices) : 0} ${currencySign} aralığında`, icon: CircleDollarSign, iconClass: "bg-blue-50 text-blue-600", valueClass: "text-xl sm:text-2xl" },
+    { title: "Ümumi xidmətlər", value: count, detail: `${t("Kateqoriyalar:")} ${categoryCount}`, icon: Scissors, iconClass: "bg-amber-50 text-amber-700", valueClass: "text-2xl sm:text-3xl" },
+    { title: "Onlayn qəbul", value: online, detail: `${count ? Math.round(online / count * 100) : 0}% ${t("aktiv")}`, icon: Check, iconClass: "bg-emerald-50 text-emerald-600", valueClass: "text-2xl sm:text-3xl" },
+    { title: "Orta qiymət", value: `${averagePrice.toFixed(2)} ${currencySign}`, detail: `${t("Qiymət aralığı:")} ${count ? Math.min(...prices) : 0}–${count ? Math.max(...prices) : 0} ${currencySign}`, icon: CircleDollarSign, iconClass: "bg-blue-50 text-blue-600", valueClass: "text-xl sm:text-2xl" },
     { title: "Orta müddət", value: `${averageDuration} dəq`, detail: "İcra və xidmət vaxtı", icon: Clock3, iconClass: "bg-purple-50 text-purple-600", valueClass: "text-xl sm:text-2xl" },
   ];
   return <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">{metrics.map((metric, index) => {
