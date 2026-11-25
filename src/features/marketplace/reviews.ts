@@ -6,5 +6,7 @@ export interface PublicReview {
   text: string;
   date: string;
   reply?: string;
+  serviceName?: string;
+  masterName?: string;
   status?: "published" | "hidden";
 }

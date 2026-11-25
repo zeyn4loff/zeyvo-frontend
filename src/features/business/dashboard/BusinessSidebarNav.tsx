@@ -44,7 +44,7 @@ export default function BusinessSidebarNav({ section, session, onNavigate, acces
       {entries.filter(({ id }) => canSeeBusinessSection(id, access, hasBusinessContext)).map(({ id, label, icon: Icon }) => {
         const active = section === id;
         return <Link key={id} to={id === "business" ? partnerPath() : partnerPath(`/${id}`)} onClick={onNavigate} aria-current={active ? "page" : undefined} className={`flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 transition ${active ? "bg-brand-primary font-bold text-[#101114] shadow-sm" : "font-medium text-zinc-400 hover:bg-white/[0.06] hover:text-white"}`}>
-          <span className="flex min-w-0 items-center gap-2.5"><Icon size={16} className="shrink-0" /><span>{language === "az" ? label : businessNavigationLabel(id, language)}</span></span>
+          <span className="flex min-w-0 items-center gap-2.5"><Icon size={16} className="shrink-0" /><span>{id === "marketing" && access?.role === "staff" ? translateUi("Rəylərim") : language === "az" ? label : businessNavigationLabel(id, language)}</span></span>
           {counts[id] !== undefined && <span className={`rounded-md px-1.5 py-0.5 text-[10px] ${active ? "bg-black/10 font-black text-[#101114]" : id === "integrations" ? "bg-emerald-500/20 font-bold text-emerald-400" : "bg-white/10 font-medium text-zinc-400"}`}>{counts[id]}</span>}
         </Link>;
       })}

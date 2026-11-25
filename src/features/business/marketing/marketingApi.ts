@@ -23,7 +23,7 @@ export async function saveMarketingReferral(businessId: string, settings: Referr
   return (await partnerPatch<{ referral: ReferralSettings }>(`${base(businessId)}/referral`, { ...settings })).referral;
 }
 
-export async function updateMarketingReview(businessId: string, id: string, values: { reply: string; status: string }): Promise<void> {
+export async function updateMarketingReview(businessId: string, id: string, values: { reply?: string; status?: string }): Promise<void> {
   await partnerPatch(`${base(businessId)}/reviews/${id}`, values);
 }
 

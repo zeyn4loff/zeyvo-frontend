@@ -6,7 +6,7 @@ export const campaignScheduleLabels = { auto: "Avtomatik qrafik", immediate: "T�
 export interface Promo { id: string; name: string; code: string; discountType: "percent" | "fixed"; discountValue: number; minOrder: number; usageLimit: number; usedCount: number; startDate: string; endDate: string; status: Status; serviceScope?: "all" | "specific" }
 export interface Referrer { id: string; clientName: string; phone: string; code: string; invitedCount: number; successfulCount: number; earnedBonus: number; lastInviteDate: string }
 export interface ReferralSettings { enabled: boolean; referrerReward: number; refereeDiscount: number; minOrder: number; referrers?: Referrer[] }
-export interface Review { id: string; clientName: string; phone?: string; serviceName: string; masterName?: string; rating: number; comment: string; reply: string; date: string; status: "published" | "hidden" }
+export interface Review { id: string; clientName: string; phone?: string; serviceName: string; masterName?: string; staffId?: string | null; rating: number; comment: string; reply: string; date: string; status: "pending" | "published" | "hidden" }
 export interface Segment { id: string; name: string; description: string; clientCount: number; avgCheck: number; totalRevenue: number; color: string; criteria: string; target: Campaign["target"] }
 export interface MarketingData { campaigns: Campaign[]; promos: Promo[]; segments?: Segment[]; referral: ReferralSettings; reviews: Review[] }
 export function marketingStatusLabel(item: Campaign | Promo) { return item.status === "expired" ? "Müddəti bitib" : item.status === "draft" ? "Qaralama" : item.status === "inactive" ? "Qeyri-aktiv" : "Aktiv"; }
